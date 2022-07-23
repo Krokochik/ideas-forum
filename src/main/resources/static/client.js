@@ -4,8 +4,7 @@ function onLoad() {
 
 
     sendRequest('POST', requestUrl, {
-       command: 'checkKey',
-       hash: "fd"
+       command: 'generateRandomNumber'
        })
       .then(data => console.log(data))
       .catch(err => console.log(err))
