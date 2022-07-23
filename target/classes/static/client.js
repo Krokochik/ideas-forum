@@ -4,11 +4,10 @@ function onLoad() {
 
 
     sendRequest('POST', requestUrl, {
-       command: 'asdas',
-       command2: 'dsh45'
-       })
+       command: 'asdas'
+    })
       .then(data => console.log(data))
-      .catch(err => console.log(err))
+      .catch(err => console.log("err"))
 }
 
 
