@@ -39,23 +39,19 @@ public class RequestsController {
 
     @PostMapping("/repositories/{id}")
     public Map<String, String> repositories(@PathVariable(name = "id", required = false) int id, @RequestBody String requestBody) throws ParseException {
-        if (valueManagerService.isExist(id)) {
-            short status = 200;
-            HashMap<String, String> response = new HashMap<>();
-            HashMap<String, String> request = (HashMap<String, String>) new JSONParser(requestBody).parse();
-
-            switch (request.get("command")) {
-                case "addVariable":
-                    try { valueManagerService.addVariable(request.get("name"), request.get("value"), id); } catch (NullPointerException nullPointerException) { status = 400; }
-                    break;
-                case "getVariableValue":
-                    try{ valueManagerService.getVariable(request.get("name"), id); } catch (NullPointerException nullPointerException) { status = 400; }
-                    break;
-                default: status = 400;
-            }
-            response.put("status", status + "");
-            return response;
+        short status = 200;
+        HashMap<String, String> response = new HashMap<>();
+        HashMap<String, String> request = (HashMap<String, String>) new JSONParser(requestBody).parse();
+        switch (request.get("command")) {
+            case "addVariable":
+                try { valueManagerService.addVariable(request.get("name"), request.get("value"), id); } catch (NullPointerException nullPointerException) { status = 400; }
+                break;
+            case "getVariableValue":
+                try{ valueManagerService.getVariable(request.get("name"), id); } catch (NullPointerException nullPointerException) { status = 400; }
+                break;
+            default: status = 400;
         }
-        return new HashMap<>(){{ put("status", "404"); }};
+        response.put("status", status + "");
+        return response;
     }
 }

@@ -21,13 +21,6 @@ public class ValueManagerService {
         repositories.get(repoId).addValue(name, value);
     }
 
-    public boolean isExist(int id) {
-        System.out.println("isExs: " + id);
-        System.out.println(repositories.get(id));
-        try { repositories.get(id); } catch (IndexOutOfBoundsException indexOutOfBoundsException) { return false; }
-        return true;
-    }
-
     public ValueManagerService(ArrayList<ValueRepository> repositories) {
         this.repositories = repositories;
     }
