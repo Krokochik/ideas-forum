@@ -6,7 +6,7 @@ function onLoad() {
        name: "number"
        })
       .then(data => {
-        console.log(JSON.parse(JSON.stringify(data))[status])
+        console.log(JSON.parse(JSON.stringify(data)).status)
       })
       .catch(err => console.log(err))
 }
