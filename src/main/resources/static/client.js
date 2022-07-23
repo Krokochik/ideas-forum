@@ -5,7 +5,7 @@ function onLoad() {
        command: 'getVariableValue',
        name: "number"
        })
-      .then(data => {
+       .then(data => {
           if (JSON.parse(JSON.stringify(data)).status === 404) {
               sendRequest('POST', requestUrl + "/", {
                  command: 'generateRandomNumber',
@@ -17,9 +17,12 @@ function onLoad() {
                      value: randNum
                   })
               })
+              onLoad()
           }
-          onLoad()
-      })
+          else {
+            console.log(data);
+          }
+       })
       .catch(err => console.log(err))
 }
 
