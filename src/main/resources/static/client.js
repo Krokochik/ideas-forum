@@ -16,7 +16,7 @@ function onLoad() {
                        command: "addVariable",
                        name: "number",
                        value: rand
-                   }).then(onLoad())
+                   }).then(add => {onLoad(); console.log(add)})
                }
             })
         }})
