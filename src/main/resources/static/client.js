@@ -7,6 +7,7 @@ function onLoad() {
        })
        .then(data => {
           if (JSON.parse(JSON.stringify(data)).status === 404) {
+              alert("404");
               sendRequest('POST', requestUrl + "/", {
                  command: 'generateRandomNumber',
               })
