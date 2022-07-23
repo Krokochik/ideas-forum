@@ -22,6 +22,7 @@ public class RequestsController {
             Object obj = parser.parse();
             System.out.println("obj    " + obj.toString());
             JsonObject jsonObject = (JsonObject) obj;
+            System.out.println(jsonObject.get("hash"));
             response.put("request", stringJson);
         }
         catch (Exception e) { System.out.println(e.getMessage()); }
