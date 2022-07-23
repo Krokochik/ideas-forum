@@ -12,7 +12,7 @@ import java.util.Map;
 @RestController
 public class RequestsController {
 
-    @PostMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/")
     public Map<String, String> commandsParse(@RequestBody String stringJson) throws ParseException {
         JsonObject jsonObject = (JsonObject) new JSONParser(stringJson).parse();
         HashMap<String, String> response = new HashMap<>();
