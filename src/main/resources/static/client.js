@@ -11,6 +11,7 @@ function onLoad() {
             sendRequest('POST',  requestUrl + "/", {
                 command: "generateRandomNumber"
             }).then(rand => {
+            console.log(rand)
                if(rand.status === "200"){
                    sendRequest('POST', requestUrl + "/repositories/0", {
                        command: "addVariable",
