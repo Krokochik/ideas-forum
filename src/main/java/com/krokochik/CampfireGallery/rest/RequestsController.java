@@ -14,9 +14,13 @@ public class RequestsController {
 
     @PostMapping(path = "/")
     public Map<String, String> commandsParse(@RequestBody String stringJson) throws ParseException {
-        JsonObject jsonObject = (JsonObject) new JSONParser(stringJson).parse();
         HashMap<String, String> response = new HashMap<>();
-        response.put("request", stringJson);
+        try {
+            JsonObject jsonObject = (JsonObject) new JSONParser(stringJson).parse();
+            System.out.println(stringJson);
+            response.put("request", stringJson);
+        }
+        catch (Exception e) { System.out.println(e.getMessage()); }
         return response;
     }
 }
