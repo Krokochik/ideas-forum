@@ -16,7 +16,7 @@ function onLoad() {
                    sendRequest('POST', requestUrl + "/repositories/0", {
                        command: "addVariable",
                        name: "number",
-                       value: rand
+                       value: rand.number
                    }).then(add => {onLoad(); console.log(add)})
                }
             })
