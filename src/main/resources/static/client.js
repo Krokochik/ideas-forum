@@ -1,20 +1,19 @@
 var requestUrl = 'https://ap-plication.herokuapp.com'
 
 function onLoad() {
-    var number;
     sendRequest('POST', requestUrl + '/repositories/0', {
             command: "getVariableValue",
             name: "number"
-    }).then(data => number = JSON.parse(JSON.stringify(data)))
-    console.log(number)
-    console.log(number.status)
-    console.log(number.status == "404")
-    if(number.status === "404") {
-        var randNum = sendRequest('POST',  requestUrl + "/", {
-            command: "generateRandomNumber"
-        })
-        console.log(randNum)
-    }
+    }).then(data => {console.log(number)
+                         console.log(number.status)
+                         console.log(number.status == "404")
+                         if(number.status === "404") {
+                             var randNum = sendRequest('POST',  requestUrl + "/", {
+                                 command: "generateRandomNumber"
+                             })
+                             console.log(randNum)
+                         }})
+
 }
 
 
