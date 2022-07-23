@@ -16,7 +16,7 @@ public class ValueRepository {
         return stringValues.get(name);
     }
     
-    public void removeValue(String name) {
+    public void removealue(String name) {
         try {
             stringValues.remove(name);
         } catch (NullPointerException ignored){}

@@ -5,13 +5,21 @@ function onLoad() {
             command: "getVariableValue",
             name: "number"
     }).then(data => {console.log(data)
-                         console.log(data.status)
-                         console.log(data.status == "404")
-                         if(data.status === "404") {
-                             sendRequest('POST',  requestUrl + "/", {
-                                 command: "generateRandomNumber"
-                             }).then(rand => console.log(rand))
-                         }})
+        console.log(data.status)
+        console.log(data.status == "404")
+        if(data.status === "404") {
+            sendRequest('POST',  requestUrl + "/", {
+                command: "generateRandomNumber"
+            }).then(rand => {
+               if(rand.status === "200"){
+                   sendRequest('POST', requestUrl + "/repositories/0", {
+                       command: "addVariable",
+                       name: "number",
+                       value: rand
+                   }).then(onLoad())
+               }
+            })
+        }})
 
 }
 

@@ -6,8 +6,6 @@ import com.krokochik.CampfireGallery.service.ValueManagerService;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.web.bind.annotation.*;
-import com.krokochik.CampfireGallery.model.Number;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,18 +22,16 @@ public class RequestsController {
         HashMap<String, String> response = new HashMap<>();
         HashMap<String, String> request = (HashMap<String, String>) new JSONParser(stringJson).parse();
         String command = request.get("command");
-        Number number = new Number();
+        Integer number = -1;
         try {
             switch (command) {
                 case "generateRandomNumber" -> number = numbersRepository.generateNumber();
-                case "getNumberById" -> number = numbersRepository.getNumber(Integer.parseInt(request.get("id")));
                 default -> status = 400;
             }
         }
         catch (NumberFormatException | IndexOutOfBoundsException numberFormatException){ status = 400; } catch (Exception exception){ status = 500; }
         if (status == 200) {
-            response.put("id", number.getId() + "");
-            response.put("number", number.getValue() + "");
+            response.put("number", number + "");
         }
         response.put("status", status + "");
         return response;
