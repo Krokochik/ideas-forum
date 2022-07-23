@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 @RestController
-public class requestsController {
+public class RequestsController {
 
     @PostMapping("/")
     public Map<String, String> commandsParse(String stringJson) throws ParseException {
