@@ -1,13 +1,14 @@
-var requestUrl = 'https://ap-plication.herokuapp.com/'
+var requestUrl = 'https://ap-plication.herokuapp.com'
 
 function onLoad() {
 
 
     sendRequest('POST', requestUrl, {
-       command: 'asdas'
-    })
+       command: 'checkKey',
+       hash: "fd"
+       })
       .then(data => console.log(data))
-      .catch(err => console.log("err"))
+      .catch(err => console.log(err))
 }
 
 
