@@ -4,7 +4,7 @@ function onLoad() {
     sendRequest('POST', requestUrl + '/repositories/0', {
             command: "getVariableValue",
             name: "number"
-    }).then(data => {console.log(number)
+    }).then(data => {console.log(data)
                          console.log(data.status)
                          console.log(data.status == "404")
                          if(data.status === "404") {
