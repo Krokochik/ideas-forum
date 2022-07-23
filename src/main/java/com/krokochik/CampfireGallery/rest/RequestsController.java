@@ -6,6 +6,7 @@ import com.krokochik.CampfireGallery.service.ValueManagerService;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.web.bind.annotation.*;
+import com.krokochik.CampfireGallery.veryHardSite.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,11 +14,11 @@ import java.util.Map;
 @RestController
 public class RequestsController {
 
-    private final NumbersRepository numbersRepository = new NumbersRepository();
-    public final ValueManagerService valueManagerService = new ValueManagerService(new ArrayList<ValueRepository>(){{ new ValueRepository(); }});
+    public final NumbersRepository numbersRepository = new NumbersRepository();
+    public final ValueManagerService valueManagerService = new ValueManagerService();
 
     @PostMapping(path = "/")
-    public Map<String, String> commandsParse(@RequestBody String stringJson) throws ParseException {
+    public Map<String, String> commandsParse(@RequestBody String stringJson) throws ParseException { ;
         short status = 200;
         HashMap<String, String> response = new HashMap<>();
         HashMap<String, String> request = (HashMap<String, String>) new JSONParser(stringJson).parse();

@@ -25,6 +25,8 @@ public class ValueManagerService {
         this.repositories = repositories;
     }
 
-    public ValueManagerService(){}
+    public ValueManagerService(){
+        repositories.add(new ValueRepository());
+    }
 
 }
