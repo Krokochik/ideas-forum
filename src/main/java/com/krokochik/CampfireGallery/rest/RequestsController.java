@@ -1,9 +1,7 @@
 package com.krokochik.CampfireGallery.rest;
 
-import com.google.gson.JsonObject;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
