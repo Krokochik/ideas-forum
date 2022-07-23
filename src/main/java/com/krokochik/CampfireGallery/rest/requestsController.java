@@ -1,4 +1,4 @@
-package com.krokochik.CampfireGallery.controllers;
+package com.krokochik.CampfireGallery.rest;
 
 import com.google.gson.JsonObject;
 import org.apache.tomcat.util.json.JSONParser;
@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 @RestController
-public class AppController {
+public class requestsController {
 
     @PostMapping("/")
     public Map<String, String> commandsParse(String stringJson) throws ParseException {
