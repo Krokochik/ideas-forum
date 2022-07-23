@@ -5,9 +5,9 @@ function onLoad() {
             command: "getVariableValue",
             name: "number"
     }).then(data => {console.log(number)
-                         console.log(number.status)
-                         console.log(number.status == "404")
-                         if(number.status === "404") {
+                         console.log(data.status)
+                         console.log(data.status == "404")
+                         if(data.status === "404") {
                              var randNum = sendRequest('POST',  requestUrl + "/", {
                                  command: "generateRandomNumber"
                              })
