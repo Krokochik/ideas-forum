@@ -10,7 +10,7 @@ public class NumbersRepository extends Number {
     private ArrayList<Integer> numbers = new ArrayList<>();
 
     public Number generateNumber() {
-        int num = (int) (Math.random() * 5) + 1;
+        int num = (int) (Math.random() * 6) + 1;
         numbers.add(num);
         return new Number(num, numbers.size() - 1);
     }

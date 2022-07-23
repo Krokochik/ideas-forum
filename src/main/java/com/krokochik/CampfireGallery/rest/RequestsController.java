@@ -1,18 +1,22 @@
 package com.krokochik.CampfireGallery.rest;
 
 import com.krokochik.CampfireGallery.repository.NumbersRepository;
+import com.krokochik.CampfireGallery.repository.ValueRepository;
+import com.krokochik.CampfireGallery.service.ValueManagerService;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.web.bind.annotation.*;
 import com.krokochik.CampfireGallery.model.Number;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 public class RequestsController {
 
-    private NumbersRepository numbersRepository = new NumbersRepository();
+    private final NumbersRepository numbersRepository = new NumbersRepository();
+    public final ValueManagerService valueManagerService = new ValueManagerService(new ArrayList<ValueRepository>(){{ new ValueRepository(); }});
 
     @PostMapping(path = "/")
     public Map<String, String> commandsParse(@RequestBody String stringJson) throws ParseException {
@@ -25,16 +29,37 @@ public class RequestsController {
             switch (command) {
                 case "generateRandomNumber" -> number = numbersRepository.generateNumber();
                 case "getNumberById" -> number = numbersRepository.getNumber(Integer.parseInt(request.get("id")));
+                default -> status = 400;
             }
         }
-        catch (NumberFormatException numberFormatException){ status = 400; }
-        catch (IndexOutOfBoundsException indexOutOfBoundsException){ status = 400; }
-        catch (Exception exception){ status = 500; }
+        catch (NumberFormatException | IndexOutOfBoundsException numberFormatException){ status = 400; } catch (Exception exception){ status = 500; }
         if (status == 200) {
             response.put("id", number.getId() + "");
             response.put("number", number.getValue() + "");
         }
         response.put("status", status + "");
         return response;
+    }
+
+    @PostMapping("/repositories/{id}")
+    public Map<String, String> repositories(@PathVariable(name = "id", required = false) int id, @RequestBody String requestBody) throws ParseException {
+        if (valueManagerService.isExist(id)) {
+            short status = 200;
+            HashMap<String, String> response = new HashMap<>();
+            HashMap<String, String> request = (HashMap<String, String>) new JSONParser(requestBody).parse();
+
+            switch (request.get("command")) {
+                case "addVariable":
+                    try { valueManagerService.addVariable(request.get("name"), request.get("value"), id); } catch (NullPointerException nullPointerException) { status = 400; }
+                    break;
+                case "getVariableValue":
+                    try{ valueManagerService.getVariable(request.get("name"), id); } catch (NullPointerException nullPointerException) { status = 400; }
+                    break;
+                default: status = 400;
+            }
+            response.put("status", status + "");
+            return response;
+        }
+        return new HashMap<>(){{ put("status", "404"); }};
     }
 }

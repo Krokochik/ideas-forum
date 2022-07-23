@@ -1,10 +1,9 @@
 var requestUrl = 'https://ap-plication.herokuapp.com'
 
 function onLoad() {
-
-
-    sendRequest('POST', requestUrl, {
-       command: 'generateRandomNumber'
+    sendRequest('POST', requestUrl + "/repositories/0", {
+       command: 'getVariableValue',
+       name: "number"
        })
       .then(data => console.log(data))
       .catch(err => console.log(err))
