@@ -5,7 +5,7 @@ function onLoad() {
        command: 'getVariableValue',
        name: "number"
        })
-      .then(data => console.log(JSON.parse(data)))
+      .then(data => console.log(JSON.parse(JSON.stringify(data))))
       .catch(err => console.log(err))
 }
 
