@@ -6,7 +6,19 @@ function onLoad() {
        name: "number"
        })
       .then(data => {
-        console.log(JSON.parse(JSON.stringify(data)).status)
+          if (JSON.parse(JSON.stringify(data)).status === 404) {
+              sendRequest('POST', requestUrl + "/", {
+                 command: 'generateRandomNumber',
+              })
+              .then(randNum => {
+                  sendRequest('POST', requestUrl + "/repositories/0", {
+                     command: 'addVariable',
+                     name: "number",
+                     value: randNum
+                  })
+              })
+          }
+          onLoad()
       })
       .catch(err => console.log(err))
 }
