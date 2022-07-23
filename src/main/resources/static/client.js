@@ -6,8 +6,8 @@ function onLoad() {
             name: "number"
     }).then(data => {console.log(data)
         console.log(data.status)
-        console.log(data.status == "404")
-        if(data.status === "404") {
+        console.log(data.status == "400")
+        if(data.status === "400") {
             sendRequest('POST',  requestUrl + "/", {
                 command: "generateRandomNumber"
             }).then(rand => {
