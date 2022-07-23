@@ -1,4 +1,4 @@
-var requestUrl = 'https://ap-plication.herokuapp.com'
+var requestUrl = 'https://ap-plication.herokuapp.com/'
 
 function onLoad() {
 
