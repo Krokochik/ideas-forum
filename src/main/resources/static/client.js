@@ -1,10 +1,10 @@
 var requestUrl = 'https://ap-plication.herokuapp.com'
 
 function onLoad() {
-    var number = sendRequest('POST', requestUrl + '/repositories/0', {
+    var number = JSON.parse(JSON.stringify(sendRequest('POST', requestUrl + '/repositories/0', {
         command: "getVariableValue",
         name: "number"
-    });
+    })));
     console.log(number);
     console.log(number.status)
     console.log(number.status == "404")
