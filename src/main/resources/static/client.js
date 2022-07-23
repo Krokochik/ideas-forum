@@ -8,10 +8,9 @@ function onLoad() {
                          console.log(data.status)
                          console.log(data.status == "404")
                          if(data.status === "404") {
-                             var randNum = sendRequest('POST',  requestUrl + "/", {
+                             sendRequest('POST',  requestUrl + "/", {
                                  command: "generateRandomNumber"
-                             })
-                             console.log(randNum)
+                             }).then(rand => console.log(rand))
                          }})
 
 }
