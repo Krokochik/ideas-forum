@@ -54,7 +54,12 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
         </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>io.github.classgraph</groupId>
+			<artifactId>classgraph</artifactId>
+			<version>4.8.83</version>
+		</dependency>
+	</dependencies>
 
 
 	<build>

@@ -16,8 +16,12 @@ public class RequestsController {
     public Map<String, String> commandsParse(@RequestBody String stringJson) throws ParseException {
         HashMap<String, String> response = new HashMap<>();
         try {
-            System.out.println(stringJson);
-            JsonObject jsonObject = (JsonObject) new JSONParser(stringJson).parse();
+            System.out.println("string Json    " + stringJson);
+            JSONParser parser = new JSONParser(stringJson.toString());
+            System.out.println("parser");
+            Object obj = parser.parse();
+            System.out.println("obj    " + obj.toString());
+            JsonObject jsonObject = (JsonObject) obj;
             response.put("request", stringJson);
         }
         catch (Exception e) { System.out.println(e.getMessage()); }
