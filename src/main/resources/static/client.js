@@ -6,7 +6,7 @@ function onLoad() {
         name: "number"
     });
     console.log(number);
-    if(number.status == "404") {
+    if(number.status === "404") {
         var randNum = sendRequest('POST',  requestUrl + "/", {
             command: "generateRandomNumber"
         })
