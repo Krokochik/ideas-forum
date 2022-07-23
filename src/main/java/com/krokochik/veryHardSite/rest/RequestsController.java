@@ -1,4 +1,4 @@
-package com.krokochik.CampfireGallery.rest;
+package com.krokochik.veryHardSite.rest;
 
 import com.google.gson.JsonObject;
 import org.apache.tomcat.util.json.JSONParser;

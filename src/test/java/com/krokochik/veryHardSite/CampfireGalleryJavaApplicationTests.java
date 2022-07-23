@@ -1,4 +1,4 @@
-package com.krokochik.CampfireGallery;
+package com.krokochik.veryHardSite;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
