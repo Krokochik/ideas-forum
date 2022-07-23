@@ -1,4 +1,4 @@
-package com.krokochik.veryHardSite.controllers;
+package com.krokochik.CampfireGallery.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

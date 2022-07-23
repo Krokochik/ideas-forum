@@ -1,4 +1,4 @@
-package com.krokochik.veryHardSite;
+package com.krokochik.CampfireGallery;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
