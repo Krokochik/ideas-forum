@@ -23,7 +23,7 @@ public class ValueManagerService {
 
     public boolean isExist(int id) {
         System.out.println("isExs: " + id);
-        System.out.println(isExist(id));
+        System.out.println(repositories.get(id));
         try { repositories.get(id); } catch (IndexOutOfBoundsException indexOutOfBoundsException) { return false; }
         return true;
     }
