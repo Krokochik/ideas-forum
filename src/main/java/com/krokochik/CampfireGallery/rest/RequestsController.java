@@ -16,10 +16,12 @@ public class RequestsController {
     public Map<String, String> commandsParse(String stringJson) throws ParseException {
         HashMap<String, String> response = new HashMap<>();
         try {
-            JsonObject jsonObject = (JsonObject) new JSONParser(stringJson).parse();
+            Object object = new JSONParser(stringJson).parse();
+            JsonObject jsonObject = (JsonObject) object;
             response.put("request", stringJson);
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            System.out.println("Exception");
         }
         return response;
     }
