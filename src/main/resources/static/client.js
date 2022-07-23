@@ -5,7 +5,7 @@ function onLoad() {
         command: "getVariableValue",
         name: "number"
     })));
-    console.log(number);
+    console.log(number)
     console.log(number.status)
     console.log(number.status == "404")
     if(number.status === "404") {
