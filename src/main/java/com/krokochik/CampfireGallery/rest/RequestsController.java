@@ -5,6 +5,7 @@ import com.krokochik.CampfireGallery.service.ValueManagerService;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,11 +18,6 @@ public class RequestsController {
 
     private final NumbersRepository numbersRepository = new NumbersRepository();
     private final ValueManagerService valueManagerService = new ValueManagerService();
-
-    @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="No such Order")  // 404
-    public class OrderNotFoundException extends RuntimeException {
-        // ...
-    }
 
     @PostMapping(path = "/")
     public Map<String, String> commandsParse(@RequestBody String stringJson) throws ParseException { ;
@@ -62,7 +58,8 @@ public class RequestsController {
                     break;
                 case "getVariableValue":
                     try {
-                        response.put("value", valueManagerService.getVariable(request.get("name"), id)); }
+                        response.put("value", valueManagerService.getVariable(request.get("name"), id));
+                    }
                     catch (NullPointerException | IndexOutOfBoundsException nullPointerException) { status = 404; }
                     break;
                 case "changeVariableValue":
@@ -75,7 +72,7 @@ public class RequestsController {
                     break;
             }
             response.put("status", status + "");
-            httpServletResponse.setStatus(404);
+            httpServletResponse.setStatus(status);
             return response;
         } else return new HashMap<>(){{ put("status", "404"); }};
     }
