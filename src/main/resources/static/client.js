@@ -5,9 +5,7 @@ function onLoad() {
             command: "getVariableValue",
             name: "number"
     }).then(data => {console.log(data)
-        console.log(data.status)
-        console.log(data.status == "400")
-        if(data.status === "400") {
+        if(data.status === "404") {
             sendRequest('POST',  requestUrl + "/", {
                 command: "generateRandomNumber"
             }).then(rand => {
@@ -17,7 +15,7 @@ function onLoad() {
                        command: "addVariable",
                        name: "number",
                        value: rand.number
-                   }).then(add => {onLoad(); console.log(add)})
+                   }).then(add => {console.log(add); onLoad(); })
                }
             })
         }})
