@@ -4,23 +4,25 @@ function onLoad() {
     sendRequest('POST', requestUrl + '/repositories/0', {
             command: "getVariableValue",
             name: "number"
-    }).then(data => {console.log(data)
-        console.log(data.status)
-        console.log(data.status == "400")
-        if(data.status === "400") {
+    }).then(data => {
+        data = JSON.parse(JSON.stringify(data))
+        if(data.status === "404") {
             sendRequest('POST',  requestUrl + "/", {
                 command: "generateRandomNumber"
             }).then(rand => {
-            console.log(rand)
                if(rand.status === "200"){
                    sendRequest('POST', requestUrl + "/repositories/0", {
                        command: "addVariable",
                        name: "number",
                        value: rand.number
-                   }).then(add => {onLoad(); console.log(add)})
+                   }).then(add => { onLoad(); })
                }
             })
-        }})
+        }
+        else {
+            console.log(data.value);
+        }
+    })
 
 }
 
@@ -35,15 +37,11 @@ function sendRequest(method, url, body = null) {
     xhr.setRequestHeader('Content-Type', 'application/json')
 
     xhr.onload = () => {
-      if (xhr.status >= 400) {
-        reject(xhr.response)
-      } else {
         resolve(xhr.response)
       }
-    }
 
     xhr.onerror = () => {
-      reject(xhr.response)
+      resolve(xhr.response)
     }
 
     xhr.send(JSON.stringify(body))
