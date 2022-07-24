@@ -13,7 +13,7 @@ public class ValueManagerService {
         return repositories.size() - 1;
     }
 
-    public String getVariable(String name, int repoId) throws IndexOutOfBoundsException {
+    public String getVariable(String name, int repoId) throws IndexOutOfBoundsException, NullPointerException {
         return repositories.get(repoId).getValue(name);
     }
 

@@ -76,6 +76,8 @@ public class RequestsController {
             response.put("status", status + "");
             httpServletResponse.setStatus(status);
             return response;
-        } else return new HashMap<>(){{ put("status", "404"); }};
+        }
+        httpServletResponse.setStatus(404);
+        return new HashMap<>(){{ put("status", "404"); }};
     }
 }
