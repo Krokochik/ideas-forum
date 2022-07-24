@@ -34,15 +34,12 @@ function sendRequest(method, url, body = null) {
     xhr.setRequestHeader('Content-Type', 'application/json')
 
     xhr.onload = () => {
-      if (xhr.status >= 400) {
-        reject(xhr.response)
-      } else {
         resolve(xhr.response)
       }
     }
 
     xhr.onerror = () => {
-      reject(xhr.response)
+      resolve(xhr.response)
     }
 
     xhr.send(JSON.stringify(body))
