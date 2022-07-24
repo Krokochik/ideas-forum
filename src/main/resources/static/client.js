@@ -4,7 +4,8 @@ function onLoad() {
     sendRequest('POST', requestUrl + '/repositories/0', {
             command: "getVariableValue",
             name: "number"
-    }).then(data => data = {data = JSON.parse(JSON.stringify(data))
+    }).then(data => {
+        data = JSON.parse(JSON.stringify(data))
         if(data.status === "404") {
             sendRequest('POST',  requestUrl + "/", {
                 command: "generateRandomNumber"
