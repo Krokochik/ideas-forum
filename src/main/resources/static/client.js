@@ -9,7 +9,7 @@ function onLoad() {
         if(data.status === "404") {
             sendRequest('POST',  requestUrl + "/", {
                 command: "generateRandomNumber"
-            console.log(rand)
+            }).then(rand => {
                if(rand.status === "200"){
                    sendRequest('POST', requestUrl + "/repositories/0", {
                        command: "addVariable",
