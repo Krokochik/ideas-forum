@@ -36,7 +36,6 @@ function sendRequest(method, url, body = null) {
     xhr.onload = () => {
         resolve(xhr.response)
       }
-    }
 
     xhr.onerror = () => {
       resolve(xhr.response)
