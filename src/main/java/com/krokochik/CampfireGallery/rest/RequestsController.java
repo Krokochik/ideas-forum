@@ -48,10 +48,15 @@ public class RequestsController {
     public Map<String, String> repositories(@PathVariable(name = "id") int id, @RequestBody String requestBody, HttpServletResponse httpServletResponse, HttpServletRequest Rrequest)
             throws ParseException, IOException {
         System.out.println(Rrequest.getRemoteHost());
-        InetAddress ip ;
-        String hostname ;
+        System.out.println(Rrequest.getServerName());
+        System.out.println(Rrequest.getRemoteUser());
+        System.out.println(Rrequest.getRemoteAddr());
+        System.out.println(Rrequest.getRemotePort());
+        InetAddress ip;
+        String hostname;
         try {
             ip = InetAddress.getByName("ap-plication.herokuapp.com");
+            System.out.println("ur: " + ip.getHostAddress());
             StringBuilder builder = new StringBuilder();
             for( byte el : ip.getAddress() ) {
                 builder.append(el);
