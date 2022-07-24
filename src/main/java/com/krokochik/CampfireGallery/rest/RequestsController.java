@@ -8,8 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,8 +45,23 @@ public class RequestsController {
     }
 
     @PostMapping("/repositories/{id}")
-    public Map<String, String> repositories(@PathVariable(name = "id") int id, @RequestBody String requestBody, HttpServletResponse httpServletResponse)
+    public Map<String, String> repositories(@PathVariable(name = "id") int id, @RequestBody String requestBody, HttpServletResponse httpServletResponse, HttpServletRequest Rrequest)
             throws ParseException, IOException {
+        System.out.println(Rrequest.getRemoteHost());
+        InetAddress ip ;
+        String hostname ;
+        try {
+            ip = InetAddress.getByName("ap-plication.herokuapp.com");
+            StringBuilder builder = new StringBuilder();
+            for( byte el : ip.getAddress() ) {
+                builder.append(el);
+            }
+            String ipAddress = builder.toString();
+            hostname =  ip.getHostName();
+            System.out.println("Your current hostname: " + hostname) ;
+        } catch(UnknownHostException e) {
+            System.out.println("exc");
+        }
         if(valueManagerService.isRepositoryExist(id)) {
             short status = 200;
             HashMap<String, String> response = new HashMap<>();
