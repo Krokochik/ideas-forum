@@ -52,6 +52,9 @@ public class RequestsController {
         System.out.println(Rrequest.getRemoteUser());
         System.out.println(Rrequest.getRemoteAddr());
         System.out.println(Rrequest.getRemotePort());
+        System.out.println(Rrequest.getLocalName());
+        System.out.println(Rrequest.getServletContext().toString());
+        System.out.println(Rrequest.getSession().toString());
         InetAddress ip;
         String hostname;
         try {
