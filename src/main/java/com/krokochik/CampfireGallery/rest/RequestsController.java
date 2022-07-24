@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +56,7 @@ public class RequestsController {
         System.out.println(Rrequest.getRemotePort());
         System.out.println(Rrequest.getLocalName());
         System.out.println(Rrequest.getLocalAddr());
-        System.out.println(Rrequest.getSession().getAttributeNames().toString());
+        Rrequest.getSession().getAttributeNames().asIterator().forEachRemaining((var el) -> System.out.println(el));
         System.out.println(Rrequest.getSession().getId());
         System.out.println(Arrays.toString(Rrequest.getSession().getValueNames()));
         InetAddress ip;
