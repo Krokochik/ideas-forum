@@ -2,7 +2,6 @@ package com.krokochik.CampfireGallery.service;
 
 import com.krokochik.CampfireGallery.repository.VariableRepository;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
 
@@ -14,15 +13,15 @@ public class ValueManagerService {
         return repositories.size() - 1;
     }
 
-    public String getVariable(@NotNull String name, int repoId) throws IndexOutOfBoundsException {
+    public String getVariable(String name, int repoId) throws IndexOutOfBoundsException {
         return repositories.get(repoId).getValue(name);
     }
 
-    public void addVariable(@NotNull String name, @NotNull String value, int repoId) throws Exception {
+    public void addVariable(String name, String value, int repoId) throws Exception {
         repositories.get(repoId).addValue(name, value);
     }
 
-    public void changeVariable(@NotNull String name, @NotNull String newValue, int repoId) throws NullPointerException {
+    public void changeVariable(String name, String newValue, int repoId) throws NullPointerException {
         repositories.get(repoId).changeValue(name, newValue);
     }
 
