@@ -55,7 +55,7 @@ public class RequestsController {
         System.out.println(Rrequest.getRemotePort());
         System.out.println(Rrequest.getLocalName());
         System.out.println(Rrequest.getLocalAddr());
-        System.out.println(Rrequest.getSession().getAttributeNames());
+        System.out.println(Rrequest.getSession().getAttributeNames().toString());
         System.out.println(Rrequest.getSession().getId());
         System.out.println(Arrays.toString(Rrequest.getSession().getValueNames()));
         InetAddress ip;
