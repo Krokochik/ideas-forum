@@ -12,10 +12,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/**", "/**/**").hasIpAddress("54.73.53.134")
+                    .antMatchers("/**", "/**/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                    .cors().disable()
                     .csrf().disable();
     }
 }
