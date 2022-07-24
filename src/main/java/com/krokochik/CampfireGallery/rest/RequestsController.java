@@ -20,7 +20,7 @@ public class RequestsController {
     private final ValueManagerService valueManagerService = new ValueManagerService();
 
     @PostMapping(path = "/")
-    public Map<String, String> commandsParse(@RequestBody String stringJson) throws ParseException { ;
+    public Map<String, String> commandsParse(@RequestBody String stringJson, HttpServletResponse httpServletResponse) throws ParseException { ;
         short status = 200;
         HashMap<String, String> response = new HashMap<>();
         HashMap<String, String> request = (HashMap<String, String>) new JSONParser(stringJson).parse();
@@ -37,6 +37,7 @@ public class RequestsController {
             response.put("number", number + "");
         }
         response.put("status", status + "");
+        httpServletResponse.setStatus(status);
         return response;
     }
 
