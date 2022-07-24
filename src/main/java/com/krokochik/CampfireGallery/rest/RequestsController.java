@@ -40,17 +40,21 @@ public class RequestsController {
     public Map<String, String> repositories(@PathVariable(name = "id") int id, @RequestBody String requestBody) throws ParseException {
         if(valueManagerService.isRepositoryExist(id)) {
             short status = 200;
+            System.out.println(1);
             HashMap<String, String> response = new HashMap<>();
+            System.out.println(2);
             HashMap<String, String> request = (HashMap<String, String>) new JSONParser(requestBody).parse();
+            System.out.println(3);
             switch (request.get("command")) {
                 case "addVariable":
+                    System.out.println("adV");
                     try {
-                        valueManagerService.addVariable(request.get("name"), request.get("value"), id);
-                    } catch (Exception e) {
-                        status = 500;
-                    }
+                        valueManagerService.addVariable(request.get("name"), request.get("value"), id); }
+                    catch (NullPointerException e) { status = 400; }
+                    catch (Exception e) { status = 500; }
                     break;
                 case "getVariableValue":
+                    System.out.println("getVV");
                     try {
                         valueManagerService.getVariable(request.get("name"), id);
                     } catch (NullPointerException | IndexOutOfBoundsException nullPointerException) {
@@ -58,6 +62,7 @@ public class RequestsController {
                     }
                     break;
                 case "changeVariableValue":
+                    System.out.println("chVV");
                     try {
                         valueManagerService.changeVariable(request.get("name"), request.get("newValue"), id);
                     } catch (NullPointerException nullPointerException) {
@@ -65,7 +70,9 @@ public class RequestsController {
                     }
                     break;
                 default:
+                    System.out.println("df");
                     status = 400;
+                    break;
             }
             response.put("status", status + "");
             return response;
