@@ -58,7 +58,7 @@ public class RequestsController {
                     break;
                 case "getVariableValue":
                     try {
-                        request.get("name");
+                        valueManagerService.getVariable(request.get("name"), id);
                         response.put("value", valueManagerService.getVariable(request.get("name"), id));
                     }
                     catch (NullPointerException | IndexOutOfBoundsException nullPointerException) { status = 404; }
