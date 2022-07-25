@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(originPatterns = {"https://ap-plication.herokuapp.com/**", "https://ap-plication.herokuapp.com/**/*", "https://ap-plication.herokuapp.com/**/**", "https://ap-plication.herokuapp.com/"})
 public class RequestsController {
 
     private final NumbersRepository numbersRepository = new NumbersRepository();
