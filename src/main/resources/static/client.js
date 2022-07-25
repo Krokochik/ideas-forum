@@ -23,15 +23,6 @@ function onLoad() {
             console.log(data.value);
         }
     })
-    sendRequest('GET', requestUrl + "/repositories/1")
-      .then(data => console.log(data))
-      .catch(err => console.log(err))
-
-    sendRequest('POST', requestUrl + "/", {
-        command: "generateRandomNumber"
-    })
-          .then(data => console.log(data))
-          .catch(err => console.log(err))
 }
 
 
