@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(originPatterns = "https://ap-plication.herokuapp.com/**")
+@CrossOrigin(originPatterns = {"https://ap-plication.herokuapp.com/**", "https://ap-plication.herokuapp.com/**/*", "https://ap-plication.herokuapp.com/**/**", "https://ap-plication.herokuapp.com/"})
 public class RequestsController {
 
     private final NumbersRepository numbersRepository = new NumbersRepository();
@@ -50,31 +50,6 @@ public class RequestsController {
     @PostMapping("/repositories/{id}")
     public Map<String, String> repositories(@PathVariable(name = "id") int id, @RequestBody String requestBody, HttpServletResponse httpServletResponse, HttpServletRequest Rrequest)
             throws ParseException, IOException {
-        System.out.println(Rrequest.getRemoteHost());
-        System.out.println(Rrequest.getServerName());
-        System.out.println(Rrequest.getRemoteUser());
-        System.out.println(Rrequest.getRemoteAddr());
-        System.out.println(Rrequest.getRemotePort());
-        System.out.println(Rrequest.getLocalName());
-        System.out.println(Rrequest.getLocalAddr());
-        Rrequest.getSession().getAttributeNames().asIterator().forEachRemaining((var el) -> System.out.println(el));
-        System.out.println(Rrequest.getSession().getId());
-        System.out.println(Arrays.toString(Rrequest.getSession().getValueNames()));
-        InetAddress ip;
-        String hostname;
-        try {
-            ip = InetAddress.getByName("ap-plication.herokuapp.com");
-            System.out.println("ur: " + ip.getHostAddress());
-            StringBuilder builder = new StringBuilder();
-            for( byte el : ip.getAddress() ) {
-                builder.append(el);
-            }
-            String ipAddress = builder.toString();
-            hostname =  ip.getHostName();
-            System.out.println("Your current hostname: " + hostname) ;
-        } catch(UnknownHostException e) {
-            System.out.println("exc");
-        }
         if(valueManagerService.isRepositoryExist(id)) {
             short status = 200;
             HashMap<String, String> response = new HashMap<>();
