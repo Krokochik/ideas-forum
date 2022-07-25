@@ -27,6 +27,11 @@ function onLoad() {
       .then(data => console.log(data))
       .catch(err => console.log(err))
 
+    sendRequest('POST', requestUrl + "/", {
+        command: "generateRandomNumber"
+    })
+          .then(data => console.log(data))
+          .catch(err => console.log(err))
 }
 
 
