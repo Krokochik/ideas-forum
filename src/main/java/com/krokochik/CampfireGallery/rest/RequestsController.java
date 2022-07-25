@@ -19,7 +19,7 @@ public class RequestsController {
     private final ValueManagerService valueManagerService = new ValueManagerService();
 
     @PostMapping(path = "/")
-    public Map<String, String> commandsParse(@RequestBody String stringJson, HttpServletResponse httpServletResponse) throws ParseException { ;
+    public Map<String, String> commandsParse(@RequestBody String stringJson, HttpServletResponse httpServletResponse) throws ParseException {
         short status = 200;
         HashMap<String, String> response = new HashMap<>();
         HashMap<String, String> request = (HashMap<String, String>) new JSONParser(stringJson).parse();
@@ -41,7 +41,7 @@ public class RequestsController {
     }
 
     @PostMapping("/repositories/{id}")
-    public Map<String, String> repositories(@PathVariable(name = "id") int id, @RequestBody String requestBody, HttpServletResponse httpServletResponse, HttpServletRequest Rrequest)
+    public Map<String, String> repositories(@PathVariable(name = "id") int id, @RequestBody String requestBody, HttpServletResponse httpServletResponse, HttpServletRequest httpRequest)
             throws ParseException, IOException {
         if(valueManagerService.isRepositoryExist(id)) {
             short status = 200;
@@ -50,7 +50,8 @@ public class RequestsController {
             switch (request.get("command")) {
                 case "addVariable":
                     try {
-                        valueManagerService.addVariable(request.get("name"), request.get("value"), id);
+                        System.out.println(httpRequest.getLocalAddr());
+                        valueManagerService.addVariable(request.get("name") + httpRequest.getLocalAddr(), request.get("value"), id);
                         status = 201;
                     }
                     catch (NullPointerException e) { status = 400; }
