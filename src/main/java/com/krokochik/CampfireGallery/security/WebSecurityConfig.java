@@ -23,5 +23,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
         registry.addMapping("/**")
                 .allowedOrigins("https://ap-plication.herokuapp.com")
                 .allowedMethods("*");
+        registry.addMapping("/**")
+                .allowedOrigins("https://ap-plication.herokuapp.com/repositories/*")
+                .allowedMethods("*");
     }
 }
