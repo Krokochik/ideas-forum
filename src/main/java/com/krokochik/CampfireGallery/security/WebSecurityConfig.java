@@ -22,6 +22,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedMethods("*")
-                .allowedOriginPatterns("https://ap-plication.herokuapp.com/**");
+                .allowedOriginPatterns("https://ap-plication.herokuapp.com");
+        registry.addMapping("/repositories/**")
+                .allowedMethods("*")
+                .allowedOriginPatterns("https://ap-plication.herokuapp.com");
+        registry.addMapping("/")
+                .allowedOriginPatterns("https://ap-plication.herokuapp.com")
+                .allowedMethods("*");
     }
 }
