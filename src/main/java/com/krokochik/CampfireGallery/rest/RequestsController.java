@@ -50,7 +50,7 @@ public class RequestsController {
             switch (request.get("command")) {
                 case "addVariable":
                     try {
-                        System.out.println(httpRequest.getLocalAddr());
+                        System.out.println(httpRequest.getRemoteAddr());
                         valueManagerService.addVariable(request.get("name") + httpRequest.getLocalAddr(), request.get("value"), id);
                         status = 201;
                     }
