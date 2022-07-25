@@ -23,7 +23,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .formLogin()
                     .loginPage("/login")
-                    .permitAll();
+                    .permitAll()
+                .and()
+                    .cors().disable();
     }
 
     @Bean

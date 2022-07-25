@@ -23,7 +23,6 @@ function onLoad() {
             console.log(data.value);
         }
     })
-
 }
 
 
