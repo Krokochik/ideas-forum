@@ -15,7 +15,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
         http
                 .authorizeRequests()
                     .antMatchers("/**", "/**/**").permitAll()
-                .anyRequest().authenticated().and().cors();
+                .anyRequest().authenticated().and().cors().and().csrf().disable();
     }
 
     @Override
