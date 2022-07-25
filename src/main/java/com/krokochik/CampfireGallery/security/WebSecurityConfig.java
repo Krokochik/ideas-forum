@@ -18,13 +18,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .anyRequest().authenticated().and().cors();
     }
 
-    /*@Override
+    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://ap-plication.herokuapp.com/")
-                .allowedMethods("*");
-        registry.addMapping("/**")
-                .allowedOrigins("https://ap-plication.herokuapp.com/repositories/*")
-                .allowedMethods("*");
-    }*/
+                .allowedMethods("*")
+                .allowedOriginPatterns("https://ap-plication.herokuapp.com/**");
+    }
 }
