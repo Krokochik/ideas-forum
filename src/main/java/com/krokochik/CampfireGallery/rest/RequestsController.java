@@ -50,8 +50,7 @@ public class RequestsController {
             switch (request.get("command")) {
                 case "addVariable":
                     try {
-                        System.out.println(httpRequest.getRemoteAddr());
-                        valueManagerService.addVariable(request.get("name") + httpRequest.getLocalAddr(), request.get("value"), id);
+                        valueManagerService.addVariable(request.get("name") + httpRequest.getRemoteAddr(), request.get("value"), id);
                         status = 201;
                     }
                     catch (NullPointerException e) { status = 400; }
@@ -59,13 +58,13 @@ public class RequestsController {
                     break;
                 case "getVariableValue":
                     try {
-                        response.put("value", valueManagerService.getVariable(request.get("name"), id));
+                        response.put("value", valueManagerService.getVariable(request.get("name") + httpRequest.getRemoteAddr(), id));
                     }
                     catch (NullPointerException | IndexOutOfBoundsException nullPointerException) { status = 404; }
                     break;
                 case "changeVariableValue":
                     try {
-                        valueManagerService.changeVariable(request.get("name"), request.get("newValue"), id); }
+                        valueManagerService.changeVariable(request.get("name") + httpRequest.getRemoteAddr(), request.get("newValue"), id); }
                     catch (NullPointerException nullPointerException) { status = 400; }
                     break;
                 default:
