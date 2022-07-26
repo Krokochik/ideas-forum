@@ -2,6 +2,9 @@ package com.krokochik.CampfireGallery.service;
 
 import com.krokochik.CampfireGallery.repository.VariableRepository;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.boot.convert.DataSizeUnit;
 
 import java.util.ArrayList;
 
@@ -14,6 +17,11 @@ public class ValueManagerService {
     }
 
     public String getVariable(String name, int repoId) throws IndexOutOfBoundsException, NullPointerException {
+        return repositories.get(repoId).getValue(name);
+    }
+
+    public String getVariable(String name, int repoId, @DefaultValue("1") byte lifePeriod) throws IndexOutOfBoundsException, NullPointerException {
+        System.out.println(lifePeriod + " " + "+1: " + lifePeriod + 1);
         return repositories.get(repoId).getValue(name);
     }
 
