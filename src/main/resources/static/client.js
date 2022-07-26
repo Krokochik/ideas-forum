@@ -17,7 +17,7 @@ function send(i = 0, howMany) {
           max: maxV
     })
     .then(data => {
-      numbers[i] = JSON.parse(JSON.stringify(data)).number;
+      numbers[i-1] = JSON.parse(JSON.stringify(data)).number;
       return send(i, howMany);
     })
   }
