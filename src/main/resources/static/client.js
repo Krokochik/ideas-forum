@@ -2,11 +2,10 @@ var requestUrl = 'https://ap-plication.herokuapp.com'
 
 function onLoad() {
     var minV = document.getElementById('minValue').value;
-    alert(minV)
     var maxV = document.getElementById('maxValue').value;
     var repeats = document.getElementById('repeats').value;
     let numbers = [];
-    var j = 0;
+    /*var j = 0;
     while (j < Number(repeats) + 1) {
         sendRequest('POST', requestUrl + '/', {
           command: 'generateRandomNumber',
@@ -17,7 +16,15 @@ function onLoad() {
           numbers[j] = JSON.stringify.parse(data).number;
           j++;
         })
-    }
+    }*/
+    sendRequest('POST', requestUrl + '/', {
+          command: 'generateRandomNumber',
+          min: minV,
+          max: maxV
+        })
+        .then(data => {
+          numbers[0] = JSON.stringify.parse(data).number;
+        })
     for (var i = 0; i < numbers.length; i++) {
       var articleDiv = document.querySelector("div.numbers");
       var elem = document.createElement("a");
