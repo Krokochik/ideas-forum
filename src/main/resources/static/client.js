@@ -5,7 +5,7 @@ function onLoad() {
     alert(minV)
     var maxV = document.getElementById('maxValue').value;
     var repeats = document.getElementById('repeats').value;
-    var numbers = {};
+    let numbers = [];
     var j = 0;
     while(j < Number(repeats) + 1) {
         sendRequest('POST', requestUrl + '/', {
