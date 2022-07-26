@@ -17,20 +17,17 @@ function send(i = 0, howMany) {
           max: maxV
     })
     .then(data => {
-      numbers[i-1] = JSON.parse(JSON.stringify(data)).number;
+      numbers[i] = JSON.parse(JSON.stringify(data)).number;
       return send(i, howMany);
     })
   }
   else {
     for (var i = 0; i < numbers.length; i++) {
-              alert(numbers[0]);
-              alert("ok");
-              var articleDiv = document.querySelector("div.numbers");
-              var elem = document.createElement("a");
-              var elemText = document.createTextNode(numbers[i]);
-              elem.appendChild(elemText);
-              articleDiv.appendChild(elem);
-              alert("ok");
+        var articleDiv = document.querySelector("div.numbers");
+        var elem = document.createElement("a");
+        var elemText = document.createTextNode(numbers[i]);
+        elem.appendChild(elemText);
+        articleDiv.appendChild(elem);
     }
     return;
   }
