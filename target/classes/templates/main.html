@@ -51,16 +51,16 @@ input::-webkit-inner-spin-button {
     <body style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
     <form action="/" method="get">
         <div>
-        <input value="1" type="number" min="-2000000000" max="2000000000" id="minValue" placeholder="Min Value" style="margin-left: 42%; margin-top: 25%; margin-right: 15px;">
+        <input type="number" min="-2000000000" max="2000000000" id="minValue" placeholder="Min Value" style="margin-left: 42%; margin-top: 25%; margin-right: 15px;">
         ~
-        <input value="46" type="number" min="-2000000000" max="2000000000" id="maxValue" placeholder="Max Value" style="margin-left: 15px; margin-top: 50px; margin-right: 15px">
+        <input type="number" min="-2000000000" max="2000000000" id="maxValue" placeholder="Max Value" style="margin-left: 15px; margin-top: 50px; margin-right: 15px">
         x
-        <input value="10" type="number" min="0" max="10" id="repeats" placeholder="Repeats" style="margin-left: 15px; margin-top: 50px; margin-right: 15px; width: 100px">
+        <input type="number" min="0" max="10" id="repeats" placeholder="Repeats" style="margin-left: 15px; margin-top: 50px; margin-right: 15px; width: 100px">
         </div>
-        <button class="btn" style="margin-top: 10px; margin-left: 50%" type="submit">Генерировать</button>
+        <button class="btn" style="margin-top: 10px; margin-left: 50%" onclick="generate()">Генерировать</button>
     </form>
 
-        <div class="numbers" style="width: 40%;">
+        <div class="numbers" style="margin-left: 40%;">
         </div>
         <script src="../static/client.js?ver=3" th:src="@{/client.js}"></script>
     </body>

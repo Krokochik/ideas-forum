@@ -3,7 +3,7 @@ let numbers = [];
 var minV = document.getElementById('minValue').value;
 var maxV = document.getElementById('maxValue').value;
 
-function onLoad() {
+function generate() {
 
     var repeats = document.getElementById('repeats').value;
     send(0, Number(repeats));    
