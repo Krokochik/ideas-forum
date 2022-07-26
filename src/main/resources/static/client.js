@@ -7,7 +7,7 @@ function onLoad() {
     var repeats = document.getElementById('repeats').value;
     let numbers = [];
     var j = 0;
-    while(j < Number(repeats) + 1) {
+    while (j < Number(repeats) + 1) {
         sendRequest('POST', requestUrl + '/', {
           command: 'generateRandomNumber',
           min: minV,
@@ -18,7 +18,7 @@ function onLoad() {
           j++;
         })
     }
-    for (var i = 0; i < numbers.size() + 1; i++) {
+    for (var i = 0; i < numbers.length; i++) {
       var articleDiv = document.querySelector("div.numbers");
       var elem = document.createElement("a");
       var elemText = document.createTextNode(numbers[i]);
