@@ -1,9 +1,10 @@
 var requestUrl = 'https://ap-plication.herokuapp.com'
 let numbers = [];
+var minV = document.getElementById('minValue').value;
+var maxV = document.getElementById('maxValue').value;
 
 function onLoad() {
-    var minV = document.getElementById('minValue').value;
-    var maxV = document.getElementById('maxValue').value;
+
     var repeats = document.getElementById('repeats').value;
     send(0, Number(repeats));    
 }
