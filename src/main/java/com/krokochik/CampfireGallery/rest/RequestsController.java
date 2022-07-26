@@ -25,16 +25,18 @@ public class RequestsController {
         HashMap<String, String> response = new HashMap<>();
         HashMap<String, String> request = (HashMap<String, String>) new JSONParser(stringJson).parse();
         Integer number = -1;
-        try {
-            switch (request.get("command")) {
-                case "generateRandomNumber":
-                    try { number = numbersRepository.generateNumber(Integer.parseInt(request.get("min")), Integer.parseInt(request.get("max"))); }
-                    catch (NumberFormatException numberFormatException) { status = 400; }
-                    break;
-                default: status = 400;
-            }
+        switch (request.get("command")) {
+            case "generateRandomNumber":
+                try {
+                    number = numbersRepository.generateNumber(Integer.parseInt(request.get("min")), Integer.parseInt(request.get("max")));
+                }
+                catch (NumberFormatException numberFormatException) { status = 400;
+                    System.out.println(numberFormatException.getMessage());
+                    System.out.println(request.get("min"));
+                }
+                break;
+            default: status = 400;
         }
-        catch (NumberFormatException | IndexOutOfBoundsException numberFormatException){ status = 400; } catch (Exception exception){ status = 500; }
         if (status == 200) {
             response.put("number", number + "");
         }

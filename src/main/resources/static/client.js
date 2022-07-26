@@ -2,6 +2,7 @@ var requestUrl = 'https://ap-plication.herokuapp.com'
 
 function onLoad() {
     var minV = document.getElementById('minValue').value;
+    alert(minV)
     var maxV = document.getElementById('maxValue').value;
     var repeats = document.getElementById('repeats').value;
     var numbers = {};
@@ -12,7 +13,7 @@ function onLoad() {
           max: maxV
         })
         .then(data => {
-          numbers[j] = JSON.stringify.parse(data).number;
+          alert(JSON.parse(JSON.stringify(data)).number);
         })
 
     /*while(j < repeats + 1) {

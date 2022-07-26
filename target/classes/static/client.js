@@ -1,28 +1,39 @@
 var requestUrl = 'https://ap-plication.herokuapp.com'
 
 function onLoad() {
+    var minV = document.getElementById('minValue').value;
+    alert(minV)
+    var maxV = document.getElementById('maxValue').value;
+    var repeats = document.getElementById('repeats').value;
+    var numbers = {};
+    var j = 0;
     sendRequest('POST', requestUrl + '/repositories/0', {
-            command: "getVariableValue",
-            name: "number"
-    }).then(data => {
-        data = JSON.parse(JSON.stringify(data))
-        if(data.status === "404") {
-            sendRequest('POST',  requestUrl + "/", {
-                command: "generateRandomNumber"
-            }).then(rand => {
-               if(rand.status === "200"){
-                   sendRequest('POST', requestUrl + "/repositories/0", {
-                       command: "addVariable",
-                       name: "number",
-                       value: rand.number
-                   }).then(add => { onLoad(); })
-               }
-            })
-        }
-        else {
-            console.log(data.value);
-        }
-    })
+          command: 'generateRandomNumber',
+          min: minV,
+          max: maxV
+        })
+        .then(data => {
+          numbers[j] = JSON.stringify.parse(data).number;
+        })
+
+    /*while(j < repeats + 1) {
+        sendRequest('POST', requestUrl + 'repositories/0', {
+          command: 'generateRandomNumber',
+          min: minV,
+          max: maxV
+        })
+        .then(data => {
+          numbers[j] = JSON.stringify.parse(data).number;
+          j++;
+        })
+    }
+    for (var i = 0; i < numbers.size() + 1; i++) {
+      var articleDiv = document.querySelector("div.numbers");
+      var elem = document.createElement("a");
+      var elemText = document.createTextNode(numbers[i]);
+      elem.appendChild(elemText);
+      articleDiv.appendChild(elem);
+    }*/
 }
 
 
