@@ -7,7 +7,7 @@ function onLoad() {
     let numbers = [];
     var j = 0;
     var requestsSent = false;
-    while (requestsSent == false) {
+    while (true) {
         sendRequest('POST', requestUrl + '/', {
           command: 'generateRandomNumber',
           min: minV,
@@ -16,8 +16,7 @@ function onLoad() {
         .then(data => {
           numbers[j] = JSON.parse(JSON.stringify(data)).number;
           j++;
-          if(j == Number(repeats)){requestsSent = true}
-          if(requestsSent == true){
+          if(j == Number(repeats)){
             for (var i = 0; i < numbers.length; i++) {
               alert(numbers[0]);
               alert("ok");
