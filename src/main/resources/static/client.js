@@ -31,6 +31,7 @@ function onLoad() {
       var elemText = document.createTextNode(numbers[i]);
       elem.appendChild(elemText);
       articleDiv.appendChild(elem);
+      alert("ok");
     }
 }
 
