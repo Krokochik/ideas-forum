@@ -8,6 +8,7 @@ function generate() {
     numbers.length = 0;
     minV = document.getElementById('minValue').value;
     maxV = document.getElementById('maxValue').value;
+    document.getElementById('numbers').innerHTML = "";
     send(0, Number(repeats));    
 }
 
@@ -26,7 +27,6 @@ function send(i = 0, howMany) {
   else {
     for (var i = 0; i < numbers.length; i++) {
         var articleDiv = document.querySelector("div.numbers");
-        document.getElementById('numbers').innerHTML = "";
         var elem = document.createElement("a");
         elem.style = "margin-right: 10px;"
         var elemText = document.createTextNode(numbers[i]);
