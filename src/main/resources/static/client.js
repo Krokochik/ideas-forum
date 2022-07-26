@@ -7,16 +7,7 @@ function onLoad() {
     var repeats = document.getElementById('repeats').value;
     var numbers = {};
     var j = 0;
-    sendRequest('POST', requestUrl + '/', {
-          command: 'generateRandomNumber',
-          min: minV,
-          max: maxV
-        })
-        .then(data => {
-          alert(JSON.parse(JSON.stringify(data)).number);
-        })
-
-    /*while(j < repeats + 1) {
+    while(j < repeats + 1) {
         sendRequest('POST', requestUrl + 'repositories/0', {
           command: 'generateRandomNumber',
           min: minV,
@@ -33,7 +24,7 @@ function onLoad() {
       var elemText = document.createTextNode(numbers[i]);
       elem.appendChild(elemText);
       articleDiv.appendChild(elem);
-    }*/
+    }
 }
 
 
