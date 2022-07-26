@@ -8,7 +8,7 @@ function onLoad() {
     var numbers = {};
     var j = 0;
     while(j < Number(repeats) + 1) {
-        sendRequest('POST', requestUrl + 'repositories/0', {
+        sendRequest('POST', requestUrl + '/', {
           command: 'generateRandomNumber',
           min: minV,
           max: maxV
