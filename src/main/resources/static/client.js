@@ -13,7 +13,7 @@ function onLoad() {
           max: maxV
         })
         .then(data => {
-          numbers[j] = JSON.stringify.parse(data).number;
+          numbers[j] = JSON.parse(JSON.stringify(data)).number;
           j++;
         })
     }*/
@@ -23,7 +23,7 @@ function onLoad() {
           max: maxV
         })
         .then(data => {
-          numbers[0] = JSON.stringify.parse(data).number;
+          numbers[0] = JSON.parse(JSON.stringify(data)).number;
         })
     for (var i = 0; i < numbers.length; i++) {
       var articleDiv = document.querySelector("div.numbers");
