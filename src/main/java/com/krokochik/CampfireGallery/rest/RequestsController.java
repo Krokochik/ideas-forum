@@ -25,6 +25,7 @@ public class RequestsController {
         HashMap<String, String> response = new HashMap<>();
         HashMap<String, String> request = (HashMap<String, String>) new JSONParser(stringJson).parse();
         Integer number = -1;
+        System.out.println(request.get("command"));
         switch (request.get("command")) {
             case "generateRandomNumber":
                 try {
