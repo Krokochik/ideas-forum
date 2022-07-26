@@ -5,22 +5,7 @@ function onLoad() {
     var minV = document.getElementById('minValue').value;
     var maxV = document.getElementById('maxValue').value;
     var repeats = document.getElementById('repeats').value;
-    var j = 0;
-    var requestsSent = false;
-    while (true) {
-        sendRequest('POST', requestUrl + '/', {
-          command: 'generateRandomNumber',
-          min: minV,
-          max: maxV
-        })
-        .then(data => {
-          numbers[j] = JSON.parse(JSON.stringify(data)).number;
-          j++;
-          if(j == Number(repeats)){
-            
-        })
-    }
-    
+    send(0, Number(repeats));    
 }
 
 function send(i = 0, howMany) {
