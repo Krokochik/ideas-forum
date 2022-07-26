@@ -57,8 +57,6 @@ function sendRequest(method, url, body = null) {
   })
 }
 
-onLoad();
-
 //sendRequest('GET', requestUrl)
 //  .then(data => console.log(data))
 //  .catch(err => console.log(err))
