@@ -26,6 +26,7 @@ function send(i = 0, howMany) {
   else {
     for (var i = 0; i < numbers.length; i++) {
         var articleDiv = document.querySelector("div.numbers");
+        document.getElementById('numbers').innerHTML = "";
         var elem = document.createElement("a");
         elem.style = "margin-right: 10px;"
         var elemText = document.createTextNode(numbers[i]);
