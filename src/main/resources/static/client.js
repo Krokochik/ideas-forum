@@ -5,6 +5,9 @@ var maxV = document.getElementById('maxValue').value;
 
 function generate() {
     var repeats = document.getElementById('repeats').value;
+    numbers = [];
+    minV = document.getElementById('minValue').value;
+    maxV = document.getElementById('maxValue').value;
     send(0, Number(repeats));    
 }
 
