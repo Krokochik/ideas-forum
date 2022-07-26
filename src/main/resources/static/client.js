@@ -25,6 +25,7 @@ function send(i = 0, howMany) {
     for (var i = 0; i < numbers.length; i++) {
         var articleDiv = document.querySelector("div.numbers");
         var elem = document.createElement("a");
+        elem.style = "margin-right: 10px;"
         var elemText = document.createTextNode(numbers[i]);
         elem.appendChild(elemText);
         articleDiv.appendChild(elem);
