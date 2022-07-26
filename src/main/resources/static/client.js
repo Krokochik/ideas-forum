@@ -26,6 +26,8 @@ function onLoad() {
           numbers[0] = JSON.parse(JSON.stringify(data)).number;
         })
     for (var i = 0; i < numbers.length; i++) {
+      alert(numbers[0]);
+      alert("ok");
       var articleDiv = document.querySelector("div.numbers");
       var elem = document.createElement("a");
       var elemText = document.createTextNode(numbers[i]);
