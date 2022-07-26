@@ -1,8 +1,10 @@
 package com.krokochik.CampfireGallery.repository;
 
+import java.util.Random;
+
 public class NumbersRepository {
 
-    public Integer generateNumber() {
-        return (int) (Math.random() * 6) + 1;
+    public Integer generateNumber(int min, int max) {
+        return new Random().nextInt(min, max);
     }
 }
