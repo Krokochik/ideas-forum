@@ -7,9 +7,13 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.boot.convert.DataSizeUnit;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class ValueManagerService {
+public class ValueManagerService
+{
     private ArrayList<VariableRepository> repositories = new ArrayList<>();
+    private final Timer timer = new Timer();
 
     public Integer addRepository() {
         repositories.add(new VariableRepository());
@@ -17,11 +21,6 @@ public class ValueManagerService {
     }
 
     public String getVariable(String name, int repoId) throws IndexOutOfBoundsException, NullPointerException {
-        return repositories.get(repoId).getValue(name);
-    }
-
-    public String getVariable(String name, int repoId, @DefaultValue("1") byte lifePeriod) throws IndexOutOfBoundsException, NullPointerException {
-        System.out.println(lifePeriod + " " + "+1: " + lifePeriod + 1);
         return repositories.get(repoId).getValue(name);
     }
 
@@ -45,5 +44,4 @@ public class ValueManagerService {
     public ValueManagerService(){
         repositories.add(new VariableRepository());
     }
-
 }

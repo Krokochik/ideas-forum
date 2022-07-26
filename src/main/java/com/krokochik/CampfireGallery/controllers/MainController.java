@@ -10,8 +10,4 @@ public class MainController {
     public String mainPage(Model model) {
         return "main";
     }
-    @GetMapping("/repositories/1")
-    public String test(Model model) {
-        return "main";
-    }
 }

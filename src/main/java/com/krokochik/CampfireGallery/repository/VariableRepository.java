@@ -23,7 +23,7 @@ public class VariableRepository {
         stringValues.put(name, newValue);
     }
 
-    public void removeValue(String name) throws NullPointerException {
+    public void removeVariable(String name) throws NullPointerException {
         if(stringValues.get(name) == null)
             throw new NullPointerException();
         stringValues.remove(name);
