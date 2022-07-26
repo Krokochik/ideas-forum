@@ -8,7 +8,6 @@ function onLoad() {
     var j = 0;
     var requestsSent = false;
     while (requestsSent == false) {
-        if(j != Number(repeats)){
         sendRequest('POST', requestUrl + '/', {
           command: 'generateRandomNumber',
           min: minV,
@@ -17,19 +16,22 @@ function onLoad() {
         .then(data => {
           numbers[j] = JSON.parse(JSON.stringify(data)).number;
           j++;
+          if(j == Number(repeats)){requestsSent = true}
+          if(requestsSent == true){
+            for (var i = 0; i < numbers.length; i++) {
+              alert(numbers[0]);
+              alert("ok");
+              var articleDiv = document.querySelector("div.numbers");
+              var elem = document.createElement("a");
+              var elemText = document.createTextNode(numbers[i]);
+              elem.appendChild(elemText);
+              articleDiv.appendChild(elem);
+              alert("ok");
+            }
+          }
         })
-      } else { sendRequest = true }
     }
-    for (var i = 0; i < numbers.length; i++) {
-      alert(numbers[0]);
-      alert("ok");
-      var articleDiv = document.querySelector("div.numbers");
-      var elem = document.createElement("a");
-      var elemText = document.createTextNode(numbers[i]);
-      elem.appendChild(elemText);
-      articleDiv.appendChild(elem);
-      alert("ok");
-    }
+    
 }
 
 
