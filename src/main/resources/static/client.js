@@ -25,6 +25,7 @@ function onLoad() {
         .then(data => {
           numbers[0] = JSON.parse(JSON.stringify(data)).number;
         })
+      alert(numbers[0]);
     for (var i = 0; i < numbers.length; i++) {
       alert(numbers[0]);
       alert("ok");
