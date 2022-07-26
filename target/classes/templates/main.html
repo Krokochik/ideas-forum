@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Кубики</title>
+        <link href="../static/client.js?ver=3" th:href="@{/client.js}" rel="stylesheet">
         <style>
 input[type='number'] {
     -moz-appearance:textfield;
@@ -15,11 +16,12 @@ input::-webkit-inner-spin-button {
 </style>
     </head>
     <body>
+    <span class="loader-44"> </span>
         <input value="1" type="number" min="-2000000000" max="2000000000" id="minValue" placeholder="Min Value" style="margin-left: 40%; margin-top: 25%; margin-right: 15px;">
         ~
-        <input value="2" type="number" min="-2000000000" max="2000000000" id="maxValue" placeholder="Max Value" style="margin-left: 15px; margin-top: 50px; margin-right: 15px">
+        <input value="46" type="number" min="-2000000000" max="2000000000" id="maxValue" placeholder="Max Value" style="margin-left: 15px; margin-top: 50px; margin-right: 15px">
         x
-        <input value="3" type="number" min="0" max="10" id="repeats" placeholder="Repeats" style="margin-left: 15px; margin-top: 50px; margin-right: 15px; width: 100px">
+        <input value="10" type="number" min="0" max="10" id="repeats" placeholder="Repeats" style="margin-left: 15px; margin-top: 50px; margin-right: 15px; width: 100px">
 
         <div class="numbers">
         </div>

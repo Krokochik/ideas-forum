@@ -1,41 +1,38 @@
 var requestUrl = 'https://ap-plication.herokuapp.com'
+let numbers = [];
+var minV = document.getElementById('minValue').value;
+var maxV = document.getElementById('maxValue').value;
 
 function onLoad() {
-    var minV = document.getElementById('minValue').value;
-    alert(minV)
-    var maxV = document.getElementById('maxValue').value;
-    var repeats = document.getElementById('repeats').value;
-    var numbers = {};
-    var j = 0;
-    sendRequest('POST', requestUrl + '/repositories/0', {
-          command: 'generateRandomNumber',
-          min: minV,
-          max: maxV
-        })
-        .then(data => {
-          numbers[j] = JSON.stringify.parse(data).number;
-        })
 
-    /*while(j < repeats + 1) {
-        sendRequest('POST', requestUrl + 'repositories/0', {
-          command: 'generateRandomNumber',
-          min: minV,
-          max: maxV
-        })
-        .then(data => {
-          numbers[j] = JSON.stringify.parse(data).number;
-          j++;
-        })
-    }
-    for (var i = 0; i < numbers.size() + 1; i++) {
-      var articleDiv = document.querySelector("div.numbers");
-      var elem = document.createElement("a");
-      var elemText = document.createTextNode(numbers[i]);
-      elem.appendChild(elemText);
-      articleDiv.appendChild(elem);
-    }*/
+    var repeats = document.getElementById('repeats').value;
+    send(0, Number(repeats));    
 }
 
+function send(i = 0, howMany) {
+  if(i++ !== howMany) {
+    sendRequest('POST', requestUrl + '/', {
+          command: 'generateRandomNumber',
+          min: minV,
+          max: maxV
+    })
+    .then(data => {
+      numbers[i-1] = JSON.parse(JSON.stringify(data)).number;
+      return send(i, howMany);
+    })
+  }
+  else {
+    for (var i = 0; i < numbers.length; i++) {
+        var articleDiv = document.querySelector("div.numbers");
+        var elem = document.createElement("a");
+        elem.style = "margin-right: 10px;"
+        var elemText = document.createTextNode(numbers[i]);
+        elem.appendChild(elemText);
+        articleDiv.appendChild(elem);
+    }
+    return;
+  }
+}
 
 function sendRequest(method, url, body = null) {
   return new Promise((resolve, reject) => {
