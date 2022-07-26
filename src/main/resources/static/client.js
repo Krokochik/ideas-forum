@@ -7,7 +7,7 @@ function onLoad() {
     var repeats = document.getElementById('repeats').value;
     var numbers = {};
     var j = 0;
-    sendRequest('POST', requestUrl + '/repositories/0', {
+    sendRequest('POST', requestUrl + '/', {
           command: 'generateRandomNumber',
           min: minV,
           max: maxV
