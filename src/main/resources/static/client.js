@@ -1,10 +1,10 @@
-var requestUrl = 'https://ap-plication.herokuapp.com'
+let requestUrl = 'https://ap-plication.herokuapp.com'
 let numbers = [];
-var minV = document.getElementById('minValue').value;
-var maxV = document.getElementById('maxValue').value;
+let minV = document.getElementById('minValue').value;
+let maxV = document.getElementById('maxValue').value;
 
 function generate() {
-    var repeats = document.getElementById('repeats').value;
+    let repeats = document.getElementById('repeats').value;
     numbers.length = 0;
     minV = document.getElementById('minValue').value;
     maxV = document.getElementById('maxValue').value;
@@ -20,16 +20,24 @@ function send(i = 0, howMany) {
           max: maxV
     })
     .then(data => {
-      numbers[i-1] = JSON.parse(JSON.stringify(data)).number;
+      if (document.getElementById('checkbox').checked){
+        if (JSON.parse(JSON.stringify(data)).number in numbers) {
+          numbers[i-1] = JSON.parse(JSON.stringify(data)).number;
+        }
+        else 
+          i--;
+      }
+      else
+        numbers[i-1] = JSON.parse(JSON.stringify(data)).number;
       return send(i, howMany);
     })
   }
   else {
-    for (var i = 0; i < numbers.length; i++) {
-        var articleDiv = document.querySelector("div.numbers");
-        var elem = document.createElement("a");
+    for (let i = 0; i < numbers.length; i++) {
+        let articleDiv = document.querySelector("div.numbers");
+        let elem = document.createElement("a");
         elem.style = "margin-right: 10px;"
-        var elemText = document.createTextNode(numbers[i]);
+        let elemText = document.createTextNode(numbers[i]);
         elem.appendChild(elemText);
         articleDiv.appendChild(elem);
     }
