@@ -49,7 +49,6 @@ input::-webkit-inner-spin-button {
 </style>
     </head>
     <body style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
-    <form action="/" method="get">
         <div>
         <input type="number" min="-2000000000" max="2000000000" id="minValue" placeholder="Min Value" style="margin-left: 42%; margin-top: 25%; margin-right: 15px;">
         ~
@@ -58,9 +57,10 @@ input::-webkit-inner-spin-button {
         <input type="number" min="0" max="10" id="repeats" placeholder="Repeats" style="margin-left: 15px; margin-top: 50px; margin-right: 15px; width: 100px">
         </div>
         <button class="btn" style="margin-top: 10px; margin-left: 50%" onclick="generate()">Генерировать</button>
-    </form>
+        <input type="checkbox" style="margin-top: 10px; margin-left: 50%" id="checkbox">
+        <label for="checkbox" class="custom-control-label">без дубликатов</label>
 
-        <div class="numbers" style="margin-left: 40%;">
+        <div class="numbers" style="margin-left: 40%;" id="numbers">
         </div>
         <script src="../static/client.js?ver=3" th:src="@{/client.js}"></script>
     </body>
