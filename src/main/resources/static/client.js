@@ -20,8 +20,8 @@ function send(i = 0, howMany) {
           max: maxV
     })
     .then(data => {
-      if (document.getElementById('checkbox').checked){
-        if (JSON.parse(JSON.stringify(data)).number in numbers) {
+      if (document.getElementById('checkbox').checked) {
+        if (!numbers.includes(JSON.parse(JSON.stringify(data)).number)) {
           numbers[i-1] = JSON.parse(JSON.stringify(data)).number;
         }
         else 
