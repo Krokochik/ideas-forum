@@ -4,12 +4,17 @@ let minV = document.getElementById('minValue').value;
 let maxV = document.getElementById('maxValue').value;
 
 function generate() {
-    let repeats = document.getElementById('repeats').value;
-    numbers.length = 0;
-    minV = document.getElementById('minValue').value;
-    maxV = document.getElementById('maxValue').value;
-    document.getElementById('numbers').innerHTML = "";
-    send(0, Number(repeats));    
+    if ((document.getElementById('checkbox').checked == true && document.getElementById('repeats').value <= document.getElementById('maxValue').value)
+      || document.getElementById('checkbox').checked == false) { 
+      let repeats = document.getElementById('repeats').value;
+      numbers.length = 0;
+      minV = document.getElementById('minValue').value;
+      maxV = document.getElementById('maxValue').value;
+      document.getElementById('numbers').innerHTML = "";
+      send(0, Number(repeats));  
+    }
+    else 
+    alert("Количество повторов превышает маскимальное значение, невозможно сгенерировать без дубликтов");
 }
 
 function send(i = 0, howMany) {
@@ -20,8 +25,8 @@ function send(i = 0, howMany) {
           max: maxV
     })
     .then(data => {
-      if (document.getElementById('checkbox').checked){
-        if (JSON.parse(JSON.stringify(data)).number in numbers) {
+      if (document.getElementById('checkbox').checked) {
+        if (!numbers.includes(JSON.parse(JSON.stringify(data)).number)) {
           numbers[i-1] = JSON.parse(JSON.stringify(data)).number;
         }
         else 
