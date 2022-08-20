@@ -12,4 +12,9 @@ public class MainController {
     public String mainPage(Model model) {
         return "main";
     }
+
+    @GetMapping("/add-note")
+    public String addNotePage(Model model) {
+        return "add-note";
+    }
 }
