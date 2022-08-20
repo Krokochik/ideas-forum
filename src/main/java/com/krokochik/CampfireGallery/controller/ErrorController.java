@@ -19,7 +19,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
             int statusCode = Integer.parseInt(status.toString());
 
             model.addAttribute("code", statusCode + "");
-            model.addAttribute("message", "Error " + statusCode + " : " +  HttpStatus.valueOf(404).getReasonPhrase());
+            model.addAttribute("message", "Error " + statusCode + " : " +  HttpStatus.valueOf(statusCode).getReasonPhrase());
             return "error";
         }
         return "error";
