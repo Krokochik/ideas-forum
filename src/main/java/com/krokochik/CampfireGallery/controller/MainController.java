@@ -19,7 +19,7 @@ public class MainController {
 
         model.addAttribute("theme", theme.equals("light") ? 2 : 1);
         model.addAttribute("lang", !language.equals("") ? language : request.getHeader("Accept-Language").substring(0, 2));
-        return "main";
+        return "googleb8fcdd64aa45ba54";
     }
 
     @GetMapping("/add-note")
