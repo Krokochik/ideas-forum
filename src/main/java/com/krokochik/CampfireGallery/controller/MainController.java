@@ -31,4 +31,14 @@ public class MainController {
         model.addAttribute("lang", !language.equals("") ? language : request.getHeader("Accept-Language").substring(0, 2));
         return "add-note";
     }
+
+    @GetMapping("/settings")
+    public String settingsPage(Model model,  HttpServletRequest request, HttpServletResponse response,
+                               @RequestParam(name = "lang", defaultValue = "", required = false) String language,
+                               @RequestParam(name = "theme", defaultValue = "", required = false) String theme) {
+
+        model.addAttribute("theme", theme.equals("light") ? 2 : 1);
+        model.addAttribute("lang", !language.equals("") ? language : request.getHeader("Accept-Language").substring(0, 2));
+        return "settings";
+    }
 }

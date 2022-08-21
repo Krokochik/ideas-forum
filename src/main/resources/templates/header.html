@@ -3,36 +3,33 @@
 <head>
 </head>
 <body>
-  <header th:fragment="header (mainPage, theme)" th:class="'p-3 mb-3 ' + ${theme == 1? 'text-bg-dark' : 'text-bg-light border-bottom'}">
-    <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a th:href="${'/main?lang=' + lang}" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-          <img src="https://raw.githubusercontent.com/Krokochik/randomNumber/main/signage.png" alt="" width="23" height="24">
-        </a>
-
+  <header th:fragment="header (mainPage, theme)" th:class="'p-3 mb-3 border-bottom select-none ' + ${theme == 1? 'text-bg-dark' : 'text-bg-light'}">
+      <div class="d-flex flex-wrap align-items-center justify-content-center container">
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <a th:href="${'/main?lang=' + lang}" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+            <img src="https://raw.githubusercontent.com/Krokochik/resources/main/signage.png" alt="" width="23" height="24">
+          </a>
           <li><a th:href="'/main?lang=' + ${lang} + '&theme=' + ${theme == 1? 'dark' : 'light'}" th:class="'nav-link px-2 ' + ${mainPage == 'main' ? theme == 1? 'link-primary-light' : 'link-primary-dark' : theme == 1? 'link-light' : 'link-dark'}" th:text="#{home}"></a></li>
           <li><a th:href="'/add-note?lang=' + ${lang} + '&theme=' + ${theme == 1? 'dark' : 'light'}" th:class="'nav-link px-2 ' + ${mainPage == 'add-note' ? theme == 1? 'link-primary-light' : 'link-primary-dark' : theme == 1? 'link-light' : 'link-dark'}" th:text="#{add entry}"></a></li>
         </ul>
 
-        <form class="d-flex" role="search" data-np-checked="1">
-          <input type="search" th:class="'form-control me-2 ' + ${theme == 1? 'text-bg-dark' : 'text-bg-light'}" th:placeholder="@{#{search}+...}" aria-label="Search" data-np-checked="1">
+        <div class="d-flex" role="search" data-np-checked="1">
+          <input th:class="'form-control me-2 ' + ${theme == 1? 'text-bg-dark' : 'text-bg-light'}" th:placeholder="@{#{search}+...}" aria-label="Search" data-np-checked="1">
           <button class="btn btn-outline-success me-2" type="button" th:text="#{search}"></button>
           <div class="dropdown text-end">
-            <a href="#" th:class="'d-block link-dark text-decoration-none dropdown-toggle ' + ${theme == 1? 'text-bg-dark' : 'text-bg-light'}" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+            <a href="#" th:class="'d-block text-decoration-none dropdown-toggle ' + ${theme == 1? 'text-bg-dark link-light' : 'text-bg-light link-dark'}" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="https://raw.githubusercontent.com/Krokochik/resources/main/guest.png" alt="guest" width="32" height="32" class="rounded-circle">
             </a>
-            <ul th:class="'dropdown-menu text-small light ' + ${theme == 1? 'bg-dark' : 'bg-light'}">
-              <li><a th:class="'dropdown-item text-' + ${theme == 1? 'bg-dark' : 'bg-light'}" th:href="'/add-note?lang=' + ${lang} + '&theme=' + ${theme == 1? 'dark' : 'light'}" th:text="#{add entry}"></a></li>
-              <li><a th:class="'dropdown-item text-' + ${theme == 1? 'bg-dark' : 'bg-light'}" href="#" th:text="#{settings}"></a></li>
-              <li><a th:class="'dropdown-item text-' + ${theme == 1? 'bg-dark' : 'bg-light'}" href="#" th:text="#{profile}"></a></li>
+            <ul th:class="'dropdown-menu light ' + ${theme == 1? 'dropdown-menu-dark' : ''}">
+              <li><a class="dropdown-item" th:href="'/add-note?lang=' + ${lang} + '&theme=' + ${theme == 1? 'dark' : 'light'}" th:text="#{add entry}"></a></li>
+              <li><a class="dropdown-item" th:href="'/settings?lang=' + ${lang} + '&theme=' + ${theme == 1? 'dark' : 'light'}" th:text="#{settings}"></a></li>
+              <li><a class="dropdown-item" href="#" th:text="#{profile}"></a></li>
               <li><hr th:class="'dropdown-divider ' + ${theme == 1? 'bg-light' : 'bg-dark'}"></li>
-              <li><a th:class="'dropdown-item text-' + ${theme == 1? 'bg-dark' : 'bg-light'}" href="#" th:text="#{logout}"></a></li>
+              <li><a class="dropdown-item" href="#" th:text="#{logout}"></a></li>
             </ul>
           </div>
-        </form>
+        </div>
       </div>
-    </div>
   </header>
 </body>
 </html>
