@@ -1,21 +1,67 @@
 <!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:javascript="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title th:text="#{home}"></title>
 
+    <style th:insert="styles :: list-groups"></style>
+    <style th:insert="styles :: list-groups-2"></style>
+    <style th:insert="styles :: list-groups-3"></style>
+
     <link rel="icon" href="https://raw.githubusercontent.com/Krokochik/randomNumber/main/signage.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
 </head>
-<body>
-    <header th:insert="header :: header ('main')"></header>
+<body style="min-height: 100vh;" th:class="'bg-' + ${theme == 1? 'secondary' : 'white'}">
+    <input type="hidden" id="language" th:value="${lang}">
+    <input type="hidden" id="theme" th:value="${theme}">
+    <span class="d-block small opacity-50" style="display: none;" id="fSpan" th:text="#{enableDarkTheme}"></span>
+    <span class="d-block small opacity-50" style="display: none;" id="sSpan" th:text="#{enableLightTheme}"></span>
 
+    <header th:insert="header :: header ('main', ${theme})"></header>
+
+    <div style="max-width: 50%; margin-left: auto; margin-right: auto;" class="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
+        <input class="list-group-item-check pe-none" type="radio" onclick="toDark()" name="listGroupCheckableRadios" id="listGroupCheckableRadios1" value=""  data-np-checked="1">
+        <label id="fLabel" th:style="${theme == 1? 'background-color: var(--bs-gray-dark); color: #fff;' : ''}" class="list-group-item rounded-3 py-3" for="listGroupCheckableRadios1" th:text="#{darkTheme}">
+        </label>
+
+        <input class="list-group-item-check pe-none" type="radio" onclick="toLight()" name="listGroupCheckableRadios" id="listGroupCheckableRadios2" value="" data-np-checked="1">
+        <label  class="list-group-item rounded-3 py-3" id="sLabel" for="listGroupCheckableRadios2" th:text="#{lightTheme}">
+        </label>
+    </div>
+    <br>
+    <div class="b-example-divider"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
     <script src="https://getbootstrap.com/docs/5.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
+    <script>
+        function toLight() {
+            window.location.href = '/main?lang=' + document.getElementById('language').value + '&theme=light';
+        }
+        function toDark() {
+            window.location.href = '/main?lang=' + document.getElementById('language').value + '&theme=dark';
+        }
+        function onLoad() {
+            if (document.getElementById('theme').value == 1) {
+                document.getElementById('listGroupCheckableRadios1').setAttribute('checked', '');
+                document.getElementById('listGroupCheckableRadios2').removeAttribute('checked');
+            }
+            else {
+                document.getElementById('listGroupCheckableRadios2').setAttribute('checked', '');
+                document.getElementById('listGroupCheckableRadios1').removeAttribute('checked');
+            }
+
+            document.getElementById('sLabel').appendChild(document.getElementById('sSpan'));
+            document.getElementById('sSpan').style = '';
+
+            document.getElementById('fLabel').appendChild(document.getElementById('fSpan'));
+            document.getElementById('fSpan').style = '';
+        }
+        onLoad();
+    </script>
 </body>
 </html>

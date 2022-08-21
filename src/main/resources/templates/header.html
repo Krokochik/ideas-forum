@@ -3,7 +3,7 @@
 <head>
 </head>
 <body>
-  <header th:fragment="header (mainPage)" class="p-3 mb-3 border-bottom text-bg-dark">
+  <header th:fragment="header (mainPage, theme)" th:class="'p-3 mb-3 ' + ${theme == 1? 'text-bg-dark' : 'text-bg-light border-bottom'}">
     <div class="container">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
         <a th:href="${'/main?lang=' + lang}" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
@@ -11,23 +11,23 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <b><li><a th:href="${'/main?lang=' + lang}" th:class="'nav-link px-2 ' + ${mainPage == 'main' ? 'link-primary-light' : 'link-light'}" th:text="#{home}"></a></li></b>
-          <b><li><a th:href="${'/add-note?lang=' + lang}" th:class="'nav-link px-2 ' + ${mainPage == 'add-note' ? 'link-primary-light' : 'link-light'}" th:text="#{add entry}"></a></li></b>
+          <li><a th:href="'/main?lang=' + ${lang} + '&theme=' + ${theme == 1? 'dark' : 'light'}" th:class="'nav-link px-2 ' + ${mainPage == 'main' ? theme == 1? 'link-primary-light' : 'link-primary-dark' : theme == 1? 'link-light' : 'link-dark'}" th:text="#{home}"></a></li>
+          <li><a th:href="'/add-note?lang=' + ${lang} + '&theme=' + ${theme == 1? 'dark' : 'light'}" th:class="'nav-link px-2 ' + ${mainPage == 'add-note' ? theme == 1? 'link-primary-light' : 'link-primary-dark' : theme == 1? 'link-light' : 'link-dark'}" th:text="#{add entry}"></a></li>
         </ul>
 
         <form class="d-flex" role="search" data-np-checked="1">
-          <input type="search" class="form-control me-2 text-bg-dark" th:placeholder="@{#{search}+...}" aria-label="Search" data-np-checked="1">
+          <input type="search" th:class="'form-control me-2 ' + ${theme == 1? 'text-bg-dark' : 'text-bg-light'}" th:placeholder="@{#{search}+...}" aria-label="Search" data-np-checked="1">
           <button class="btn btn-outline-success me-2" type="button" th:text="#{search}"></button>
           <div class="dropdown text-end">
-            <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle text-bg-dark" data-bs-toggle="dropdown" aria-expanded="false">
+            <a href="#" th:class="'d-block link-dark text-decoration-none dropdown-toggle ' + ${theme == 1? 'text-bg-dark' : 'text-bg-light'}" data-bs-toggle="dropdown" aria-expanded="false">
               <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
             </a>
-            <ul class="dropdown-menu text-small bg-dark">
-              <li><a class="dropdown-item text-light bg-dark" th:href="${'/add-note?lang=' + lang}" th:text="#{add entry}"></a></li>
-              <li><a class="dropdown-item text-light bg-dark" href="#" th:text="#{settings}"></a></li>
-              <li><a class="dropdown-item text-light bg-dark" href="#" th:text="#{profile}"></a></li>
-              <li><hr class="dropdown-divider bg-light"></li>
-              <li><a class="dropdown-item text-light bg-dark" href="#" th:text="#{logout}"></a></li>
+            <ul th:class="'dropdown-menu text-small light ' + ${theme == 1? 'bg-dark' : 'bg-light'}">
+              <li><a th:class="'dropdown-item text-' + ${theme == 1? 'bg-dark' : 'bg-light'}" th:href="${'/add-note?lang=' + lang}" th:text="#{add entry}"></a></li>
+              <li><a th:class="'dropdown-item text-' + ${theme == 1? 'bg-dark' : 'bg-light'}" href="#" th:text="#{settings}"></a></li>
+              <li><a th:class="'dropdown-item text-' + ${theme == 1? 'bg-dark' : 'bg-light'}" href="#" th:text="#{profile}"></a></li>
+              <li><hr th:class="'dropdown-divider ' + ${theme == 1? 'bg-light' : 'bg-dark'}"></li>
+              <li><a th:class="'dropdown-item text-' + ${theme == 1? 'bg-dark' : 'bg-light'}" href="#" th:text="#{logout}"></a></li>
             </ul>
           </div>
         </form>
