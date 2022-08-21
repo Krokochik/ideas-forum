@@ -23,7 +23,7 @@
               <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
             </a>
             <ul th:class="'dropdown-menu text-small light ' + ${theme == 1? 'bg-dark' : 'bg-light'}">
-              <li><a th:class="'dropdown-item text-' + ${theme == 1? 'bg-dark' : 'bg-light'}" th:href="${'/add-note?lang=' + lang}" th:text="#{add entry}"></a></li>
+              <li><a th:class="'dropdown-item text-' + ${theme == 1? 'bg-dark' : 'bg-light'}" th:href="'/add-note?lang=' + ${lang} + '&theme=' + ${theme == 1? 'dark' : 'light'}" th:text="#{add entry}"></a></li>
               <li><a th:class="'dropdown-item text-' + ${theme == 1? 'bg-dark' : 'bg-light'}" href="#" th:text="#{settings}"></a></li>
               <li><a th:class="'dropdown-item text-' + ${theme == 1? 'bg-dark' : 'bg-light'}" href="#" th:text="#{profile}"></a></li>
               <li><hr th:class="'dropdown-divider ' + ${theme == 1? 'bg-light' : 'bg-dark'}"></li>
