@@ -26,9 +26,10 @@
 
     <link rel="icon" href="https://raw.githubusercontent.com/Krokochik/resources/main/signage.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/5.2/examples/sidebars/sidebars.css" rel="stylesheet" crossorigin="anonymous">
 </head>
 
-<body style="min-height: 100vh;" th:class="'bg-' + ${theme == 1? 'secondary' : 'white'}">
+<body style="min-height: 100vh;" th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
     <input type="hidden" id="language" th:value="${lang}">
     <input type="hidden" id="theme" th:value="${theme}">
     <span class="d-block small opacity-50" style="display: none;" id="fSpan1" th:text="#{enableDarkTheme}"></span>
@@ -44,16 +45,16 @@
 
     <header th:replace="header :: header ('settings', ${theme})"></header>
 
-    <div class="select-none">
+    <div class="main"><div class="select-none">
         <form>
             <div style="margin: 4rem auto; margin-top: 2rem;" class="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
-                <p style="text-right: left; margin-right: auto;" th:class="'mb-2 fs-2 fw-bold ' + ${theme == 1? 'text-light' : 'text-dark'}" th:text="#{theme}"></p>
+                <p style="text-right: left; margin-right: auto;" th:class="'mb-2 fs-2 fw-bold ' + ${theme == 'dark'? 'text-light' : 'text-dark'}" th:text="#{theme}"></p>
                 <input class="list-group-item-check pe-none" onclick="toDark();" type="radio" name="listGroupCheckableRadios" id="fListGroupCheckableRadios1" value="" data-np-checked="1">
-                <label id="fLabel1" th:class="${theme == 2? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" for="fListGroupCheckableRadios1" th:text="#{darkTheme}">
+                <label id="fLabel1" th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" for="fListGroupCheckableRadios1" th:text="#{darkTheme}">
                 </label>
 
                 <input class="list-group-item-check pe-none" type="radio" onclick="toLight();" name="listGroupCheckableRadios" id="fListGroupCheckableRadios2" value="" data-np-checked="1">
-                <label th:class="${theme == 2? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="fLabel2" for="fListGroupCheckableRadios2" th:text="#{lightTheme}">
+                <label th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="fLabel2" for="fListGroupCheckableRadios2" th:text="#{lightTheme}">
                 </label>
             </div>
         </form>
@@ -62,18 +63,18 @@
 
         <form>
             <div style="margin: 4rem auto; margin-top: 2rem;" class="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
-                <p style="text-right: left; margin-right: auto;" th:class="'mb-2 fs-2 fw-bold ' + ${theme == 1? 'text-light' : 'text-dark'}" th:text="#{language}"></p>
+                <p style="text-right: left; margin-right: auto;" th:class="'mb-2 fs-2 fw-bold ' + ${theme == 'dark'? 'text-light' : 'text-dark'}" th:text="#{language}"></p>
                 <div class="container-xl item-center">
                     <div class="row">
                         <div style="padding-left: 0px;" class="col">
                             <input class="list-group-item-check pe-none" onclick="switchLang('en')" type="radio" name="listGroupCheckableRadios" id="sListGroupCheckableRadios1" value="" data-np-checked="1">
-                            <label id="sLabel1" th:class="${theme == 2? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" for="sListGroupCheckableRadios1" th:text="#{language.en}">
+                            <label id="sLabel1" th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" for="sListGroupCheckableRadios1" th:text="#{language.en}">
                             </label>
                         </div>
 
                         <div style="padding-left: 0px; padding-right: 0px;" class="col">
                             <input class="list-group-item-check pe-none" type="radio" onclick="switchLang('ru')" name="listGroupCheckableRadios" id="sListGroupCheckableRadios2" value="" data-np-checked="1">
-                            <label th:class="${theme == 2? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel2" for="sListGroupCheckableRadios2" th:text="#{language.ru}">
+                            <label th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel2" for="sListGroupCheckableRadios2" th:text="#{language.ru}">
                             </label>
                         </div>
                     </div>
@@ -83,13 +84,13 @@
                     <div class="row">
                         <div style="padding-left: 0px;" class="col">
                             <input class="list-group-item-check pe-none" type="radio" onclick="switchLang('uk')" name="listGroupCheckableRadios" id="sListGroupCheckableRadios3" value="" data-np-checked="1">
-                            <label th:class="${theme == 2? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel3" for="sListGroupCheckableRadios3" th:text="#{language.uk}">
+                            <label th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel3" for="sListGroupCheckableRadios3" th:text="#{language.uk}">
                             </label>
                         </div>
 
                         <div style="padding-left: 0px; padding-right: 0px;" class="col">
                             <input class="list-group-item-check pe-none" type="radio" onclick="switchLang('be')" name="listGroupCheckableRadios" id="sListGroupCheckableRadios4" value="" data-np-checked="1">
-                            <label th:class="${theme == 2? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel4" for="sListGroupCheckableRadios4" th:text="#{language.be}">
+                            <label th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel4" for="sListGroupCheckableRadios4" th:text="#{language.be}">
                             </label>
                         </div>
                     </div>
@@ -99,13 +100,13 @@
                     <div class="row">
                         <div style="padding-left: 0px;" class="col">
                             <input class="list-group-item-check pe-none" type="radio" onclick="switchLang('it')" name="listGroupCheckableRadios" id="sListGroupCheckableRadios5" value="" data-np-checked="1">
-                            <label th:class="${theme == 2? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel5" for="sListGroupCheckableRadios5" th:text="#{language.it}">
+                            <label th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel5" for="sListGroupCheckableRadios5" th:text="#{language.it}">
                             </label>
                         </div>
 
                         <div style="padding-left: 0px; padding-right: 0px;" class="col">
                             <input class="list-group-item-check pe-none" type="radio" onclick="switchLang('fr')" name="listGroupCheckableRadios" id="sListGroupCheckableRadios6" value="" data-np-checked="1">
-                            <label th:class="${theme == 2? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel6" for="sListGroupCheckableRadios6" th:text="#{language.fr}">
+                            <label th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel6" for="sListGroupCheckableRadios6" th:text="#{language.fr}">
                             </label>
                         </div>
                     </div>
@@ -115,11 +116,11 @@
                     <div class="row">
                         <div style="padding-left: 0px; padding-right: 0px;" class="col">
                             <input class="list-group-item-check pe-none" type="radio" name="listGroupCheckableRadios" id="sListGroupCheckableRadios7" value="" data-np-checked="1">
-                            <label th:class="${theme == 2? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" onclick="switchLang('de')" id="sLabel7" for="sListGroupCheckableRadios7" th:text="#{language.de}">
+                            <label th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" onclick="switchLang('de')" id="sLabel7" for="sListGroupCheckableRadios7" th:text="#{language.de}">
                             </label>
                         </div>
                     </div>
-                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -128,6 +129,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
     <script src="https://getbootstrap.com/docs/5.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
+    <script src="https://getbootstrap.com/docs/5.2/examples/sidebars/sidebars.js" crossorigin="anonymous"></script>
     <script th:replace="resources :: settings-script"></script>
 </body>
 </html>

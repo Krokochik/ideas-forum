@@ -1,4 +1,4 @@
-package com.krokochik.CampfireGallery.controller;
+package com.krokochik.ideasForum.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;

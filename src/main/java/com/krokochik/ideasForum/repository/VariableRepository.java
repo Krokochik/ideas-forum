@@ -1,4 +1,4 @@
-package com.krokochik.CampfireGallery.repository;
+package com.krokochik.ideasForum.repository;
 
 import java.util.HashMap;
 

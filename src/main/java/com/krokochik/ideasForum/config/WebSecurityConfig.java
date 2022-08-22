@@ -1,4 +1,4 @@
-package com.krokochik.CampfireGallery.config;
+package com.krokochik.ideasForum.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

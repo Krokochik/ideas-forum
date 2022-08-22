@@ -1,14 +1,10 @@
-package com.krokochik.CampfireGallery.service;
+package com.krokochik.ideasForum.service;
 
-import com.krokochik.CampfireGallery.repository.VariableRepository;
+import com.krokochik.ideasForum.repository.VariableRepository;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-import org.springframework.boot.convert.DataSizeUnit;
 
 import java.util.ArrayList;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class ValueManagerService
 {

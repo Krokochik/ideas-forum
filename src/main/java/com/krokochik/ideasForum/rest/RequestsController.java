@@ -1,4 +1,4 @@
-package com.krokochik.CampfireGallery.rest;
+package com.krokochik.ideasForum.rest;
 
 import org.springframework.web.bind.annotation.RestController;
 

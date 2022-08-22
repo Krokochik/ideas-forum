@@ -147,25 +147,25 @@
     </style>
    <script th:fragment="settings-script">
        function toLight() {
-           if(!document.getElementById('theme').value != 2)
+           if(!document.getElementById('theme').value != 'light')
                window.location.href = '/settings?lang=' + document.getElementById('language').value + '&theme=light';
        }
 
        function toDark() {
-           if(document.getElementById('theme').value != 1)
+           if(document.getElementById('theme').value != 'dark')
                window.location.href = '/settings?lang=' + document.getElementById('language').value + '&theme=dark';
        }
 
        function switchLang(lang) {
             if(document.getElementById('language').value !== lang) {
-               window.location.href = '/settings?lang=' + lang + '&theme=' + (document.getElementById('theme').value == 1? 'dark' : 'light');
+               window.location.href = '/settings?lang=' + lang + '&theme=' + (document.getElementById('theme').value);
             }
        }
 
        function onLoad() {
            var langs = ["en", "ru", "uk", "be", "it", "fr", "de"];
 
-           if(document.getElementById('theme').value == 1)
+           if(document.getElementById('theme').value == 'dark')
                document.getElementById('fListGroupCheckableRadios1').setAttribute('checked', '');
            else
                document.getElementById('fListGroupCheckableRadios2').setAttribute('checked', '');
