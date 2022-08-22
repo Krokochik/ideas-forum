@@ -26,15 +26,14 @@
         clip: rect(0, 0, 0, 0);
       }
       .list-group-item-check:hover + .dark-theme {
-        background-color: var(--bs-gray-300);
+        background-color: var(--bs-gray-900);
       }
       .list-group-item-check:hover + .light-theme {
         background-color: var(--bs-gray-300);
       }
-      .list-group-item-check + .dark-theme {
+      .list-group-item-check:checked + .dark-theme {
+        color: #000;
         background-color: var(--bs-white);
-        padding-left: 10px;
-        width: 100%;
       }
       .list-group-item-check + .light-theme {
         border: 0.5px solid #000;
@@ -42,9 +41,11 @@
         padding-left: 10px;
         width: 100%;
       }
-      .list-group-item-check:checked + .dark-theme {
+      .list-group-item-check + .dark-theme {
         color: #fff;
+        padding-left: 10px;
         background-color: var(--bs-gray-dark);
+        width: 100%;
       }
       .list-group-item-check:checked + .light-theme {
         border: none;
