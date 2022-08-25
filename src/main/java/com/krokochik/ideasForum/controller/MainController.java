@@ -13,18 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class MainController {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @GetMapping({"/login", "/sign-in", "/log-up", "/sign-up"})
-    public String loginPage(Model model, HttpServletRequest request,
-                            @RequestParam(name = "lang", defaultValue = "", required = false) String language) {
-
-        model.addAttribute("lang", !language.equals("") ? language : request.getHeader("Accept-Language").substring(0, 2));
-        return "login";
-    }
-
     @GetMapping({"/main", "/", "", "/main/{index}"})
     public String mainPage(Model model, HttpServletRequest request, HttpServletResponse response,
                            @RequestParam(name = "lang", defaultValue = "", required = false) String language,
