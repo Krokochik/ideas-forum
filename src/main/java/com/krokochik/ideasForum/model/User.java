@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "user")
-public class User implements UserDetails
+public class User
 {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -26,34 +26,9 @@ public class User implements UserDetails
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
-    }
-
     public User(String email, String password) {
         this.email = email;
         this.password = password;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return !locked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 
     public boolean isLocked() {

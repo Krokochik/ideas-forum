@@ -1,6 +1,5 @@
 package com.krokochik.ideasForum.config;
 
-import com.krokochik.ideasForum.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +15,6 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    UserService userService;
     @Autowired
     DataSource dataSource;
 
@@ -48,11 +45,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .passwordEncoder(NoOpPasswordEncoder.getInstance())
-                .usersByUsernameQuery("select username, password, email from user where username=?")
+                .usersByUsernameQuery("select username, password, locked from user where username=?")
                 .authoritiesByUsernameQuery("select user.username, role.name " +
                                             "from user, role, user_role " +
                                             "where user.id = user_role.user_id " +
                                             "AND role.id = user_role.roles_id " +
-                                            "AND user.username='u';");
+                                            "AND user.username=?");
     }
 }
