@@ -91,7 +91,7 @@ public class AuthController {
                     Mail mail = new Mail();
                     mail.setReceiver(userRepository.findByUsername(context.getAuthentication().getName()).getEmail());
                     mail.setTheme("Email confirmation");
-                    mail.setLink("http://localhost:6606/confirm?name=" + context.getAuthentication().getName() + "&token=" + userToken);
+                    mail.setLink("https://ideas-forum.herokuapp.com/confirm?name=" + context.getAuthentication().getName() + "&token=" + userToken);
                     mailService.sendActiveMail(mail, context.getAuthentication().getName());
                 });
                 mailSending.start();
