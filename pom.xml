@@ -131,11 +131,6 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-        <dependency>
-            <groupId>com.google</groupId>
-            <artifactId>google</artifactId>
-            <version>1</version>
-        </dependency>
 
     </dependencies>
 
