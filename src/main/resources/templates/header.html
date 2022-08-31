@@ -3,7 +3,7 @@
 <head>
 </head>
 <body>
-  <header th:fragment="header (mainPage, theme)" th:class="'p-3 mb-3 border-bottom select-none ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}">
+  <header th:fragment="header (mainPage, theme, auth)" th:class="'p-3 mb-3 border-bottom select-none ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}">
       <div class="d-flex flex-wrap align-items-center justify-content-center container">
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <a th:href="${'/main?lang=' + lang}" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
@@ -21,11 +21,11 @@
               <img src="https://raw.githubusercontent.com/Krokochik/resources/main/guest.png" alt="guest" width="32" height="32" class="rounded-circle">
             </a>
             <ul th:class="'dropdown-menu light ' + ${theme == 'dark'? 'dropdown-menu-dark' : ''}">
-              <li><a class="dropdown-item" th:href="'/add-note?lang=' + ${lang} + '&theme=' + ${theme}" th:text="#{add entry}"></a></li>
+              <li th:if="${auth}"><a class="dropdown-item" th:href="'/add-note?lang=' + ${lang} + '&theme=' + ${theme}" th:text="#{add entry}"></a></li>
               <li><a class="dropdown-item" th:href="'/settings?lang=' + ${lang} + '&theme=' + ${theme}" th:text="#{settings}"></a></li>
-              <li><a class="dropdown-item" href="#" th:text="#{profile}"></a></li>
-              <li><hr th:class="'dropdown-divider ' + ${theme == 1? 'bg-light' : 'bg-dark'}"></li>
-              <li><a class="dropdown-item" href="#" th:text="#{logout}"></a></li>
+              <li th:if="${auth}"><a class="dropdown-item" href="#" th:text="#{profile}"></a></li>
+              <li><hr th:class="'dropdown-divider ' + ${theme == 'dark'? 'bg-light' : 'bg-dark'}"></li>
+              <li><a class="dropdown-item" th:href="${auth? '/logout' : '/login'}" th:text="#{${auth? 'logout' : 'login'}}"></a></li>
             </ul>
           </div>
         </div>

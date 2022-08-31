@@ -440,6 +440,40 @@ h6 span{
 	width: auto;
 	display: block;
 }
+
+.closeModal {
+	position: absolute;
+	top: 30px;
+	right: 20px;
+	width: 24px;
+	height: 24px;
+	opacity: 0.2;
+	cursor: pointer;
+	transition: opacity ease 0.5s;
+}
+
+.closeModal:hover {
+	opacity: 1;
+}
+
+.closeModal::before,
+.closeModal::after {
+	content: '';
+	position: absolute;
+	top: 10px;
+	display: block;
+	width: 24px;
+	height: 3px;
+	background: #c4c3ca;
+}
+
+.closeModal::before {
+	transform: rotate(45deg);
+}
+
+.closeModal::after {
+	transform: rotate(-45deg);
+}
    </style>
    <script th:fragment="settings-script">
        function toLight() {

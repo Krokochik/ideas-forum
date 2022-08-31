@@ -14,7 +14,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title th:text="#{home}"></title>
+  <title th:text="#{add entry}"></title>
 
   <style th:replace="resources :: list-groups"></style>
   <style th:replace="resources :: list-groups-2"></style>
@@ -29,7 +29,7 @@
 
 <body style="min-height: 100vh;" th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
 
-  <header th:insert="header :: header ('add-note', ${theme})"></header>
+  <header th:insert="header :: header ('add-note', ${theme}, ${auth})"></header>
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>

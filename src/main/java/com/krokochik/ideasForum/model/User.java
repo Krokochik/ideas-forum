@@ -1,119 +1,43 @@
 package com.krokochik.ideasForum.model;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.Data;
+import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Set;
 
+@Data
+@ToString(exclude = {"id", "avatar"})
 @Entity
-@Table(name = "user")
+@Table(name = "usr")
 public class User
 {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     private String username;
+    @NotNull
     private String email;
+    @NotNull
     private String password;
     private String avatar;
-    private boolean locked;
+    private boolean active = true;
+    private String mailConfirmationToken;
+    private boolean confirmMailSent = false;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
-
-    public boolean isLocked() {
-        return locked;
-    }
-
-    public void setLocked(boolean locked) {
-        this.locked = locked;
-    }
-
-    public User(String username, String email, String password, String avatar) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.avatar = avatar;
-    }
-
-    public User(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
-
-    public User(String username, String email, String password, String avatar, Set<Role> roles) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.avatar = avatar;
-        this.roles = roles;
-    }
-
-    public User(String username, String email, String password, Set<Role> roles) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-    }
-
     public User() {}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
+    public User(@NotNull String username, @NotNull String email, @NotNull String password) {
         this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 }

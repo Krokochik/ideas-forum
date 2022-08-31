@@ -1,5 +1,6 @@
 package com.krokochik.ideasForum.config;
 
+import com.krokochik.ideasForum.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,8 +8,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -26,18 +29,33 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                    .antMatchers("/", "/main", "/main/**", "/settings", "/sign-up").permitAll()
-                    .antMatchers("/add-note")
-                    .hasAnyRole("USER")
-                    .anyRequest().authenticated()
+            .authorizeRequests()
+                .antMatchers("/", "/main", "/main/**", "/settings", "/mail-confirm")
+                    .permitAll()
+                .antMatchers("/login", "/sign-up")
+                    .not().hasAnyAuthority(Role.USER.name(), Role.ADMIN.name(), Role.MODER.name(), Role.ANONYM.name())
+                .antMatchers("/add-note")
+                    .hasAnyAuthority(Role.USER.name())
+                .antMatchers("/change-email")
+                    .hasAnyAuthority(Role.ANONYM.name())
+                .anyRequest()
+                    .authenticated()
                 .and()
                     .formLogin()
-                    .loginPage("/login")
-                    .permitAll()
+                        .loginPage("/login")
+                        .failureUrl("/login?loginError")
+                        .defaultSuccessUrl("/mail-confirm")
                 .and()
                     .logout()
-                    .permitAll();
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/main")
+                        .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true)
+                .and()
+                    .sessionManagement()
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .and()
+                    .requiresChannel();
     }
 
     @Override
@@ -45,11 +63,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .passwordEncoder(NoOpPasswordEncoder.getInstance())
-                .usersByUsernameQuery("select username, password, locked from user where username=?")
-                .authoritiesByUsernameQuery("select user.username, role.name " +
-                                            "from user, role, user_role " +
-                                            "where user.id = user_role.user_id " +
-                                            "AND role.id = user_role.roles_id " +
-                                            "AND user.username=?");
+                .usersByUsernameQuery("select username, password, active from usr where username=?")
+                .authoritiesByUsernameQuery("select usr.username, user_roles.roles " +
+                                            "from usr inner join user_role user_roles " +
+                                            "on usr.id = user_roles.user_id " +
+                                            "where usr.username=?");
     }
 }

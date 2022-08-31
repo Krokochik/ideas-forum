@@ -41,7 +41,7 @@
     <span class="d-block small opacity-50" style="display: none;" id="sSpan7">Deutsch</span>
 
 
-    <header th:replace="header :: header ('settings', ${theme})"></header>
+    <header th:replace="header :: header ('settings', ${theme}, ${auth})"></header>
 
     <div class="main"><div class="select-none">
         <form>
