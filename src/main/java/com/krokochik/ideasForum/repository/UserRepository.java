@@ -21,6 +21,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Transactional
+    @Query("update User usr set usr.password=?1 where usr.id=?2")
+    void setPasswordById(String password, Long id);
+
+    @Modifying
+    @Transactional
     @Query(value = "update user_role set roles=?1 where user_id=?2", nativeQuery = true)
     void setRoleById(String role, Long id);
 
@@ -28,6 +33,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     @Query("update User usr set usr.confirmMailSent=?1 where usr.id=?2")
     void setConfirmMailSentById(boolean sent, Long id);
+
+    @Modifying
+    @Transactional
+    @Query("update User usr set usr.passwordAbortSent=?1 where usr.id=?2")
+    void setPasswordAbortSentById(boolean sent, Long id);
+
 
     @Modifying
     @Transactional

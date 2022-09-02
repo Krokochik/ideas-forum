@@ -30,9 +30,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/", "/main", "/main/**", "/settings", "/mail-confirm")
+                .antMatchers("/", "/main", "/main/**", "/settings", "/mail-confirm", "/password-abort", "/abortPass")
                     .permitAll()
-                .antMatchers("/login", "/sign-up")
+                .antMatchers("/login", "/sign-up", "/password-abort", "/abortPass")
                     .not().hasAnyAuthority(Role.USER.name(), Role.ADMIN.name(), Role.MODER.name(), Role.ANONYM.name())
                 .antMatchers("/add-note")
                     .hasAnyAuthority(Role.USER.name())

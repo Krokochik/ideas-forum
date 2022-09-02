@@ -26,7 +26,9 @@ public class User
     private String avatar;
     private boolean active = true;
     private String mailConfirmationToken;
+    private String passwordAbortToken;
     private boolean confirmMailSent = false;
+    private boolean passwordAbortSent = false;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))

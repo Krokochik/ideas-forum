@@ -26,14 +26,14 @@ public class MailService {
     @Value("spring.mail.sender.text")
     String senderText;
 
-    public void sendActiveMail(Mail mail, String name) {
+    public void sendEmail(Mail mail, String name, String htmlName) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message);
             helper.setFrom(new InternetAddress(senderEmail, "Ideas-forum"));
             helper.setTo(mail.getReceiver());
             helper.setSubject(mail.getTheme());
-            Scanner scanner = new Scanner(new ClassPathResource("templates/confirm.html").getInputStream());
+            Scanner scanner = new Scanner(new ClassPathResource("templates/" + htmlName).getInputStream());
             StringBuilder html = new StringBuilder();
             while (scanner.hasNextLine()) html.append(scanner.nextLine());
             helper.setText(html.toString().replace("{LINK}", mail.getLink()).replace("{NAME}", name), true);
@@ -43,6 +43,10 @@ public class MailService {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
+    }
+
+    public void sendActiveMail(Mail mail, String name)  {
+        sendEmail(mail, name, "confirm.html");
     }
 }
 

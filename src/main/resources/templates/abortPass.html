@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en" class="oldie">
 <html lang="en">
-<head>  <!-- Google tag (gtag.js) -->
+<head>
+    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGY1BPG84M"></script>
     <script>
   window.dataLayer = window.dataLayer || [];
@@ -12,6 +13,7 @@
 </script>
     <meta charset="utf-8">
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="icon" href="https://raw.githubusercontent.com/Krokochik/resources/main/signage.png">
 
     <style>html,body{overflow:hidden;height:100%}.fullpage{padding-bottom:0;margin:0;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column}.fullpage .main-header{min-width:0}.fullpage .mobile-action-button{display:block;width:48%;float:left;text-align:center;margin:0 4% 10px 0}.fullpage .mobile-action-button:nth-child(even){margin-right:0}.fullpage .jump-view{width:48%;margin:0 4% 10px 0;float:left}.fullpage .jump-view:nth-child(even){margin-right:0}.fullpage .jump-view:nth-child(3){display:none}.fullpage .jump-label{display:block}.oldie-header{display:none;padding:5px;background:var(--cp-color-20);color:var(--cp-color-1)}html.oldie .oldie-header{display:block}html.oldie .main-header{display:none}#result-iframe-wrap{-webkit-box-flex:1;-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;height:100%;position:relative;overflow:auto;-webkit-overflow-scrolling:touch}html.oldie #result-iframe-wrap{height:100%;height:calc(100% - 32px)}#result{position:absolute;top:0;left:0;border:0;background:var(--cp-color-1);width:100%;height:100%;display:block}#full-view-ad{position:absolute;left:50%;bottom:0;-webkit-transform:translateX(-50%);transform:translateX(-50%);width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;z-index:1}</style>
 </head>
@@ -25,58 +27,44 @@
 
         <title>Login</title>
 
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
-        <link rel="icon" href="https://raw.githubusercontent.com/Krokochik/resources/main/signage.png">
 
         <style th:replace="resources :: login"></style>
     </head>
 
     <body translate="no">
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content" style="background-color: #2a2b38; background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg')">
-                <button type="button" style="background: none; border: none; top: 20px;" class="closeModal" data-bs-dismiss="modal"></button>
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Log out?</h5>
-                </div>
-                <div class="modal-body">
-                    Do You really wanna log out?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                    <button type="button" onclick="window.location.href = '/logout'" class="btn btn-primary">Yes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="section">
         <div class="container">
             <div class="row full-height justify-content-center">
                 <div class="col-12 text-center align-self-center py-5">
                     <div class="section pb-5 pt-5 pt-sm-2 text-center">
-                        <div class="card-3d-wrap mx-auto h-auto" style="min-height: 320px;">
+                        <div class="card-3d-wrap mx-auto" style="height: 300px;">
                             <div class="card-3d-wrapper">
                                 <div class="card-front">
-                                    <div onclick="window.location.href = '/main'" class="closeModal" style="top: 15px; right: 15px"></div>
+                                    <div onclick="window.location.href = '/login'" class="closeModal" style="top: 20px;"></div>
                                     <div class="center-wrap">
                                         <div class="section text-center">
-                                            <h4 class="mb-4 pb-3">Confirm your email</h4>
+                                            <h4 class="mb-4 pb-3">Change your email</h4>
+                                            <form th:action="@{/abortPass}" method="post">
                                                 <div class="form-group">
-                                                </div>
-                                                <p class="mb-0 mt-4 text-center">Confirm your email by link in the letter.</p>
-                                                <p class="mb-0 mt-4 text-center" th:text="'The letter has been sent to: ' + ${@userAuth.getCurrentEmail()} + '.'"></p>
-                                                <div class="row" style="width: 100%; margin: auto;">
-                                                    <div class="col">
-                                                        <p class="mb-2 mt-4 text-center"><a href="/change-email" class="link">Incorrect email?</a></p>
+                                                    <div th:if="${param.error}" class="text-bg-danger rounded mb-3 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
+                                                        <p style="padding: 8px;">Passwords don't match.</p>
                                                     </div>
-                                                    <div class="col">
-                                                        <p  class="mb-2 mt-4 text-center"><a type="button" class="link" data-bs-toggle="modal" data-bs-target="#exampleModal">Invalid account?</a></p>
+                                                    <div class="form-group mt-2">
+                                                        <input type="password" name="pass" class="form-style" placeholder="Your Password" id="password" autocomplete="off">
+                                                        <i class="input-icon uil uil-lock-alt"></i>
+                                                        <i class="uil uil-eye-slash" id="eye" style="cursor: pointer;right: 5px;position: absolute;top: 5px;text-align: right;font-size: 21px;color: #ffeba7;" onclick="document.getElementById('eye').className=document.getElementById('eye').className==='uil uil-eye-slash'? 'uil uil-eye' : 'uil uil-eye-slash'; document.getElementById('password').type=document.getElementById('password').type==='text'?'password':'text';"></i>
+                                                    </div>
+                                                    <div class="form-group mt-2">
+                                                        <input type="password" name="passConf" class="form-style" placeholder="Your Password" id="password1" autocomplete="off">
+                                                        <i class="input-icon uil uil-lock-alt"></i>
+                                                        <i class="uil uil-eye-slash" id="eye1" style="cursor: pointer;right: 5px;position: absolute;top: 5px;text-align: right;font-size: 21px;color: #ffeba7;" onclick="document.getElementById('eye1').className=document.getElementById('eye1').className==='uil uil-eye-slash'? 'uil uil-eye' : 'uil uil-eye-slash'; document.getElementById('password1').type=document.getElementById('password1').type==='text'?'password':'text';"></i>
                                                     </div>
                                                 </div>
+                                                <button type="submit" class="btn mt-4">submit</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -87,7 +75,6 @@
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     </body></html>
 </div>
 </body>

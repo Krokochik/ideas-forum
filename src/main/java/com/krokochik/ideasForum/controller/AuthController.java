@@ -103,6 +103,55 @@ public class AuthController {
         return "redirect:/login";
     }
 
+    @GetMapping("/abortPass")
+    public String abortPass(Model model, @RequestParam(name = "name") String name, @RequestParam(name = "token") String token) {
+        if (userRepository.findByUsername(name) != null && userRepository.findByUsername(name).getPasswordAbortToken().equals(token)) {
+            return "abortPass";
+        }
+        return "redirect:/password-abort";
+    }
+
+    @PostMapping("/abortPass")
+    public String abortPassPost(Model model,
+                                @ModelAttribute(name = "pass") String password, @ModelAttribute(name = "passConf") String passwordConfirm,
+                                @RequestParam(name = "name") String name, @RequestParam(name = "token") String token) {
+        if (userRepository.findByUsername(name) != null && userRepository.findByUsername(name).getPasswordAbortToken().equals(token)) {
+            if (password.equals(passwordConfirm)) {
+                userRepository.setPasswordById(password, userRepository.findByUsername(name).getId());
+                return "redirect:/login";
+            }
+            return "redirect:/abortPass?error";
+        }
+        return "redirect:/password-abort";
+    }
+
+    @GetMapping("/password-abort")
+    public String abortPasswordGet(Model model) {
+        return "pass";
+    }
+
+    @PostMapping("/password-abort")
+    public String abortPassword(Model model,
+                                @ModelAttribute(name = "nick") String name) {
+        if (!name.isEmpty()) {
+            if (userRepository.findByUsername(name) != null) {
+                Thread mailSending = new Thread(() -> {
+                    String passToken = new MailConfirmationTokenService().generateToken();
+                    Mail mail = new Mail();
+                    mail.setTheme("Password abort");
+                    mail.setReceiver(userRepository.findByUsername(name).getEmail());
+                    mail.setLink("https://ideas-forum.herokuapp.com/abortPass?name=" + name + "&token=" + passToken);
+                    new MailService().sendEmail(mail, name, "abort.html");
+                    userRepository.setPasswordAbortSentById(true, userRepository.findByUsername(name).getId());
+                });
+                mailSending.start();
+                return "pass";
+            }
+            return "redirect:/password-abort?notFoundErr";
+        }
+        return "redirect:/password-abort?nameErr";
+    }
+
     @GetMapping("/change-email")
     public String changeEmailGet(Model model) {
         return "change-email";
