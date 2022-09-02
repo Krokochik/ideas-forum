@@ -145,7 +145,7 @@ public class AuthController {
                     userRepository.setPasswordAbortSentById(true, userRepository.findByUsername(name).getId());
                 });
                 mailSending.start();
-                return "pass";
+                return "redirect:/password-abort";
             }
             return "redirect:/password-abort?notFoundErr";
         }
