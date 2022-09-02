@@ -53,9 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .invalidateHttpSession(true)
                 .and()
                     .sessionManagement()
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                .and()
-                    .requiresChannel();
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
     }
 
     @Override

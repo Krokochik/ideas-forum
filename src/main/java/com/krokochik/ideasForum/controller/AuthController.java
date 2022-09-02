@@ -141,7 +141,8 @@ public class AuthController {
                     mail.setTheme("Password abort");
                     mail.setReceiver(userRepository.findByUsername(name).getEmail());
                     mail.setLink("https://ideas-forum.herokuapp.com/abortPass?name=" + name + "&token=" + passToken);
-                    new MailService().sendEmail(mail, name, "abort.html");
+                    MailService mailService = new MailService();
+                    mailService.sendEmail(mail, name, "abort.html");
                     userRepository.setPasswordAbortSentById(true, userRepository.findByUsername(name).getId());
                 });
                 mailSending.start();
