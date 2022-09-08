@@ -40,7 +40,7 @@
             <div class="row full-height justify-content-center">
                 <div class="col-12 text-center align-self-center py-5">
                     <div class="section pb-5 pt-5 pt-sm-2 text-center">
-                        <div class="card-3d-wrap mx-auto" style="height: 320px;">
+                        <div th:unless="${param.passInsecureErr}" class="card-3d-wrap mx-auto" style="height: 320px;">
                             <div class="card-3d-wrapper">
                                 <div class="card-front">
                                     <div onclick="window.location.href = '/login'" class="closeModal" style="top: 20px;"></div>
