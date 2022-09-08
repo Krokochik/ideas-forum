@@ -45,6 +45,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("update User usr set usr.mailConfirmationToken=?1 where usr.id=?2")
     void setMailConfirmationTokenById(String token, Long id);
 
+    @Modifying
+    @Transactional
+    @Query("update User usr set usr.passwordAbortToken=?1 where usr.id=?2")
+    void setPasswordAbortTokenById(String token, Long id);
+
+
     @Override
     Optional<User> findById(Long aLong);
 }
