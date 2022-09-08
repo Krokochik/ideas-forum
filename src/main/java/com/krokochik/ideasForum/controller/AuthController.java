@@ -120,7 +120,7 @@ public class AuthController {
                 userRepository.setPasswordById(password, userRepository.findByUsername(name).getId());
                 return "redirect:/login";
             }
-            return "redirect:/abortPass?error";
+            return "redirect:/abortPass?name=" + name + "&token=" + token + "&error";
         }
         return "redirect:/password-abort";
     }
