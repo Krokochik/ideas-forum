@@ -149,11 +149,16 @@ public class AuthController {
                     userRepository.setPasswordAbortSentById(true, userRepository.findByUsername(name).getId());
                 });
                 mailSending.start();
-                return "redirect:/password-abort";
+                return "redirect:/pass-abort-notify";
             }
             return "redirect:/password-abort?notFoundErr";
         }
         return "redirect:/password-abort?nameErr";
+    }
+
+    @GetMapping("pass-abort-notify")
+    public String abortNotify() {
+        return "abortPassNotify";
     }
 
     @GetMapping("/change-email")
