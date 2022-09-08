@@ -27,7 +27,7 @@
 
         <title>Login</title>
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
         <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
 
         <style th:replace="resources :: login"></style>
@@ -46,8 +46,8 @@
                                     <div onclick="window.location.href = '/login'" class="closeModal" style="top: 20px;"></div>
                                     <div class="center-wrap">
                                         <div class="section text-center">
-                                            <h4 th:unless="${param.error}" class="mb-4 pb-3">Change your password</h4>
-                                            <h4 th:if="${param.error}" class="mb-1 pb-3">Change your password</h4>
+                                            <h4 th:unless="${param.error}" class="mb-4 pb-2">Change your password</h4>
+                                            <h4 th:if="${param.error}" class="mb-1 pb-2">Change your password</h4>
                                             <form th:action="'/abortPass?name=' + ${param.name} + '&token=' + ${param.token}" method="post">
                                                 <div th:if="${param.passInsecureErr}" class="text-bg-danger rounded mb-0 mt-2 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
                                                     <p class="mb-0" style="padding: 8px;">The password must contain an uppercase letter, lowercase letter, number and be at least 8 characters long.</p>
