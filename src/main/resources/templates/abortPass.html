@@ -46,8 +46,8 @@
                                     <div onclick="window.location.href = '/login'" class="closeModal" style="top: 20px;"></div>
                                     <div class="center-wrap">
                                         <div class="section text-center">
-                                            <h4 class="mb-4 pb-3">Change your email</h4>
-                                            <form th:action="@{/abortPass}" method="post">
+                                            <h4 class="mb-4 pb-3">Change your password</h4>
+                                            <form th:action="'/abortPass?name=' + ${param.name} + '&token=' + ${param.token}" method="post">
                                                 <div class="form-group">
                                                     <div th:if="${param.error}" class="text-bg-danger rounded mb-3 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
                                                         <p style="padding: 8px;">Passwords don't match.</p>
