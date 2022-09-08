@@ -116,11 +116,14 @@ public class AuthController {
                                 @ModelAttribute(name = "pass") String password, @ModelAttribute(name = "passConf") String passwordConfirm,
                                 @RequestParam(name = "name") String name, @RequestParam(name = "token") String token) {
         if (userRepository.findByUsername(name) != null && userRepository.findByUsername(name).getPasswordAbortToken().equals(token)) {
-            if (password.equals(passwordConfirm)) {
-                userRepository.setPasswordById(password, userRepository.findByUsername(name).getId());
-                return "redirect:/login";
+            if (UserValidationService.validatePassword(password)) {
+                if (password.equals(passwordConfirm)) {
+                    userRepository.setPasswordById(password, userRepository.findByUsername(name).getId());
+                    return "redirect:/login";
+                }
+                return "redirect:/abortPass?name=" + name + "&token=" + token + "&error";
             }
-            return "redirect:/abortPass?name=" + name + "&token=" + token + "&error";
+            return "redirect:/abortPass?name=" + name + "&token=" + token + "&passInsecureErr";
         }
         return "redirect:/password-abort";
     }

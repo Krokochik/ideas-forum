@@ -23,6 +23,10 @@ public class UserValidationService {
         } else throw new PasswordInsecureException();
     }
 
+    public static boolean validatePassword(String password) {
+        return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.\\S+$).{8,}$");
+    }
+
     public static class EmailFormatException extends Exception {
         EmailFormatException() {
             super();
