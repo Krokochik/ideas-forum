@@ -46,16 +46,6 @@
                                     <div onclick="window.location.href = '/login'" class="closeModal" style="top: 20px;"></div>
                                     <div class="center-wrap">
                                         <div class="section text-center">
-                                            <h4 class="mb-4 pb-3">Change your password</h4>
-                                            <form th:action="'/abortPass?name=' + ${param.name} + '&token=' + ${param.token}" method="post">
-                                                <div class="form-group">
-
-
-                                                </div>
-                                                <button type="submit" class="btn mt-4">submit</button>
-                                            </form>
-                                        </div>
-                                        <div class="section text-center">
                                             <h4 th:unless="${param.error}" class="mb-4 pb-3">Change your password</h4>
                                             <h4 th:if="${param.error}" class="mb-1 pb-3">Change your password</h4>
                                             <form th:action="'/abortPass?name=' + ${param.name} + '&token=' + ${param.token}" method="post">
@@ -75,8 +65,8 @@
                                                     <i class="input-icon uil uil-lock-alt"></i>
                                                     <i class="uil uil-eye-slash" id="eye1" style="cursor: pointer;right: 5px;position: absolute;top: 5px;text-align: right;font-size: 21px;color: #ffeba7;" onclick="document.getElementById('eye1').className=document.getElementById('eye1').className==='uil uil-eye-slash'? 'uil uil-eye' : 'uil uil-eye-slash'; document.getElementById('password1').type=document.getElementById('password1').type==='text'?'password':'text';"></i>
                                                 </div>
-                                                <button th:unless="${param.passInsecureErr}" type="submit" class="btn mt-4">submit</button>
-                                                <button th:if="${param.passInsecureErr}" type="submit" class="btn mt-2">submit</button>
+                                                <button th:unless="${param.error}" type="submit" class="btn mt-4">submit</button>
+                                                <button th:if="${param.error}" type="submit" class="btn mt-2">submit</button>
                                             </form>
                                         </div>
                                     </div>
