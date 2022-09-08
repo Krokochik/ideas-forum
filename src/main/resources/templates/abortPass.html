@@ -49,21 +49,34 @@
                                             <h4 class="mb-4 pb-3">Change your password</h4>
                                             <form th:action="'/abortPass?name=' + ${param.name} + '&token=' + ${param.token}" method="post">
                                                 <div class="form-group">
-                                                    <div th:if="${param.error}" class="text-bg-danger rounded mb-3 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
-                                                        <p style="padding: 8px;">Passwords don't match.</p>
-                                                    </div>
-                                                    <div class="form-group mt-2">
-                                                        <input type="password" name="pass" class="form-style" placeholder="Your Password" id="password" autocomplete="off">
-                                                        <i class="input-icon uil uil-lock-alt"></i>
-                                                        <i class="uil uil-eye-slash" id="eye" style="cursor: pointer;right: 5px;position: absolute;top: 5px;text-align: right;font-size: 21px;color: #ffeba7;" onclick="document.getElementById('eye').className=document.getElementById('eye').className==='uil uil-eye-slash'? 'uil uil-eye' : 'uil uil-eye-slash'; document.getElementById('password').type=document.getElementById('password').type==='text'?'password':'text';"></i>
-                                                    </div>
-                                                    <div class="form-group mt-2">
-                                                        <input type="password" name="passConf" class="form-style" placeholder="Your Password" id="password1" autocomplete="off">
-                                                        <i class="input-icon uil uil-lock-alt"></i>
-                                                        <i class="uil uil-eye-slash" id="eye1" style="cursor: pointer;right: 5px;position: absolute;top: 5px;text-align: right;font-size: 21px;color: #ffeba7;" onclick="document.getElementById('eye1').className=document.getElementById('eye1').className==='uil uil-eye-slash'? 'uil uil-eye' : 'uil uil-eye-slash'; document.getElementById('password1').type=document.getElementById('password1').type==='text'?'password':'text';"></i>
-                                                    </div>
+
+
                                                 </div>
                                                 <button type="submit" class="btn mt-4">submit</button>
+                                            </form>
+                                        </div>
+                                        <div class="section text-center">
+                                            <h4 th:unless="${param.error}" class="mb-4 pb-3">Change your password</h4>
+                                            <h4 th:if="${param.error}" class="mb-1 pb-3">Change your password</h4>
+                                            <form th:action="'/abortPass?name=' + ${param.name} + '&token=' + ${param.token}" method="post">
+                                                <div th:if="${param.passInsecureErr}" class="text-bg-danger rounded mb-0 mt-2 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
+                                                    <p class="mb-0" style="padding: 8px;">The password must contain an uppercase letter, lowercase letter, number and be at least 8 characters long.</p>
+                                                </div>
+                                                <div th:if="${param.error}" class="text-bg-danger rounded mb-0 mt-2 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
+                                                    <p class="mb-0" style="padding: 8px;">Passwords don't match.</p>
+                                                </div>
+                                                <div class="form-group mt-2">
+                                                    <input type="password" name="pass" class="form-style" placeholder="Your Password" id="password" autocomplete="off">
+                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                    <i class="uil uil-eye-slash" id="eye" style="cursor: pointer;right: 5px;position: absolute;top: 5px;text-align: right;font-size: 21px;color: #ffeba7;" onclick="document.getElementById('eye').className=document.getElementById('eye').className==='uil uil-eye-slash'? 'uil uil-eye' : 'uil uil-eye-slash'; document.getElementById('password').type=document.getElementById('password').type==='text'?'password':'text';"></i>
+                                                </div>
+                                                <div class="form-group mt-2">
+                                                    <input type="password" name="passConf" class="form-style" placeholder="Your Password" id="password1" autocomplete="off">
+                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                    <i class="uil uil-eye-slash" id="eye1" style="cursor: pointer;right: 5px;position: absolute;top: 5px;text-align: right;font-size: 21px;color: #ffeba7;" onclick="document.getElementById('eye1').className=document.getElementById('eye1').className==='uil uil-eye-slash'? 'uil uil-eye' : 'uil uil-eye-slash'; document.getElementById('password1').type=document.getElementById('password1').type==='text'?'password':'text';"></i>
+                                                </div>
+                                                <button th:unless="${param.passInsecureErr}" type="submit" class="btn mt-4">submit</button>
+                                                <button th:if="${param.passInsecureErr}" type="submit" class="btn mt-2">submit</button>
                                             </form>
                                         </div>
                                     </div>
