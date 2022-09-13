@@ -53,7 +53,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .invalidateHttpSession(true)
                 .and()
                     .sessionManagement()
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .and()
+                    .rememberMe()
+                        .key("p%a^&Xcg9&DVu$#ADC8%");
     }
 
     @Override

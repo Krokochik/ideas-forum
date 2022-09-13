@@ -91,7 +91,7 @@ public class AuthController {
                     Mail mail = new Mail();
                     mail.setReceiver(userRepository.findByUsername(context.getAuthentication().getName()).getEmail());
                     mail.setTheme("Email confirmation");
-                    mail.setLink("https://ideas-forum.herokuapp.com/confirm?name=" + context.getAuthentication().getName() + "&token=" + userToken);
+                    mail.setLink("https://localhost:6606/confirm?name=" + context.getAuthentication().getName() + "&token=" + userToken);
                     mailService.sendActiveMail(mail, context.getAuthentication().getName());
                 });
                 mailSending.start();
@@ -143,7 +143,7 @@ public class AuthController {
                     Mail mail = new Mail();
                     mail.setTheme("Password abort");
                     mail.setReceiver(userRepository.findByUsername(name).getEmail());
-                    mail.setLink("https://ideas-forum.herokuapp.com/abortPass?name=" + name + "&token=" + passToken);
+                    mail.setLink("https://localhost:6606/abortPass?name=" + name + "&token=" + passToken);
                     userRepository.setPasswordAbortTokenById(passToken, userRepository.findByUsername(name).getId());
                     mailService.sendEmail(mail, name, "abort.html");
                     userRepository.setPasswordAbortSentById(true, userRepository.findByUsername(name).getId());

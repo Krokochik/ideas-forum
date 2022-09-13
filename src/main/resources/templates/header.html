@@ -22,8 +22,8 @@
             </a>
             <ul th:class="'dropdown-menu light ' + ${theme == 'dark'? 'dropdown-menu-dark' : ''}">
               <li th:if="${auth}"><a class="dropdown-item" th:href="'/add-note?lang=' + ${lang} + '&theme=' + ${theme}" th:text="#{add entry}"></a></li>
-              <li><a class="dropdown-item" th:href="'/settings?lang=' + ${lang} + '&theme=' + ${theme}" th:text="#{settings}"></a></li>
               <li th:if="${auth}"><a class="dropdown-item" href="#" th:text="#{profile}"></a></li>
+              <li><a class="dropdown-item" th:href="'/settings?lang=' + ${lang} + '&theme=' + ${theme}" th:text="#{settings}"></a></li>
               <li><hr th:class="'dropdown-divider ' + ${theme == 'dark'? 'bg-light' : 'bg-dark'}"></li>
               <li><a class="dropdown-item" th:href="${auth? '/logout' : '/login'}" th:text="#{${auth? 'logout' : 'login'}}"></a></li>
             </ul>
