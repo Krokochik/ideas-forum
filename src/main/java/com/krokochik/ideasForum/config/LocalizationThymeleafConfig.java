@@ -27,7 +27,7 @@ public class LocalizationThymeleafConfig implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
-        resolver.setCookieDomain("localhost");
+        resolver.setCookieDomain("ideas-forum.herokuapp.com");
         resolver.setCookieMaxAge(1);
         return resolver;
     }
