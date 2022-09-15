@@ -8,6 +8,7 @@ import com.krokochik.ideasForum.service.MailConfirmationTokenService;
 import com.krokochik.ideasForum.service.MailService;
 import com.krokochik.ideasForum.service.UserValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +30,9 @@ public class AuthController {
 
     @Autowired
     MailService mailService;
+
+    @Value("host")
+    String host;
 
     public static boolean isAuthenticated() {
         for (GrantedAuthority authority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
@@ -91,7 +95,7 @@ public class AuthController {
                     Mail mail = new Mail();
                     mail.setReceiver(userRepository.findByUsername(context.getAuthentication().getName()).getEmail());
                     mail.setTheme("Email confirmation");
-                    mail.setLink("https://localhost:6606/confirm?name=" + context.getAuthentication().getName() + "&token=" + userToken);
+                    mail.setLink("https://" + host + "/confirm?name=" + context.getAuthentication().getName() + "&token=" + userToken);
                     mailService.sendActiveMail(mail, context.getAuthentication().getName());
                 });
                 mailSending.start();
@@ -143,7 +147,7 @@ public class AuthController {
                     Mail mail = new Mail();
                     mail.setTheme("Password abort");
                     mail.setReceiver(userRepository.findByUsername(name).getEmail());
-                    mail.setLink("https://localhost:6606/abortPass?name=" + name + "&token=" + passToken);
+                    mail.setLink("https://" + host + "/abortPass?name=" + name + "&token=" + passToken);
                     userRepository.setPasswordAbortTokenById(passToken, userRepository.findByUsername(name).getId());
                     mailService.sendEmail(mail, name, "abort.html");
                     userRepository.setPasswordAbortSentById(true, userRepository.findByUsername(name).getId());
@@ -162,14 +166,20 @@ public class AuthController {
     }
 
     @GetMapping("/change-email")
-    public String changeEmailGet(Model model) {
+    public String changeEmailGet(Model model,
+                                 @RequestParam(name = "from", required = false) String from) {
+
+        if (from != null)
+            model.addAttribute("from", "/" + from);
+
         return "change-email";
     }
 
     @PostMapping("/change-email")
     public String changeEmail(Model model,
                               @ModelAttribute(name = "email") String email) {
-        if (email.isEmpty())
+
+        if (email.isEmpty() || !UserValidationService.validateEmail(email))
             return "change-email";
 
         userRepository.setEmailById(email, userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getId());

@@ -27,6 +27,10 @@ public class UserValidationService {
         return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.\\S+$).{8,}$");
     }
 
+    public static boolean validateEmail(String email) {
+        return rfc2822.matcher(email).matches();
+    }
+
     public static class EmailFormatException extends Exception {
         EmailFormatException() {
             super();

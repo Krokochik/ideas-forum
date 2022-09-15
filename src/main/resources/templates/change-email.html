@@ -43,13 +43,13 @@
             <div class="card-3d-wrap mx-auto" style="height: 300px;">
               <div class="card-3d-wrapper">
                 <div class="card-front">
-                  <div onclick="window.location.href = '/mail-confirm'" class="closeModal" style="top: 20px;"></div>
+                  <a th:href="${from != null? from : '/mail-confirm'}" class="closeModal" style="top: 20px;"></a>
                   <div class="center-wrap">
                     <div class="section text-center">
                       <h4 class="mb-4 pb-3">Change your email</h4>
                       <form th:action="@{/change-email}" method="post">
                         <div class="form-group">
-                            <input type="email" name="email" class="form-style" placeholder="Your Email" id="email" autocomplete="off">
+                            <input type="email" name="email" class="form-style" placeholder="New Email" id="email" autocomplete="off">
                             <i class="input-icon uil uil-at"></i>
                           </div>
                         <button type="submit" class="btn mt-4">submit</button>

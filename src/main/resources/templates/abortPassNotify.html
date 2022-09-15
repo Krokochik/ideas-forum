@@ -61,7 +61,7 @@
             <div class="card-3d-wrap mx-auto h-auto" style="min-height: 230px;">
               <div class="card-3d-wrapper">
                 <div class="card-front">
-                  <div onclick="window.location.href = '/main'" class="closeModal" style="top: 15px; right: 15px"></div>
+                  <a th:href="${from != null? from : '/main'}" class="closeModal" style="top: 15px; right: 15px"></a>
                   <div class="center-wrap">
                     <div class="section text-center">
                       <h4 class="mb-4 pb-3">Change Your password</h4>

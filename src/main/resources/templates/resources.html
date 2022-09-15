@@ -475,6 +475,30 @@ h6 span{
 	transform: rotate(-45deg);
 }
    </style>
+   <style th:fragment="buttons">
+      .btn-drk {
+         text-align: left!important;
+         font-size: 1rem!important;
+         border-radius: 0.5rem!important;
+         border: none!important;
+         background-color: #343a40!important;
+         color: #fff!important;
+      }
+      .btn-drk:hover {
+        background-color: var(--bs-gray-900)!important;
+      }
+      .btn-lgt {
+         text-align: left!important;
+         font-size: 1rem!important;
+         border-radius: 0.5rem!important;
+         border: none!important;
+         background-color: #0d6efd!important;
+         color: #fff!important;
+      }
+      .btn-lgt:hover {
+        background-color: #0b5ed7!important;
+      }
+   </style>
    <script th:fragment="settings-script">
        function toLight() {
            if(!document.getElementById('theme').value != 'light')
@@ -513,6 +537,10 @@ h6 span{
            for(var i = 0; i < 7; i++) {
               if (document.getElementById('language').value === langs[i])
                  document.getElementById('sListGroupCheckableRadios' + (i+1)).setAttribute('checked', '');
+           }
+
+           for(var i = 1; i < 3; i++) {
+              document.getElementById('chng' + i).appendChild(document.getElementById('thSpan' + i));
            }
 
         }

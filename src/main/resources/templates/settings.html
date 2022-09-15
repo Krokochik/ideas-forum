@@ -20,6 +20,7 @@
     <style th:replace="resources :: list-groups-2"></style>
     <style th:replace="resources :: list-groups-3"></style>
     <style th:replace="resources :: select-none"></style>
+    <style th:replace="resources :: buttons"></style>
 
 
     <link rel="icon" href="https://raw.githubusercontent.com/Krokochik/resources/main/signage.png">
@@ -39,6 +40,9 @@
     <span class="d-block small opacity-50" style="display: none;" id="sSpan5">Italiano</span>
     <span class="d-block small opacity-50" style="display: none;" id="sSpan6">Français</span>
     <span class="d-block small opacity-50" style="display: none;" id="sSpan7">Deutsch</span>
+    <span th:if="${auth}" class="d-block small opacity-50" id="thSpan1">Отправить письмо</span>
+    <span th:if="${auth}" class="d-block small opacity-50" id="thSpan2" th:text="'Текущая: ' + ${@userAuth.getCurrentEmail()}"></span>
+
 
 
     <header th:replace="header :: header ('settings', ${theme}, ${auth})"></header>
@@ -47,11 +51,8 @@
         <form th:if="${auth}">
             <div style="margin: 4rem auto; margin-top: 2rem;" class="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
                 <p style="text-right: left; margin-right: auto;" th:class="'mb-2 fs-2 fw-bold ' + ${theme == 'dark'? 'text-light' : 'text-dark'}">Безопасность</p>
-                <button style="width: 350px; height: 67px; text-align: left; font-size: 1rem" class="btn btn-lg btn-primary list-group-item-check" th:class="${theme == 'light'? 'light-theme' : 'dark-theme'}" type="submit">Сменить пароль</button>
-                <a class="list-group-item-check pe-none" onclick="toDark();" type="radio" name="listGroupCheckableRadios" id="fListGroupCheckableRadios0" value="" data-np-checked="1"></a>
-                <label id="fLabel0" th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" for="fListGroupCheckableRadios1" th:text="#{darkTheme}">
-                </label>
-
+                <button class="h-auto" style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;" th:class="'btn btn-' + ${theme == 'dark'? 'drk' : 'lgt'}" id="chng1" onclick="window.location.href = '/password-change'" type="button">Сменить пароль</button>
+                <button class="h-auto" style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;" th:class="'btn btn-' + ${theme == 'dark'? 'drk' : 'lgt'}" id="chng2" onclick="window.location.href = '/change-email?from=settings'" type="button">Сменить почту</button>
             </div>
 
             <div class="b-example-divider"></div>

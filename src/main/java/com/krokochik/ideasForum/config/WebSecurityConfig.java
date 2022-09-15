@@ -36,8 +36,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .not().hasAnyAuthority(Role.USER.name(), Role.ADMIN.name(), Role.MODER.name(), Role.ANONYM.name())
                 .antMatchers("/add-note")
                     .hasAnyAuthority(Role.USER.name())
-                .antMatchers("/change-email")
-                    .hasAnyAuthority(Role.ANONYM.name())
                 .anyRequest()
                     .authenticated()
                 .and()
