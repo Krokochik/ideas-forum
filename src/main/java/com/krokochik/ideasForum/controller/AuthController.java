@@ -8,7 +8,6 @@ import com.krokochik.ideasForum.service.MailConfirmationTokenService;
 import com.krokochik.ideasForum.service.MailService;
 import com.krokochik.ideasForum.service.UserValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 
@@ -31,8 +31,7 @@ public class AuthController {
     @Autowired
     MailService mailService;
 
-    @Value("host")
-    String host;
+    String host = new InternetAddress().getAddress();
 
     public static boolean isAuthenticated() {
         for (GrantedAuthority authority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
