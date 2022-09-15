@@ -56,7 +56,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .and()
                     .rememberMe()
-                        .key("p%a^&Xcg9&DVu$#ADC8%");
+                        .key("p%a^&Xcg9&DVu$#ADC8%")
+                        .rememberMeCookieName("ideasForum-remember-me")
+                        .tokenValiditySeconds(1209600);
     }
 
     @Override
