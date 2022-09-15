@@ -9,8 +9,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import static com.krokochik.ideasForum.ideasForum.HOST;
+
 @Configuration
 public class LocalizationThymeleafConfig implements WebMvcConfigurer {
+
+    String host = HOST.replaceAll(":6606", "");
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -27,7 +31,7 @@ public class LocalizationThymeleafConfig implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
-        resolver.setCookieDomain("ideas-forum.herokuapp.com");
+        resolver.setCookieDomain(host);
         resolver.setCookieMaxAge(1);
         return resolver;
     }

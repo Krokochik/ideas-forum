@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class MainController {
+
     @Autowired
     UserRepository userRepository;
 

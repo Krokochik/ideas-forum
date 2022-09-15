@@ -5,7 +5,6 @@ import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MailConfirmationTokenService;
 import com.krokochik.ideasForum.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static com.krokochik.ideasForum.ideasForum.HOST;
 
 @Controller
 public class SettingsController {
@@ -24,8 +25,7 @@ public class SettingsController {
     @Autowired
     MailService mailService;
 
-    @Value("host")
-    String host;
+    String host = HOST;
 
     @GetMapping("/settings")
     public String settingsPage(Model model, HttpServletRequest request, HttpServletResponse response,

@@ -23,6 +23,7 @@ public class MailService {
 
     @Value("spring.mail.sender.email")
     String senderEmail;
+
     @Value("spring.mail.sender.text")
     String senderText;
 
