@@ -5322,7 +5322,7 @@ var shellprompt = '$ ';
       xhr.open(method, url)
 
       xhr.responseType = 'json'
-      xhr.setRequestHeader('Content-Type', 'application/json')
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
 
       xhr.onload = () => {
         if (xhr.status >= 400) {
@@ -5336,7 +5336,7 @@ var shellprompt = '$ ';
         reject(xhr.response)
       }
 
-      xhr.send(JSON.stringify(body))
+      xhr.send(body)
     })
   }
 
@@ -5346,10 +5346,7 @@ var shellprompt = '$ ';
     );
 
     if (ev.keyCode == 13) {
-      const body = {
-        _csrf: document.getElementById('csrf').value,
-        cmd: command
-      }
+      const body = '_csrf=' + document.getElementById('csrf').value + '&cmd=' +command
 
       sendRequest('POST', requestURL, body)
         .then(data => {term.writeln(JSON.stringify(data)); term.prompt()})
