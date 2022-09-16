@@ -5336,7 +5336,6 @@ var shellprompt = '$ ';
         reject(xhr.response)
       }
 
-      xhr.setRequestHeader(document.getElementById('csrf').name, document.getElementById('csrf').value);
       xhr.send(JSON.stringify(body));
     })
   }
