@@ -10,7 +10,7 @@ import java.util.Map;
 @RestController
 public class Terminal {
 
-    @PostMapping("/terminal")
+    @PostMapping("/terminal/logic")
     public Map<String, Object> commandsMapping(@RequestBody String requestBodyStr) {
         System.out.println("request");
         System.out.println(requestBodyStr);
