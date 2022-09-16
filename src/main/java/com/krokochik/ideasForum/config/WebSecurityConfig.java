@@ -55,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .rememberMe()
                         .key("AUJf1g3u1eHnpGTV3GYPJ%r1qUVNqF7msy$YNUAw")
-                        .useSecureCookie(true);
+                        .useSecureCookie(true).and().csrf().disable();
     }
 
     @Override
