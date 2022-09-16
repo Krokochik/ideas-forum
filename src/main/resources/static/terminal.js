@@ -5347,6 +5347,7 @@ var shellprompt = '$ ';
 
     if (ev.keyCode == 13) {
       const body = {
+        _csrf: document.getElementById('csrf').value
         cmd: command
       }
 
