@@ -16,7 +16,7 @@ public class TerminalController {
         return "terminal";
     }
 
-    @PostMapping("/terminal")
+    @PostMapping("/api/terminal")
     public Map<String, Object> commandsMapping(@RequestBody String requestBodyStr) {
         System.out.println("request");
         System.out.println(requestBodyStr);

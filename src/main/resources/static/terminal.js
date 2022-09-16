@@ -5313,7 +5313,7 @@ var shellprompt = '$ ';
 
   var command = '';
 
-  const requestURL = 'https://ideas-forum.herokuapp.com/terminal'
+  const requestURL = 'https://ideas-forum.herokuapp.com/api/terminal'
 
   function sendRequest(method, url, body = null) {
     return new Promise((resolve, reject) => {
