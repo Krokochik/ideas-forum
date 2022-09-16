@@ -18,6 +18,7 @@ public class TerminalController {
 
     @PostMapping("/terminal")
     public Map<String, Object> commandsMapping(@RequestBody String requestBodyStr) {
+        System.out.println("request");
         System.out.println(requestBodyStr);
         return new HashMap<>(){{put("status", "200");}};
     }
