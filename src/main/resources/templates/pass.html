@@ -27,7 +27,7 @@
 
     <title>Login</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
 
     <style th:replace="resources :: login"></style>
@@ -46,19 +46,21 @@
                   <div onclick="window.location.href = '/login'" class="closeModal" style="top: 20px;"></div>
                   <div class="center-wrap">
                     <div class="section text-center">
-                      <h4 class="mb-4 pb-3">Change your password</h4>
+                      <h4 class="mb-4 pb-3" th:text="#{change.password}"></h4>
                       <form th:action="@{/password-abort}" method="post">
                         <div class="form-group">
                           <div th:if="${param.nameErr}" class="text-bg-danger rounded mb-3 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
-                            <p style="padding: 8px;">Nickname must not be null.</p>
+                            <p style="padding: 8px;" th:text="#{error.null}"></p>
                           </div>
                           <div th:if="${param.notFoundErr}" class="text-bg-danger rounded mb-3 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
-                            <p style="padding: 8px;">Nickname isn't logged.</p>
+                            <p style="padding: 8px;" th:text="#{error.logged}"></p>
                           </div>
-                          <input type="text" name="nick" class="form-style" placeholder="Your Nickname" id="nick" autocomplete="off">
-                          <i class="input-icon uil uil-user"></i>
+                          <div class="form-group mt-2">
+                            <input type="text" name="nick" class="form-style" th:placeholder="#{your.nickname}" id="nick" autocomplete="off">
+                            <i class="input-icon uil uil-user"></i>
+                          </div>
                         </div>
-                        <button type="submit" class="btn mt-4">submit</button>
+                        <button type="submit" class="btn mt-4" th:text="#{submit}"></button>
                       </form>
                     </div>
                   </div>

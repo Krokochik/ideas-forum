@@ -499,6 +499,48 @@ h6 span{
         background-color: #0b5ed7!important;
       }
    </style>
+   <style th:fragment="checkbox">
+ .checkbox-yellow {
+	 width: 24px;
+	 position: relative;
+	 margin: 20px auto;
+}
+ .checkbox-yellow label {
+	 width: 20px;
+	 height: 20px;
+	 cursor: pointer;
+	 position: absolute;
+	 top: 0;
+	 background: #ccc;
+	 border-radius: 4px;
+}
+ .checkbox-yellow label:after {
+	 content: '';
+	 width: 12px;
+	 height: 9px;
+	 position: absolute;
+	 top: 4px;
+	 left: 4px;
+	 border: 3px solid #333;
+	 border-top: none;
+	 border-right: none;
+	 background: transparent;
+	 opacity: 0;
+	 transform: rotate(-45deg);
+}
+ .checkbox-yellow label:hover::after {
+	 opacity: 0.5;
+}
+ .checkbox-yellow input[type=checkbox] {
+	 visibility: hidden;
+}
+ .checkbox-yellow input[type=checkbox]:checked + label:after {
+	 opacity: 1;
+}
+ .checkbox-yellow input[type=checkbox]:checked + label {
+	 background: #ffeba7;
+}
+    </style>
    <script th:fragment="settings-script">
        function toLight() {
            if(!document.getElementById('theme').value != 'light')
