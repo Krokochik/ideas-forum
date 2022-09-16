@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/", "/main", "/main/**", "/settings", "/mail-confirm", "/password-abort", "/abortPass", "/pass-abort-notify", "/terminal")
+                .antMatchers("/", "/main", "/main/**", "/settings", "/mail-confirm", "/password-abort", "/abortPass", "/pass-abort-notify", "/terminal", "/terminal/logic")
                     .permitAll()
                 .antMatchers("/login", "/sign-up", "/password-abort")
                     .not().hasAnyAuthority(Role.USER.name(), Role.ADMIN.name(), Role.MODER.name(), Role.ANONYM.name())

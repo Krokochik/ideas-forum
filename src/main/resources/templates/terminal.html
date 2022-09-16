@@ -2213,6 +2213,7 @@
 </head>
 <body>
 <div id="terminal-container"></div>
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 <script src="terminal.js" th:scr="@{../static/terminal.js}"></script>
 </body>
 </html>
