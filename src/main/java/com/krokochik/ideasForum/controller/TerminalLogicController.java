@@ -23,12 +23,13 @@ public class TerminalLogicController {
     @PostMapping("/terminal/logic")
     public Map<String, Object> commandsMapping(@RequestBody String requestBodyStr, HttpServletResponse response) {
         JsonObject requestBody;
+        JSONParser jsonParser = new JSONParser(requestBodyStr);
         String command = "";
         String message = "";
         short statusCode = 200;
 
         try {
-            requestBody = (JsonObject) new JSONParser(requestBodyStr).parse();
+            requestBody = (JsonObject) jsonParser.parse();
             command = requestBody.get("cmd").getAsString().replaceAll(" ", "").toLowerCase();
         } catch (ParseException parseException) {
             statusCode = 500;
