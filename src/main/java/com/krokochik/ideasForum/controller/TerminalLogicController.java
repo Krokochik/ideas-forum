@@ -39,12 +39,16 @@ public class TerminalLogicController {
         Map<Boolean, String> result;
 
         switch (command.substring(0, 3)) {
-            case "add" ->
-                result = add(command.substring(3));
-            case "del" ->
-                result = delete(command.substring(3));
-            default ->
-                result = new HashMap<>() {{put(false, "400Unknown command");}};
+            case "add" -> result = add(command.substring(3));
+            case "del" -> result = delete(command.substring(3));
+            default -> {
+                if (command.substring(0, 4).equalsIgnoreCase("help")) {
+                    result = help();
+                } else
+                    result = new HashMap<>() {{
+                        put(false, "400Unknown command");
+                    }};
+            }
         }
 
         message = result.get(result.containsKey(true)).substring(3);
@@ -54,6 +58,17 @@ public class TerminalLogicController {
         String finalMessage = message;
         return new HashMap<>() {{
             put("msg", finalMessage);
+        }};
+    }
+
+    private Map<Boolean, String> help() {
+        return new HashMap<>() {{
+            put(true,
+                    """
+                    Commands: add, del.\r
+                        add: add new field to datasource. Required params are params from field constructor.\r
+                        del: delete field from datasource. Required parameters not defined.\r
+                    """);
         }};
     }
 
@@ -67,7 +82,7 @@ public class TerminalLogicController {
                         if (arg.contains("=") && arg.split("=").length >= 2)
                             args.put(arg.split("=")[0], arg.split("=")[1]);
                         else return new HashMap<>() {{
-                            put(false, "400Could not be found param value with name '" + arg.replaceAll("=", "") + "'");
+                            put(false, "400Could not be found param with name '" + arg.replaceAll("=", "") + "'");
                         }};
                     }
                     if (args.containsKey("nick")) {
@@ -79,8 +94,7 @@ public class TerminalLogicController {
                         } else return new HashMap<>() {{
                             put(false, "202Could not be found user with nickname '" + userRepository.findByUsername(args.get("nick")).getUsername() + "'");
                         }};
-                    }
-                    else return new HashMap<>() {{
+                    } else return new HashMap<>() {{
                         put(false, "400Could not be found param with name 'nick'");
                     }};
 
