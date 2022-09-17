@@ -22,7 +22,7 @@ public class TerminalLogicController {
 
     @ResponseBody
     @PostMapping(value = "/terminal/logic", produces = "application/json")
-    public Map<String, Object> commandsMapping(@RequestBody String requestBodyStr, HttpServletResponse response) {
+    public Map<String, String> commandsMapping(@RequestBody String requestBodyStr, HttpServletResponse response) {
         JsonObject requestBody;
         JsonParser jsonParser = new JsonParser();
         String command = "";
