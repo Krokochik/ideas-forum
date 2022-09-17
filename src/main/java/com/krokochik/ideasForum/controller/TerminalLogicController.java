@@ -31,7 +31,7 @@ public class TerminalLogicController {
 
         try {
             requestBody = jsonParser.parse(requestBodyStr).getAsJsonObject();
-            command = requestBody.get("cmd").getAsString().replaceAll(" ", "").toLowerCase();
+            command = requestBody.get("cmd").getAsString().replaceAll(" ", "");
         } catch (Exception exception) {
             statusCode = 500;
         }
@@ -42,8 +42,7 @@ public class TerminalLogicController {
                 if (result.containsKey(true)) {
                     statusCode = 201;
                     message = result.get(true);
-                }
-                else {
+                } else {
                     statusCode = Short.parseShort(result.get(false).substring(0, 3));
                     message = result.get(false).substring(3);
                 }
@@ -96,12 +95,16 @@ public class TerminalLogicController {
                                 for (Role role : user.getRoles()) {
                                     roles.add(role.toString());
                                 }
-                            else
-                                roles.add("null");
-                            return new HashMap<>() {{
-                                put(true, String.format("Created user with nickname '%s', email '%s', password '%s' and roles: '%s'",
-                                        user.getUsername(), user.getEmail(), user.getPassword(), String.join(", ", roles)));
+                            else roles.add("null");
+                            if (userRepository.findByUsername(user.getUsername()) == null) {
+                                return new HashMap<>() {{
+                                    put(true, String.format("Created user with nickname '%s', email '%s', password '%s' and roles: '%s'",
+                                            user.getUsername(), user.getEmail(), user.getPassword(), String.join(", ", roles)));
+                                }};
+                            } else return new HashMap<>() {{
+                                put(false, "200User with nickname '" + user.getUsername() + "'");
                             }};
+
 
                         } catch (Exception exception) {
                             return new HashMap<>() {{
