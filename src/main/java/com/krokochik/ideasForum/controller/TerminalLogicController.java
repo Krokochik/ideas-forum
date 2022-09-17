@@ -63,7 +63,7 @@ public class TerminalLogicController {
                     command = command.substring(command.indexOf(":") + 1);
                     HashMap<String, String> args = new HashMap<>();
                     for (String arg : command.split(",")) {
-                        if (arg.contains("="))
+                        if (arg.contains("=") && arg.split("=").length >= 2)
                             args.put(arg.split("=")[0], arg.split("=")[1]);
                         else
                             return new HashMap<>() {{
@@ -121,7 +121,7 @@ public class TerminalLogicController {
                     }};
                 }
             }
-        } catch (Exception exception) {
+        } catch (IndexOutOfBoundsException exception) {
             return new HashMap<>() {{
                 put(false, "400Expected ':' after param name");
             }};
