@@ -89,7 +89,6 @@ public class TerminalLogicController {
                             user.setRoles(Collections.singleton(Role.USER));
                         }
                         try {
-                            userRepository.save(user);
                             Set<String> roles = new HashSet<>();
                             if (!user.getRoles().isEmpty())
                                 for (Role role : user.getRoles()) {
@@ -97,6 +96,7 @@ public class TerminalLogicController {
                                 }
                             else roles.add("null");
                             if (userRepository.findByUsername(user.getUsername()) == null) {
+                                userRepository.save(user);
                                 return new HashMap<>() {{
                                     put(true, String.format("Created user with nickname '%s', email '%s', password '%s' and roles: '%s'",
                                             user.getUsername(), user.getEmail(), user.getPassword(), String.join(", ", roles)));
