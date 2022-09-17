@@ -66,8 +66,10 @@ public class TerminalLogicController {
             put(true, "200" +
                     """
                     Commands: add, del.\r
-                        add: add new field to datasource. Required params are params from field constructor.\r
-                        del: delete field from datasource. Required parameters not defined.\r
+                        add: add new field to datasource.
+                            Required params are params from field constructor.\r
+                        del: delete field from datasource.
+                            Required parameters not defined.\r
                     """);
         }};
     }
