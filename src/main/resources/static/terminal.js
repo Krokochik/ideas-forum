@@ -5347,9 +5347,14 @@ var shellprompt = '$ ';
         cmd: command
       }
 
-      sendRequest('POST', requestURL, body)
-        .then(data => {term.writeln(''); term.write(data.msg); term.prompt()})
-      command = '';
+      if (command !== 'clear') {
+        sendRequest('POST', requestURL, body)
+          .then(data => {term.writeln(''); term.write(data.msg); term.prompt()})
+        command = '';
+      }
+      else {
+        term.clear();
+      }
     } else if (ev.keyCode == 8) {
      // Do not delete the prompt
      command = command.substring(0, command.length - 1);
