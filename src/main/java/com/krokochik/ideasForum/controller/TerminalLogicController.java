@@ -90,7 +90,7 @@ public class TerminalLogicController {
                         }
                         try {
                             Set<String> roles = new HashSet<>();
-                            if (!user.getRoles().isEmpty())
+                            if (user.getRoles() != null)
                                 for (Role role : user.getRoles()) {
                                     roles.add(role.toString());
                                 }
