@@ -8,6 +8,7 @@ import com.krokochik.ideasForum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +20,8 @@ public class TerminalLogicController {
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("/terminal/logic")
+    @ResponseBody
+    @PostMapping(value = "/terminal/logic", produces = "application/json")
     public Map<String, Object> commandsMapping(@RequestBody String requestBodyStr, HttpServletResponse response) {
         JsonObject requestBody;
         JsonParser jsonParser = new JsonParser();
