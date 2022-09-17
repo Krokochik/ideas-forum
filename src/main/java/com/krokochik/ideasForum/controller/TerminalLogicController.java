@@ -107,6 +107,7 @@ public class TerminalLogicController {
 
 
                         } catch (Exception exception) {
+                            exception.printStackTrace();
                             return new HashMap<>() {{
                                 put(false, "500Unknown internal error");
                             }};
