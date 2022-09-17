@@ -77,7 +77,7 @@ public class TerminalLogicController {
                             if (!roles[0].equals("null")) {
                                 HashSet<Role> roleHashSet = new HashSet<>();
                                 try {
-                                    Arrays.stream(roles).forEach(str -> roleHashSet.add(Role.valueOf(str)));
+                                    Arrays.stream(roles).forEach(str -> roleHashSet.add(Role.valueOf(str.toUpperCase())));
                                 } catch (IllegalArgumentException exception) {
                                     return new HashMap<>() {{
                                         put(false, "400Unknown field in role list'");
