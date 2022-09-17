@@ -5305,9 +5305,8 @@ var shellprompt = '$ ';
     term.write('\r\n' + shellprompt);
   };
 
-  term.writeln('Welcome to xterm.js');
-  term.writeln('This is a local terminal emulation, without a real terminal in the back-end.');
-  term.writeln('Type some keys and commands to play around.');
+  term.writeln('Welcome to developer console');
+  term.writeln('Enter \'help\' command to get help');
   term.writeln('');
   term.prompt();
 
