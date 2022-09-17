@@ -1,11 +1,10 @@
 package com.krokochik.ideasForum.controller;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.krokochik.ideasForum.model.Role;
 import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
-import org.apache.tomcat.util.json.JSONParser;
-import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,15 +22,15 @@ public class TerminalLogicController {
     @PostMapping("/terminal/logic")
     public Map<String, Object> commandsMapping(@RequestBody String requestBodyStr, HttpServletResponse response) {
         JsonObject requestBody;
-        JSONParser jsonParser = new JSONParser(requestBodyStr);
+        JsonParser jsonParser = new JsonParser();
         String command = "";
         String message = "";
         short statusCode = 200;
 
         try {
-            requestBody = (JsonObject) jsonParser.parse();
+            requestBody = jsonParser.parse(requestBodyStr).getAsJsonObject();
             command = requestBody.get("cmd").getAsString().replaceAll(" ", "").toLowerCase();
-        } catch (ParseException parseException) {
+        } catch (Exception exception) {
             statusCode = 500;
         }
 
