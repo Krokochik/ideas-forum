@@ -63,7 +63,7 @@ public class TerminalLogicController {
 
     private Map<Boolean, String> help() {
         return new HashMap<>() {{
-            put(true,
+            put(true, "200" +
                     """
                     Commands: add, del.\r
                         add: add new field to datasource. Required params are params from field constructor.\r
