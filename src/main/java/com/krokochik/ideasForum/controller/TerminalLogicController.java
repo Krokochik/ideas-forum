@@ -102,7 +102,7 @@ public class TerminalLogicController {
                                             user.getUsername(), user.getEmail(), user.getPassword(), String.join(", ", roles)));
                                 }};
                             } else return new HashMap<>() {{
-                                put(false, "200User with nickname '" + user.getUsername() + "'");
+                                put(false, "200User with nickname '" + userRepository.findByUsername(user.getUsername()).getUsername() + "' is already exists");
                             }};
 
 
