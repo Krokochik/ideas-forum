@@ -67,7 +67,7 @@ public class TerminalLogicController {
                             args.put(arg.split("=")[0], arg.split("=")[1]);
                         else
                             return new HashMap<>() {{
-                                put(false, "400Could not be found param value with name '" + arg + "'");
+                                put(false, "400Could not be found param value with name '" + arg.replaceAll("=", "") + "'");
                             }};
                     }
                     if (args.containsKey("pass") && args.containsKey("nick") && args.containsKey("email")) {
