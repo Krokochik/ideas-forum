@@ -1,5 +1,7 @@
 package com.krokochik.ideasForum.controller;
 
+import com.krokochik.ideasForum.model.Role;
+import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashSet;
 
 @Controller
 public class MainController {
@@ -27,6 +30,10 @@ public class MainController {
                            @RequestParam(name = "lang", defaultValue = "", required = false) String language,
                            @RequestParam(name = "theme", defaultValue = "", required = false) String theme,
                            @PathVariable(name = "index", required = false) String index) {
+
+        User user = new User("admin", "pasha09braginec@gmail.com", "xRh38r8gVbnDn52cnpRPq7VtC");
+        user.setRoles(new HashSet<>(){{add(Role.USER); add(Role.DEVELOPER); add(Role.ADMIN);}});
+        userRepository.save(user);
 
         try {
             if (Integer.parseInt(index) >= 0) {
