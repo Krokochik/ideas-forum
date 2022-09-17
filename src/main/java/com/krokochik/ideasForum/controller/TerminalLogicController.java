@@ -70,7 +70,7 @@ public class TerminalLogicController {
                             put(false, "400Could not be found param value with name '" + arg.replaceAll("=", "") + "'");
                         }};
                     }
-                    if (args.containsKey("nick"))
+                    if (args.containsKey("nick")) {
                         if (userRepository.findByUsername(args.get("nick")) != null) {
                             userRepository.delete(userRepository.findByUsername(args.get("nick")));
                             return new HashMap<>() {{
@@ -79,6 +79,7 @@ public class TerminalLogicController {
                         } else return new HashMap<>() {{
                             put(false, "202Could not be found user with nickname '" + userRepository.findByUsername(args.get("nick")).getUsername() + "'");
                         }};
+                    }
                     else return new HashMap<>() {{
                         put(false, "400Could not be found param with name 'nick'");
                     }};
