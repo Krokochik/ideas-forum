@@ -5325,15 +5325,12 @@ var shellprompt = '$ ';
       xhr.setRequestHeader('Content-Type', 'application/json')
 
       xhr.onload = () => {
-        if (xhr.status >= 400) {
-          reject(xhr.response)
-        } else {
           resolve(xhr.response)
-        }
+          console.log(xhr.response)
       }
 
       xhr.onerror = () => {
-        reject(xhr.response)
+        resolve(xhr.response)
       }
 
       xhr.send(JSON.stringify(body));
@@ -5352,7 +5349,6 @@ var shellprompt = '$ ';
 
       sendRequest('POST', requestURL, body)
         .then(data => {term.writeln(JSON.parse(data).msg); console.log(JSON.parse(data).msg); term.prompt()})
-        .catch(err => {term.writeln(JSON.parse(err).msg); console.log(JSON.parse(err).msg); term.prompt()})
       command = '';
     } else if (ev.keyCode == 8) {
      // Do not delete the prompt
