@@ -5348,7 +5348,7 @@ var shellprompt = '$ ';
 
       if (command !== 'clear') {
         sendRequest('POST', requestURL, body)
-          .then(data => {term.writeln(''); term.write(data.msg); term.prompt()})
+          .then(data => {if (data !== null) {term.writeln(''); term.write(data.msg);} term.prompt()})
         command = '';
       }
       else {
