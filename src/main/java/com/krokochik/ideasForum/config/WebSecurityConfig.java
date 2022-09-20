@@ -58,9 +58,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .rememberMe()
                         .key("AUJf1g3u1eHnpGTV3GYPJ%r1qUVNqF7msy$YNUAw")
                         .useSecureCookie(true)
-                    .and()
-                        .csrf()
-                            .ignoringAntMatchers("/terminal/**");
+                .and()
+                    .csrf()
+                        .ignoringAntMatchers("/terminal/**");
     }
 
     @Override

@@ -151,7 +151,7 @@ public class TerminalLogicController {
                             if (userRepository.findByUsername(user.getUsername()) == null) {
                                 userRepository.save(user);
                                 return new HashMap<>() {{
-                                    put(true, String.format("Created user with nickname '%s', email '%s', password '%s' and roles: '%s'",
+                                    put(true, String.format("201Created user with nickname '%s', email '%s', password '%s' and roles: '%s'",
                                             user.getUsername(), user.getEmail(), user.getPassword(), String.join(", ", roles)));
                                 }};
                             } else return new HashMap<>() {{
