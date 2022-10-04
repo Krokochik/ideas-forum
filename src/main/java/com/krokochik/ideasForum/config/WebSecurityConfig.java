@@ -56,7 +56,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .and()
                     .rememberMe()
-                        .key("AUJf1g3u1eHnpGTV3GYPJ%r1qUVNqF7msy$YNUAw")
                         .useSecureCookie(true)
                 .and()
                     .csrf()
