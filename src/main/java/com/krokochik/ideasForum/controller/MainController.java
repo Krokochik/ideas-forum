@@ -40,6 +40,7 @@ public class MainController {
         model.addAttribute("auth", AuthController.isAuthenticated());
         model.addAttribute("theme", theme.equals("light") ? "light" : "dark");
         model.addAttribute("lang", !language.equals("") ? language : request.getHeader("Accept-Language").substring(0, 2));
+        model.addAttribute("nick", AuthController.getContext().getAuthentication().getName());
         return "main";
     }
 
@@ -51,6 +52,7 @@ public class MainController {
         model.addAttribute("auth", SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
         model.addAttribute("theme", theme.equals("light") ? "light" : "dark");
         model.addAttribute("lang", !language.equals("") ? language : request.getHeader("Accept-Language").substring(0, 2));
+        model.addAttribute("nick", AuthController.getContext().getAuthentication().getName());
         return "add-note";
     }
 }

@@ -35,6 +35,7 @@ public class SettingsController {
         model.addAttribute("auth", AuthController.isAuthenticated());
         model.addAttribute("theme", theme.equals("light") ? "light" : "dark");
         model.addAttribute("lang", !language.equals("") ? language : request.getHeader("Accept-Language").substring(0, 2));
+        model.addAttribute("nick", AuthController.getContext().getAuthentication().getName());
         return "settings";
     }
     @GetMapping("/password-change")

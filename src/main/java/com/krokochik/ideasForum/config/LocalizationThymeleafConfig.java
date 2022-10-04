@@ -14,7 +14,7 @@ import static com.krokochik.ideasForum.ideasForum.HOST;
 @Configuration
 public class LocalizationThymeleafConfig implements WebMvcConfigurer {
 
-    String host = HOST.replaceAll(":6606", "");
+    String host = HOST.contains(":6606") ? HOST.replaceAll(":6606", "") : HOST;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

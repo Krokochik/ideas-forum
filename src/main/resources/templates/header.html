@@ -4,6 +4,7 @@
 </head>
 <body>
  <header th:fragment="header (mainPage, theme, auth)"  th:class="'p-3 mb-3 border-bottom select-none ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}">
+   <input type="hidden" id="name" value="${nick}">
    <div class="modal fade" id="exampleModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
      <div class="modal-dialog modal-dialog-centered">
        <div class="modal-content" style="border: none; border-radius: 10px;">
@@ -11,9 +12,8 @@
            <h5 th:class="'modal-title text-bg-' + ${theme}" id="exampleModalLabel" th:text="#{profile}"></h5>
            <button type="button" th:class="'btn-close' + ${theme == 'dark' ? ' btn-close-white' : ''}" data-bs-dismiss="modal"></button>
          </div>
-         <div th:class="'modal-body text-bg-' + ${theme}">
-           <input placeholder="Admin" th:style="'box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'"/>
-           <div class="avatar-upload">
+         <div th:class="'modal-body text-bg-' + ${theme}" style="text-align: center;">
+           <div class="avatar-upload" style="margin-top: 30px;margin-bottom: 35px;">
              <div class="avatar-edit">
                <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
                <label for="imageUpload"></label>
@@ -23,6 +23,7 @@
                </div>
              </div>
            </div>
+           <input th:placeholder="${nick}" th:style="'margin-bottom: 30px;box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'"/>
          </div>
          <div th:class="'modal-footer text-bg-' + ${theme}">
            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
