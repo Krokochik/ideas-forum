@@ -4,7 +4,7 @@
 </head>
 <body>
  <header th:fragment="header (mainPage, theme, auth)"  th:class="'p-3 mb-3 border-bottom select-none ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}">
-   <input type="hidden" id="name" value="${nick}">
+   <input type="hidden" id="name" th:value="${nick}">
    <div class="modal fade" id="exampleModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
      <div class="modal-dialog modal-dialog-centered">
        <div class="modal-content" style="border: none; border-radius: 10px;">
