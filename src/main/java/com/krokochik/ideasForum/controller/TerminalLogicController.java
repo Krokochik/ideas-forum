@@ -21,6 +21,30 @@ public class TerminalLogicController {
     UserRepository userRepository;
 
     @ResponseBody
+    @PostMapping(value = "/profile", produces = "application/json")
+    public Map<String, String> profile(@RequestBody String requestBodyStr, HttpServletResponse response) {
+        JsonObject requestBody;
+        JsonParser jsonParser = new JsonParser();
+        String avatar = "";
+        String name = "";
+        short statusCode = 201;
+
+        try {
+            requestBody = jsonParser.parse(requestBodyStr).getAsJsonObject();
+            avatar = requestBody.get("avatar").getAsString();
+            name = requestBody.get("name").getAsString();
+        } catch (Exception exception) {
+            statusCode = 500;
+        }
+
+        if (name.equalsIgnoreCase(AuthController.getContext().getAuthentication().getName())) {
+            System.out.println(avatar);
+        }
+
+        return null;
+    }
+
+    @ResponseBody
     @PostMapping(value = "/terminal/logic", produces = "application/json")
     public Map<String, String> commandsMapping(@RequestBody String requestBodyStr, HttpServletResponse response) {
         JsonObject requestBody;
