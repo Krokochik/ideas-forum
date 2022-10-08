@@ -19,7 +19,7 @@
                <label for="imageUpload"></label>
              </div>
              <div class="avatar-preview">
-               <div id="imagePreview" style="background-image: url(http://i.pravatar.cc/500?img=7);">
+               <div id="imagePreview" th:style="${auth? 'background-image: url(' + @userAuth.getAvatar() + ');' : ');'}" th:src="${auth ? '' : 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png'}">
                </div>
              </div>
            </div>
@@ -27,7 +27,7 @@
          </div>
          <div th:class="'modal-footer text-bg-' + ${theme}">
            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-           <button type="button" class="btn btn-primary">Save changes</button>
+           <button type="button" onclick="saveAvatar()" class="btn btn-primary">Save changes</button>
          </div>
        </div>
      </div>
@@ -47,7 +47,8 @@
           <button class="btn btn-outline-success me-2" type="button" th:text="#{search}"></button>
           <div class="dropdown text-end">
             <a href="#" th:class="'d-block text-decoration-none dropdown-toggle ' + ${theme == 'dark'? 'text-bg-dark link-light' : 'text-bg-light link-dark'}" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="https://raw.githubusercontent.com/Krokochik/resources/main/guest.png" alt="guest" width="35" height="35" class="rounded-circle">
+              <div th:style="'background-size: cover;background-repeat: no-repeat;background-position: center;width: 35px;height: 35px;display: inline-block; vertical-align: middle;' + ${auth? 'background-image: url(' + @userAuth.getAvatar() + ');' : 'background-image: url(https://raw.githubusercontent.com/Krokochik/resources/main/guest.png);'}"
+                   class="rounded-circle"> </div>
             </a>
             <ul th:class="'dropdown-menu light ' + ${theme == 'dark'? 'dropdown-menu-dark' : ''}">
               <li th:if="${auth}"><a class="dropdown-item" th:href="'/add-note?lang=' + ${lang} + '&theme=' + ${theme}" th:text="#{add entry}"></a></li>

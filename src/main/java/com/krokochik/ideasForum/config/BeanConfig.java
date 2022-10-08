@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.nio.charset.StandardCharsets;
+
 @Configuration
 public class BeanConfig {
     @Autowired
@@ -28,6 +30,10 @@ public class BeanConfig {
             @Override
             public Long getCurrentId() {
                 return userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getId();
+            }
+
+            public String getAvatar() {
+                return new String(userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getAvatar(), StandardCharsets.UTF_8);
             }
         };
     }

@@ -38,8 +38,10 @@ public class TerminalLogicController {
         }
 
         if (name.equalsIgnoreCase(AuthController.getContext().getAuthentication().getName())) {
-            System.out.println(avatar);
-        }
+            if (!avatar.equals("")) {
+                userRepository.setAvatarById(avatar.getBytes(), userRepository.findByUsername(name).getId());
+            } else statusCode = 400;
+        } else statusCode = 403;
 
         return null;
     }
