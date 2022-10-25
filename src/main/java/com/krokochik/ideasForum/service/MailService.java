@@ -24,29 +24,31 @@ public class MailService {
     @Value("spring.mail.sender.email")
     String senderEmail;
 
-    @Value("spring.mail.sender.text")
-    String senderText;
-
     public void sendEmail(Mail mail, String name, String htmlName) {
-        try {
+        try
+        {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message);
+
             helper.setFrom(new InternetAddress(senderEmail, "Ideas-forum"));
             helper.setTo(mail.getReceiver());
             helper.setSubject(mail.getTheme());
+
             Scanner scanner = new Scanner(new ClassPathResource("templates/" + htmlName).getInputStream());
             StringBuilder html = new StringBuilder();
-            while (scanner.hasNextLine()) html.append(scanner.nextLine());
+
+            while (scanner.hasNextLine())
+                html.append(scanner.nextLine());
+
             helper.setText(html.toString().replace("{LINK}", mail.getLink()).replace("{NAME}", name), true);
             javaMailSender.send(message);
-        } catch (MessagingException e) {
+        }
+        catch (MessagingException | IOException e) {
             e.printStackTrace();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
         }
     }
 
-    public void sendActiveMail(Mail mail, String name)  {
+    public void sendActiveMail(Mail mail, String name) {
         sendEmail(mail, name, "confirm.html");
     }
 }

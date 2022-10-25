@@ -32,8 +32,19 @@ public class BeanConfig {
                 return userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getId();
             }
 
+            public String getNickname() {
+                if (AuthController.isAuthenticated()) {
+                    return userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getNickname();
+                }
+                else return "guest";
+            }
+
             public String getAvatar() {
                 return new String(userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getAvatar(), StandardCharsets.UTF_8);
+            }
+
+            public boolean isAuth() {
+                return AuthController.isAuthenticated();
             }
         };
     }

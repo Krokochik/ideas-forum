@@ -1,6 +1,7 @@
 package com.krokochik.ideasForum.repository;
 
 import com.krokochik.ideasForum.model.User;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +19,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     @Query("update User usr set usr.avatar=?1 where usr.id=?2")
     void setAvatarById(byte[] avatar, Long id);
+
+    @Modifying
+    @Transactional
+    @Query("update User usr set usr.username=?1 where usr.id=?2")
+    void setUsernameById(@NotNull String username, Long id);
+
+    @Modifying
+    @Transactional
+    @Query("update User usr set usr.nickname=?1 where usr.id=?2")
+    void setNicknameById(@NotNull String nickname, Long id);
 
 
     @Modifying

@@ -42,15 +42,15 @@
     <span class="d-block small opacity-50" style="display: none;" id="sSpan5">Italiano</span>
     <span class="d-block small opacity-50" style="display: none;" id="sSpan6">Français</span>
     <span class="d-block small opacity-50" style="display: none;" id="sSpan7">Deutsch</span>
-    <span th:if="${auth}" class="d-block small opacity-50" id="thSpan1">Отправить письмо</span>
-    <span th:if="${auth}" class="d-block small opacity-50" id="thSpan2" th:text="'Текущая: ' + ${@userAuth.getCurrentEmail()}"></span>
+    <span th:if="${@userAuth.isAuth()}" class="d-block small opacity-50" id="thSpan1">Отправить письмо</span>
+    <span th:if="${@userAuth.isAuth()}" class="d-block small opacity-50" id="thSpan2" th:text="'Текущая: ' + ${@userAuth.getCurrentEmail()}"></span>
 
 
 
-    <header th:replace="header :: header ('settings', ${theme}, ${auth})"></header>
+    <header th:replace="header :: header ('settings', ${theme})"></header>
 
     <div class="main"><div class="select-none">
-        <form th:if="${auth}">
+        <form th:if="${@userAuth.isAuth()}">
             <div style="margin: 4rem auto; margin-top: 2rem;" class="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
                 <p style="text-right: left; margin-right: auto;" th:class="'mb-2 fs-2 fw-bold ' + ${theme == 'dark'? 'text-light' : 'text-dark'}">Безопасность</p>
                 <button class="h-auto" style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;" th:class="'btn btn-' + ${theme == 'dark'? 'drk' : 'lgt'}" id="chng1" onclick="window.location.href = '/password-change'" type="button">Сменить пароль</button>

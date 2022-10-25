@@ -1,15 +1,13 @@
 package com.krokochik.ideasForum.model;
 
-import lombok.ToString;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @ToString
-public class Mail {
-
-    private String theme;
-    private String link;
-
-    private String receiver;
-
+public class Mail
+{
+    String theme;
+    String link;
+    String receiver;
 }

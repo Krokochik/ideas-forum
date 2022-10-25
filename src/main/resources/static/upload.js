@@ -1,4 +1,5 @@
 var input1 = null;
+var style = document.getElementById("imagePreview").getAttribute('style');
 
 function readURL(input) {
     if (input.files && input.files[0]) {
@@ -19,18 +20,50 @@ $("#imageUpload").change(function() {
     readURL(this);
 });
 
-function saveAvatar() {
+  function sendRequest(method, url, body = null) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest()
+
+      xhr.open(method, url)
+
+      xhr.responseType = 'json'
+      xhr.setRequestHeader('Content-Type', 'application/json')
+
+      xhr.onload = () => {
+          resolve(xhr.response)
+          console.log(xhr.response)
+      }
+
+      xhr.onerror = () => {
+        resolve(xhr.response)
+      }
+
+      xhr.send(JSON.stringify(body));
+    })
+  }
+
+function saveChanges() {
+    var xhr = new XMLHttpRequest();
+
     if (input1 !== null) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:6606/profile");
-        xhr.setRequestHeader("Content-type", "application/json");
         var file = input1.files[0];
         var freader = new FileReader();
         freader.readAsDataURL(file);
         freader.onload = (function (f) {
             return function (e) {
-                xhr.send(JSON.stringify({"avatar": img, "name": document.getElementById('name').value}));
+                sendRequest('POST', "http://localhost:6606/profile", {nickname: document.getElementById("nickname").value, username: document.getElementById('name').value, avatar: img})
+                  .then(data => {if ((document.getElementById("nickname").value.trim().length >= 4) || document.getElementById("imagePreview").value !== document.getElementById("avatar").value)
+                                    window.location.href = window.location.href;})
             };
         })(file);
     }
+    else sendRequest('POST', "http://localhost:6606/profile", {nickname: document.getElementById("nickname").value, username: document.getElementById('name').value})
+           .then(data => {if ((document.getElementById("nickname").value.trim().length >= 4) || document.getElementById("imagePreview").value !== document.getElementById("avatar").value)
+                             window.location.href = window.location.href;})
+
+}
+
+function dismissChanges() {
+    document.getElementById("imagePreview").setAttribute('style', style);
+    document.getElementById("nickname").value = '';
 }

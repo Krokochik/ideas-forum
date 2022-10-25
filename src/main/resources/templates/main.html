@@ -40,7 +40,7 @@
     <input type="hidden" id="language" th:value="${lang}">
     <input type="hidden" id="theme" th:value="${theme}">
 
-    <header th:replace="header :: header ('main', ${theme}, ${auth})"></header>
+    <header th:replace="header :: header ('main', ${theme})"></header>
 
     <div th:class="'album py-5 bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
         <div class="container">

@@ -2,8 +2,8 @@ package com.krokochik.ideasForum.controller;
 
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MailService;
+import com.krokochik.ideasForum.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 
 @Controller
 public class MainController {
@@ -22,11 +23,17 @@ public class MainController {
     @Autowired
     MailService mailService;
 
+    @Autowired
+    PostService postService;
+
     @GetMapping({"/main", "/", "", "/main/{index}"})
     public String mainPage(Model model, HttpServletRequest request, HttpServletResponse response,
                            @RequestParam(name = "lang", defaultValue = "", required = false) String language,
                            @RequestParam(name = "theme", defaultValue = "", required = false) String theme,
                            @PathVariable(name = "index", required = false) String index) {
+
+        System.out.println("postService.formatTagsForDisplay(\"0 1\") = " + postService.formatTagsForDisplay("0 1"));
+        Arrays.stream(postService.findAllPostsWithTags("actual important simple")).forEach(System.out::println);
 
         try {
             if (Integer.parseInt(index) >= 0) {
@@ -37,10 +44,8 @@ public class MainController {
         String tagsExample = "Текст, Шаблон, Пример";
         model.addAttribute("tagsExample", tagsExample);
 
-        model.addAttribute("auth", AuthController.isAuthenticated());
         model.addAttribute("theme", theme.equals("light") ? "light" : "dark");
         model.addAttribute("lang", !language.equals("") ? language : request.getHeader("Accept-Language").substring(0, 2));
-        model.addAttribute("nick", AuthController.getContext().getAuthentication().getName());
         return "main";
     }
 
@@ -49,10 +54,8 @@ public class MainController {
                            @RequestParam(name = "lang", defaultValue = "", required = false) String language,
                            @RequestParam(name = "theme", defaultValue = "", required = false) String theme) {
 
-        model.addAttribute("auth", SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
         model.addAttribute("theme", theme.equals("light") ? "light" : "dark");
         model.addAttribute("lang", !language.equals("") ? language : request.getHeader("Accept-Language").substring(0, 2));
-        model.addAttribute("nick", AuthController.getContext().getAuthentication().getName());
         return "add-note";
     }
 }

@@ -3,14 +3,14 @@
 <head>
 </head>
 <body>
- <header th:fragment="header (mainPage, theme, auth)"  th:class="'p-3 mb-3 border-bottom select-none ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}">
-   <input type="hidden" id="name" th:value="${nick}">
+ <header th:fragment="header (mainPage, theme)"  th:class="'p-3 mb-3 border-bottom select-none ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}">
+   <input type="hidden" id="name" th:value="${@userAuth.getCurrentName()}">
    <div class="modal fade" id="exampleModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
      <div class="modal-dialog modal-dialog-centered">
        <div class="modal-content" style="border: none; border-radius: 10px;">
          <div th:class="'modal-header text-bg-' + ${theme}">
            <h5 th:class="'modal-title text-bg-' + ${theme}" id="exampleModalLabel" th:text="#{profile}"></h5>
-           <button type="button" th:class="'btn-close' + ${theme == 'dark' ? ' btn-close-white' : ''}" data-bs-dismiss="modal"></button>
+           <button onclick="dismissChanges()" type="button" th:class="'btn-close' + ${theme == 'dark' ? ' btn-close-white' : ''}" data-bs-dismiss="modal"></button>
          </div>
          <div th:class="'modal-body text-bg-' + ${theme}" style="text-align: center;">
            <div class="avatar-upload" style="margin-top: 30px;margin-bottom: 35px;">
@@ -19,15 +19,15 @@
                <label for="imageUpload"></label>
              </div>
              <div class="avatar-preview">
-               <div id="imagePreview" th:style="${auth? 'background-image: url(' + @userAuth.getAvatar() + ');' : ');'}" th:src="${auth ? '' : 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png'}">
+               <div id="imagePreview" th:style="${@userAuth.isAuth() ? ('background-image: url(' + @userAuth.getAvatar() + ');') : ');'}" th:src="${@userAuth.isAuth() ? '' : 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png'}">
                </div>
              </div>
            </div>
-           <input th:placeholder="${nick}" th:style="'margin-bottom: 30px;box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'"/>
+           <input id="nickname" th:placeholder="${@userAuth.getNickname()}" th:style="'margin-bottom: 30px;box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'"/>
          </div>
          <div th:class="'modal-footer text-bg-' + ${theme}">
-           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-           <button type="button" onclick="saveAvatar()" class="btn btn-primary">Save changes</button>
+           <button type="button" onclick="dismissChanges()" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+           <button type="button" onclick="saveChanges()" class="btn btn-primary">Save changes</button>
          </div>
        </div>
      </div>
@@ -47,15 +47,15 @@
           <button class="btn btn-outline-success me-2" type="button" th:text="#{search}"></button>
           <div class="dropdown text-end">
             <a href="#" th:class="'d-block text-decoration-none dropdown-toggle ' + ${theme == 'dark'? 'text-bg-dark link-light' : 'text-bg-light link-dark'}" data-bs-toggle="dropdown" aria-expanded="false">
-              <div th:style="'background-size: cover;background-repeat: no-repeat;background-position: center;width: 35px;height: 35px;display: inline-block; vertical-align: middle;' + ${auth? 'background-image: url(' + @userAuth.getAvatar() + ');' : 'background-image: url(https://raw.githubusercontent.com/Krokochik/resources/main/guest.png);'}"
+              <div id="avatar" th:style="'background-size: cover;background-repeat: no-repeat;background-position: center;width: 35px;height: 35px;display: inline-block; vertical-align: middle;' + ${@userAuth.isAuth()? 'background-image: url(' + @userAuth.getAvatar() + ');' : 'background-image: url(https://raw.githubusercontent.com/Krokochik/resources/main/guest.png);'}"
                    class="rounded-circle"> </div>
             </a>
             <ul th:class="'dropdown-menu light ' + ${theme == 'dark'? 'dropdown-menu-dark' : ''}">
-              <li th:if="${auth}"><a class="dropdown-item" th:href="'/add-note?lang=' + ${lang} + '&theme=' + ${theme}" th:text="#{add entry}"></a></li>
-              <li th:if="${auth}"><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal" th:text="#{profile}"></button></li>
+              <li th:if="${@userAuth.isAuth()}"><a class="dropdown-item" th:href="'/add-note?lang=' + ${lang} + '&theme=' + ${theme}" th:text="#{add entry}"></a></li>
+              <li th:if="${@userAuth.isAuth()}"><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal" th:text="#{profile}"></button></li>
               <li><a class="dropdown-item" th:href="'/settings?lang=' + ${lang} + '&theme=' + ${theme}" th:text="#{settings}"></a></li>
               <li><hr th:class="'dropdown-divider ' + ${theme == 'dark'? 'bg-light' : 'bg-dark'}"></li>
-              <li><a class="dropdown-item" th:href="${auth? '/logout' : '/login'}" th:text="#{${auth? 'logout' : 'login'}}"></a></li>
+              <li><a class="dropdown-item" th:href="${@userAuth.isAuth()? '/logout' : '/login'}" th:text="#{${@userAuth.isAuth()? 'logout' : 'login'}}"></a></li>
             </ul>
           </div>
         </div>
