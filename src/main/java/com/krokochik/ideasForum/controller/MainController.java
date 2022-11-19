@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 
 @Controller
 public class MainController {
@@ -31,9 +30,6 @@ public class MainController {
                            @RequestParam(name = "lang", defaultValue = "", required = false) String language,
                            @RequestParam(name = "theme", defaultValue = "", required = false) String theme,
                            @PathVariable(name = "index", required = false) String index) {
-
-        System.out.println("postService.formatTagsForDisplay(\"0 1\") = " + postService.formatTagsForDisplay("0 1"));
-        Arrays.stream(postService.findAllPostsWithTags("actual important simple")).forEach(System.out::println);
 
         try {
             if (Integer.parseInt(index) >= 0) {

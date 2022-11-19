@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -26,8 +29,8 @@ public class PostService {
         StringBuilder builder = new StringBuilder();
         String[] tags = nonFormattedTags.toLowerCase().split(" ");
 
-        for(int i = 0; i < tags.length; i++) {
-            if(!(Arrays.binarySearch(this.tags, tags[i]) >= 0)) {
+        for (int i = 0; i < tags.length; i++) {
+            if (!(Arrays.binarySearch(this.tags, tags[i]) >= 0)) {
                 return null;
             }
             builder.append(i).append(" ");
@@ -40,7 +43,7 @@ public class PostService {
         StringBuilder builder = new StringBuilder();
         String[] tags = nonFormattedTags.split(" ");
 
-        for(int i = 0; i < tags.length; i++) {
+        for (int i = 0; i < tags.length; i++) {
             if (Integer.parseInt(tags[i]) < this.tags.length) {
                 builder.append(this.tags[Integer.parseInt(tags[i])].substring(0, 1).toUpperCase())
                         .append(this.tags[Integer.parseInt(tags[i])].substring(1))
@@ -52,11 +55,26 @@ public class PostService {
     }
 
     public Post[] findAllPostsWithTitle(String title) {
-        return postRepository.findAllPostsWithTitle(title);
+        return postRepository.findAllPostsWithTitle(title).length >= 1 ? postRepository.findAllPostsWithTitle(title) : null;
+    }
+
+    public Post[] findAllPostsWithFuzzyTitle(String title) {
+        Post[] posts = getAllPosts();
+        AtomicReference<Set<Post>> strictSearchingResultSet = new AtomicReference<>();
+
+        Thread strictSearch = new Thread(() -> strictSearchingResultSet.set(Arrays.stream(findAllPostsWithTitle(title)).collect(Collectors.toSet())));
+
+        Thread fuzzySearch = new Thread(() -> {
+            for (Post post : posts) {
+
+            }
+        });
+
+        return null;
     }
 
     public Post[] findAllPostsByAuthor(String authorName) {
-        return postRepository.findAllPostsByAuthor(authorName);
+        return postRepository.findAllPostsByAuthor(authorName); //!!!!!!!!!
     }
 
     public void save(Post post) {
@@ -87,7 +105,7 @@ public class PostService {
                 String currentTag = filterTags[i];
                 if (!(Arrays.binarySearch(post.getTags().split(" "), currentTag) >= 0))
                     break;
-                if (i == filterTags.length-1)
+                if (i == filterTags.length - 1)
                     posts.add(post);
             }
         }
