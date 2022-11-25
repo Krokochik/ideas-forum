@@ -2,6 +2,7 @@ package com.krokochik.ideasForum.service;
 
 import com.krokochik.ideasForum.model.Post;
 import com.krokochik.ideasForum.repository.PostRepository;
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,9 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -25,59 +23,53 @@ public class PostService {
         Arrays.sort(tags);
     }
 
-    public String formatTagsForEntry(@NotNull String nonFormattedTags) {
+    public Optional<String> formatTagsForEntry(@NotNull String nonFormattedTags) {
         StringBuilder builder = new StringBuilder();
-        String[] tags = nonFormattedTags.toLowerCase().split(" ");
+        String[] tags = nonFormattedTags.toLowerCase().split(", ");
 
         for (int i = 0; i < tags.length; i++) {
-            if (!(Arrays.binarySearch(this.tags, tags[i]) >= 0)) {
-                return null;
-            }
-            builder.append(i).append(" ");
+            boolean tagExists = Arrays.binarySearch(this.tags, tags[i]) >= 0;
+            if (tagExists) {
+                builder.append(i).append(" ");
+            } else return Optional.empty();
         }
 
-        return builder.toString();
+        return Optional.of(builder.toString().trim());
     }
 
-    public String formatTagsForDisplay(@NotNull String nonFormattedTags) {
+    public Optional<String> formatTagsForDisplay(@NotNull String nonFormattedTags) {
         StringBuilder builder = new StringBuilder();
         String[] tags = nonFormattedTags.split(" ");
 
         for (int i = 0; i < tags.length; i++) {
-            if (Integer.parseInt(tags[i]) < this.tags.length) {
+            if (Integer.parseInt(tags[i]) < this.tags.length && Integer.parseInt(tags[i]) >= 0) {
                 builder.append(this.tags[Integer.parseInt(tags[i])].substring(0, 1).toUpperCase())
                         .append(this.tags[Integer.parseInt(tags[i])].substring(1))
                         .append(i < tags.length - 1 ? ", " : "");
             }
+            else return Optional.empty();
         }
 
-        return builder.toString();
+        return Optional.of(builder.toString());
     }
 
-    public Post[] findAllPostsWithTitle(String title) {
+    public Post[] findAllPostsWithTitle(String title, boolean strict) {
         return postRepository.findAllPostsWithTitle(title).length >= 1 ? postRepository.findAllPostsWithTitle(title) : null;
     }
 
-    public Post[] findAllPostsWithFuzzyTitle(String title) {
-        Post[] posts = getAllPosts();
-        AtomicReference<Set<Post>> strictSearchingResultSet = new AtomicReference<>();
-
-        Thread strictSearch = new Thread(() -> strictSearchingResultSet.set(Arrays.stream(findAllPostsWithTitle(title)).collect(Collectors.toSet())));
-
-        Thread fuzzySearch = new Thread(() -> {
-            for (Post post : posts) {
-
-            }
-        });
-
-        return null;
-    }
-
-    public Post[] findAllPostsByAuthor(String authorName) {
+    public Post[] findAllPostsByAuthor(@NotNull String authorName) {
         return postRepository.findAllPostsByAuthor(authorName); //!!!!!!!!!
     }
 
-    public void save(Post post) {
+    @SneakyThrows
+    public void save(@NotNull Post post) {
+
+        if (post.getFulltextTitle() == null) {
+
+        }
+        if (post.getFulltextContent() == null) {
+
+        }
         postRepository.save(post);
     }
 
@@ -97,7 +89,7 @@ public class PostService {
 
     public Post[] findAllPostsWithTags(String tags) {
         ArrayList<Post> posts = new ArrayList<>();
-        String[] filterTags = formatTagsForEntry(tags).split(" ");
+        String[] filterTags = tags.split(" ");
         Arrays.sort(filterTags);
 
         for (Post post : getAllPosts()) {

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.demidko:bits:2022.08.06">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/demidko/bits/2022.08.06/bits-2022.08.06.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/demidko/bits/2022.08.06/bits-2022.08.06-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/demidko/bits/2022.08.06/bits-2022.08.06-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -9,7 +9,7 @@ import java.util.Set;
 @Data
 @RequiredArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"avatar"})
+@ToString(exclude = {"avatar", "id"})
 @Entity
 @Table(name = "usr")
 public class User

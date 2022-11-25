@@ -1,5 +1,6 @@
 package com.krokochik.ideasForum.controller;
 
+import com.krokochik.ideasForum.repository.PostRepository;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MailService;
 import com.krokochik.ideasForum.service.PostService;
@@ -24,6 +25,9 @@ public class MainController {
 
     @Autowired
     PostService postService;
+
+    @Autowired
+    PostRepository postRepository;
 
     @GetMapping({"/main", "/", "", "/main/{index}"})
     public String mainPage(Model model, HttpServletRequest request, HttpServletResponse response,

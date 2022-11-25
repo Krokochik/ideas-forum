@@ -47,9 +47,9 @@ public class RequestsController {
         if (username.equalsIgnoreCase(AuthController.getContext().getAuthentication().getName())) {
             if (!avatar.equals("")) {
 
-                double BYTES_IN_MEGABYTE = 1e+6;
-                double INFELICITY_COEFFICIENT = 1.402;
-                double MAX_AVATAR_WEIGHT = 5.0;
+                final double BYTES_IN_MEGABYTE = 1e+6;
+                final double INFELICITY_COEFFICIENT = 1.402;
+                final double MAX_AVATAR_WEIGHT = 5.0;
 
                 if ((avatar.length() / BYTES_IN_MEGABYTE / INFELICITY_COEFFICIENT) <= MAX_AVATAR_WEIGHT) {
                     userRepository.setAvatarById(avatar.getBytes(), userRepository.findByUsername(username).getId());

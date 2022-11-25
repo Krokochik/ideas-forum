@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.demidko:aot-bytecode:2021.10.29">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/demidko/aot-bytecode/2021.10.29/aot-bytecode-2021.10.29.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/demidko/aot-bytecode/2021.10.29/aot-bytecode-2021.10.29-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/demidko/aot-bytecode/2021.10.29/aot-bytecode-2021.10.29-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
