@@ -12,7 +12,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="activation-1.1" level="project" />
-    <orderEntry type="library" name="Maven: com.github.demidko:aot:2022.11.16" level="project" />
+    <orderEntry type="library" name="Maven: com.github.demidko:aot:2022.11.28" level="project" />
     <orderEntry type="library" name="Maven: com.github.demidko:bits:2022.08.06" level="project" />
     <orderEntry type="library" name="Maven: com.github.demidko:aot-bytecode:2021.10.29" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-thymeleaf:2.7.1" level="project" />

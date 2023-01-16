@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>com.github.demidko</groupId>
 			<artifactId>aot</artifactId>
-			<version>2022.11.16</version>
+			<version>2022.11.28</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
