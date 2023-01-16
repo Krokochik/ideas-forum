@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Main {
 
-    public static final String HOST = "localhost:6606";
+    private static final String[] HOSTS = {"ideas-forum.herokuapp.com", "localhost:6606"};
+    public static final String HOST = HOSTS[0];
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Main.class, args);
