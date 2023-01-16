@@ -53,8 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .useSecureCookie(true)
                 .and()
                     .csrf()
-                        .ignoringAntMatchers("/terminal/**", "/profile", "/sign-up")
-                .and().cors();
+                        .ignoringAntMatchers("/terminal/**", "/profile", "/sign-up");
     }
 
     @Override
