@@ -34,9 +34,9 @@ public class User
     boolean confirmMailSent = false;
     boolean passwordAbortSent = false;
 
-    @Column(length = 1000)
+    @Column(columnDefinition = "varchar(1000)")
     String verifier;
-    @Column(length = 1000)
+    @Column(columnDefinition = "varchar(1000)")
     String salt;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
