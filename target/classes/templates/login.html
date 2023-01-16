@@ -1,0 +1,144 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGY1BPG84M"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZGY1BPG84M');
+</script>
+  <meta charset="utf-8">
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel="icon" th:href="@{/images/favicon.png}">
+
+  <style>html,body{overflow:hidden;height:100%}.fullpage{padding-bottom:0;margin:0;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column}.fullpage .main-header{min-width:0}.fullpage .mobile-action-button{display:block;width:48%;float:left;text-align:center;margin:0 4% 10px 0}.fullpage .mobile-action-button:nth-child(even){margin-right:0}.fullpage .jump-view{width:48%;margin:0 4% 10px 0;float:left}.fullpage .jump-view:nth-child(even){margin-right:0}.fullpage .jump-view:nth-child(3){display:none}.fullpage .jump-label{display:block}.oldie-header{display:none;padding:5px;background:var(--cp-color-20);color:var(--cp-color-1)}html.oldie .oldie-header{display:block}html.oldie .main-header{display:none}#result-iframe-wrap{-webkit-box-flex:1;-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;height:100%;position:relative;overflow:auto;-webkit-overflow-scrolling:touch}html.oldie #result-iframe-wrap{height:100%;height:calc(100% - 32px)}#result{position:absolute;top:0;left:0;border:0;background:var(--cp-color-1);width:100%;height:100%;display:block}#full-view-ad{position:absolute;left:50%;bottom:0;-webkit-transform:translateX(-50%);transform:translateX(-50%);width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;z-index:1}</style>
+</head>
+<body class="fullpage">
+<div id="result-iframe-wrap" role="main">
+  <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+        xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+  <head>
+
+    <meta charset="UTF-8">
+
+    <title>Вход</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
+    <link rel="icon" href="https://raw.githubusercontent.com/Krokochik/resources/main/signage.png">
+
+    <style th:replace="resources :: login"></style>
+    <style th:replace="resources :: checkbox"></style>
+
+  </head>
+
+  <body translate="no">
+
+  <div class="section">
+    <div class="container">
+      <div class="row full-height justify-content-center">
+        <div class="col-12 text-center align-self-center py-5">
+          <div class="section pb-5 pt-5 pt-sm-2 text-center">
+            <h6 class="mb-0 pb-3"><span>Авторизация</span><span>Регистрация</span></h6>
+            <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" th:checked="${mode}"/>
+            <label for="reg-log"></label>
+            <div class="card-3d-wrap mx-auto h-auto" style="min-height: 450px;">
+              <div class="card-3d-wrapper">
+                <div class="card-front">
+                  <div onclick="window.location.href = '/main'" class="closeModal" style="top: 20px;"></div>
+                  <div class="center-wrap">
+                    <div class="section text-center">
+                      <h4 th:unless="${param.loginError}" class="mb-4 pb-3">Авторизация</h4>
+                      <h4 th:if="${param.loginError}" class="mb-1 pb-3">Авторизация</h4>
+                      <form th:action="@{/login}" method="post">
+                        <div th:if="${param.loginError}" class="text-bg-danger rounded mb-3 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
+                          <p style="padding: 8px;">Неверный пароль или никнейм</p>
+                        </div>
+                        <div class="form-group">
+                          <input th:value="${name}" type="text" name="username" class="form-style" placeholder="Ваш логин" id="username" autocomplete="off">
+                          <i class="input-icon uil uil-user"></i>
+                        </div>
+                        <div class="form-group mt-2">
+                          <input th:value="${pass}" type="password" name="password" class="form-style" placeholder="Ваш пароль" id="password" autocomplete="off">
+                          <i class="input-icon uil uil-lock-alt"></i>
+                          <i class="uil uil-eye-slash" id="eye" style="cursor: pointer;right: 5px;position: absolute;top: 5px;text-align: right;font-size: 21px;color: #ffeba7;" onclick="document.getElementById('eye').className=document.getElementById('eye').className==='uil uil-eye-slash'? 'uil uil-eye' : 'uil uil-eye-slash'; document.getElementById('password').type=document.getElementById('password').type==='text'?'password':'text';"></i>
+                        </div>
+                        <button type="submit" id="sbmLogin" class="btn mt-4">Подтвердить</button>
+                        <div class="form-group mt-4" style="text-align: left;">
+                          <div class="checkbox-yellow" style="margin-left: auto;margin-right:auto;width:auto;height:auto;text-align: center;">
+                            <input type="checkbox" checked="checked" name="remember-me" id="squaredFour"/>
+                            <label for="squaredFour"></label>
+                            <span style="margin-left: 30px; white-space: nowrap;">Запомнить меня</span>
+                          </div>
+                        </div>
+                        <p class="mb-0 mt-4 text-center"><a style="text-decoration: underline; font-weight: 700" href="/password-abort" class="link">Забыли пароль?</a></p>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-back">
+                  <div onclick="window.location.href = '/main'" class="closeModal" style="top: 20px;"></div>
+                  <div class="center-wrap">
+                    <div class="section text-center">
+                      <h4 th:unless="${param.regErr}" class="mb-4 pb-3">Регистрация</h4>
+                      <h4 th:if="${param.regErr}" class="mb-1 pb-3">Регистрация</h4>
+                      <form th:action="@{/sign-up}" method="post">
+                        <div class="form-group">
+                          <input type="text" name="username1" class="form-style" placeholder="Ваш логин" id="username1" autocomplete="off">
+                          <i class="input-icon uil uil-user"></i>
+                        </div>
+                        <div th:if="${param.nameTakenErr}" class="text-bg-danger rounded mb-2 mt-2 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
+                          <p style="padding: 8px;">Этот логин уже занят.</p>
+                        </div>
+                        <div th:if="${param.nameLenErr}" class="text-bg-danger rounded mb-2 mt-2 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
+                          <p style="padding: 8px;">Никнейм логин содержать не менее 4 символов.</p>
+                        </div>
+                        <div th:if="${param.nameErr}" class="text-bg-danger rounded mb-2 mt-2 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
+                          <p style="padding: 8px;">Пожалуйста, введите логин.</p>
+                        </div>
+                        <div class="form-group mt-2">
+                          <input type="email" name="email1" class="form-style" placeholder="Ваш е-мейл" id="logemail" autocomplete="off">
+                          <i class="input-icon uil uil-at"></i>
+                        </div>
+                        <div th:if="${param.emailFormErr}" class="text-bg-danger rounded mb-2 mt-2 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
+                          <p style="padding: 8px;">Электронная почта должна соответствовать стандарту RFC.</p>
+                        </div>
+                        <div class="form-group mt-2">
+                          <input type="password" name="password1" class="form-style" placeholder="Ваш пароль" id="logpass" autocomplete="off">
+                          <i class="input-icon uil uil-lock-alt"></i>
+                          <i class="uil uil-eye-slash" id="eye1" style="cursor: pointer;right: 5px;position: absolute;top: 5px;text-align: right;font-size: 21px;color: #ffeba7;" onclick="document.getElementById('eye1').className=document.getElementById('eye1').className==='uil uil-eye-slash'? 'uil uil-eye' : 'uil uil-eye-slash'; document.getElementById('logpass').type=document.getElementById('logpass').type==='text'?'password':'text';"></i>
+                        </div>
+                        <div th:if="${param.passInsecureErr}" class="text-bg-danger rounded mb-0 mt-2 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
+                          <p class="mb-0" style="padding: 8px;">Пароль должен содержать прописную букву, строчную букву, цифру и иметь длину не менее 8 символов.</p>
+                        </div>
+                        <button th:unless="${param.passInsecureErr}" type="submit" class="btn mt-4">Подтвердить</button>
+                        <button th:if="${param.passInsecureErr}" type="submit" class="btn mt-2">Подтвердить</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    if (window.location.pathname === "/sign-up")
+      document.getElementById('username1').focus();
+    else
+      document.getElementById('username').focus();
+
+    if (document.getElementById('username').value !== "" && document.getElementById('password').value !== "")
+      document.getElementById('sbmLogin').click();
+
+  </script>
+  </body></html>
+</div>
+</body>
+</html>
