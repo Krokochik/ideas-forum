@@ -108,7 +108,7 @@ public class SpellMorphService {
                     JsonArray httpResponse = new JsonParser().parse(stringResponse.toString()).getAsJsonArray();
                     for (JsonElement element : httpResponse) {
                         JsonObject object = element.getAsJsonObject();
-                        if (!object.get("s").getAsJsonArray().isEmpty()) {
+                        if (!object.get("s").getAsJsonArray().isJsonNull()) {
                             parts.set(i, part = (part.substring(0, (object.get("pos").getAsInt() + offset))
                                     + object.get("s").getAsJsonArray().get(0).getAsString()
                                     + part.substring(object.get("pos").getAsInt() + offset + object.get("word").getAsString().length())));
