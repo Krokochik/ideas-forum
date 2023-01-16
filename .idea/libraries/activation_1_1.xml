@@ -1,13 +1,6 @@
 <component name="libraryTable">
   <library name="activation-1.1">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/src/main/resources/static/activation-1.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/src/main/resources/static/google-api-spelling-java-1.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/src/main/resources/static/jaxb-api-2.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/src/main/resources/static/jaxb-impl-2.1.5.jar!/" />
-      <root url="jar://$PROJECT_DIR$/src/main/resources/static/log4j-1.2.14.jar!/" />
-      <root url="jar://$PROJECT_DIR$/src/main/resources/static/stax-api-1.0-2.jar!/" />
-    </CLASSES>
+    <CLASSES />
     <JAVADOC />
     <SOURCES />
   </library>

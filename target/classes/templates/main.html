@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGY1BPG84M"></script>
@@ -13,15 +13,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta property="og:title" th:content="#{meta.ideas-forum}">
+    <meta property="og:title" content="Форум идей">
     <meta property="og:site_name" content="ideas-forum.com">
     <meta property="og:url" content="ideas-forum.com">
-    <meta property="og:description" th:content="#{meta.description}">
+    <meta property="og:description" content="Форум для ваших идей. Смотрите, делитесь, вдохновляйтесь и воплощайте!">
     <meta property="og:image" content="https://raw.githubusercontent.com/Krokochik/resources/main/meta-img.jpg">
     <meta property="og:image:width" content="700">
     <meta property="og:image:height" content="400">
 
-    <title th:text="#{home}"></title>
+    <title th:text="Главная"></title>
     <meta name="description" content="Форум для Ваших идей. Смотрите, делитесь, вдохнавляйтесь и воплащайте!">
 
     <style th:replace="resources :: list-groups"></style>
@@ -37,7 +37,6 @@
     <meta name="google-site-verification" content="ZTGihven32ieLrhpVGXcYqMgoiflzOeFZHGYaME2mO4" />
 </head>
 <body style="min-height: 100vh;" th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
-    <input type="hidden" id="language" th:value="${lang}">
     <input type="hidden" id="theme" th:value="${theme}">
 
     <header th:replace="header :: header ('main', ${theme})"></header>

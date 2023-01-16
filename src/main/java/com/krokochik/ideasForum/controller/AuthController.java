@@ -4,6 +4,7 @@ import com.krokochik.ideasForum.model.Mail;
 import com.krokochik.ideasForum.model.Role;
 import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
+import com.krokochik.ideasForum.service.MFAService;
 import com.krokochik.ideasForum.service.MailConfirmationTokenService;
 import com.krokochik.ideasForum.service.MailService;
 import com.krokochik.ideasForum.service.UserValidationService;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 
-import static com.krokochik.ideasForum.ideasForum.HOST;
+import static com.krokochik.ideasForum.Main.HOST;
 
 @Controller
 public class AuthController {
@@ -199,7 +200,7 @@ public class AuthController {
             if (UserValidationService.validate(user)) {
                 if (userRepository.findByUsername(user.getUsername()) == null) {
                     user.setRoles(Collections.singleton(Role.ANONYM));
-                    userRepository.save(user);
+                    userRepository.save(MFAService.writeSaltAndVerifier(user));
                 } else return "redirect:/sign-up?regErr&nameTakenErr";
             }
         } catch (UserValidationService.UsernameLengthException exception) {

@@ -44,6 +44,9 @@ $("#imageUpload").change(function() {
 
 function saveChanges() {
     var xhr = new XMLHttpRequest();
+                var newNickname = ""
+                if (document.getElementById("nickname").value === "")
+                    newNickname = document.getElementById("nickname").placeholder
 
     if (input1 !== null) {
         var file = input1.files[0];
@@ -51,14 +54,14 @@ function saveChanges() {
         freader.readAsDataURL(file);
         freader.onload = (function (f) {
             return function (e) {
-                sendRequest('POST', "http://localhost:6606/profile", {nickname: document.getElementById("nickname").value, username: document.getElementById('name').value, avatar: img})
-                  .then(data => {if ((document.getElementById("nickname").value.trim().length >= 4) || document.getElementById("imagePreview").value !== document.getElementById("avatar").value)
+                sendRequest('POST', "http://localhost:6606/profile", {nickname: newNickname, username: document.getElementById('name').value, avatar: img})
+                  .then(data => {if ((document.getElementById("nickname").value.trim().length >= 4) || (document.getElementById("imagePreview").style !== document.getElementById("avatar").style))
                                     window.location.href = window.location.href;})
             };
         })(file);
     }
-    else sendRequest('POST', "http://localhost:6606/profile", {nickname: document.getElementById("nickname").value, username: document.getElementById('name').value})
-           .then(data => {if ((document.getElementById("nickname").value.trim().length >= 4) || document.getElementById("imagePreview").value !== document.getElementById("avatar").value)
+    else sendRequest('POST', "http://localhost:6606/profile", {nickname: newNickname, username: document.getElementById('name').value})
+           .then(data => {if ((document.getElementById("nickname").value.trim().length >= 4) || document.getElementById("imagePreview").style !== document.getElementById("avatar").style)
                              window.location.href = window.location.href;})
 
 }

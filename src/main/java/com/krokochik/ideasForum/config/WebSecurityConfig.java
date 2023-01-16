@@ -11,15 +11,22 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableOAuth2Client
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     DataSource dataSource;
+
+    @Autowired
+    private OAuth2ClientContext oAuth2ClientContext;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -33,9 +40,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/main", "/main/**", "/settings", "/mail-confirm", "/password-abort", "/abortPass", "/pass-abort-notify", "/terminal", "/terminal/**", "/upload.js")
                     .permitAll()
                 .antMatchers("/login", "/sign-up", "/password-abort")
-                    .not().hasAnyAuthority(Role.USER.name(), Role.ADMIN.name(), Role.MODER.name(), Role.ANONYM.name())
+                    .not().hasAnyAuthority(Role.USER.name(), Role.DEVELOPER.name(), Role.ADMIN.name(), Role.MODER.name(), Role.ANONYM.name())
                 .antMatchers("/add-note")
-                    .hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+                    .hasAnyAuthority(Role.USER.name(), Role.ADMIN.name(), Role.DEVELOPER.name())
                 .antMatchers("/terminal.js")
                     .hasAnyAuthority(Role.DEVELOPER.name())
                 .anyRequest()

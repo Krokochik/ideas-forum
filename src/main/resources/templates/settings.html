@@ -26,26 +26,13 @@
 
 
     <link rel="icon" href="https://raw.githubusercontent.com/Krokochik/resources/main/signage.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/5.2/examples/sidebars/sidebars.css" rel="stylesheet" crossorigin="anonymous">
 </head>
 
 <body style="min-height: 100vh;" th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
     <input type="hidden" id="language" th:value="${lang}">
     <input type="hidden" id="theme" th:value="${theme}">
-    <span class="d-block small opacity-50" style="display: none;" id="fSpan1" th:text="#{enableDarkTheme}"></span>
-    <span class="d-block small opacity-50" style="display: none;" id="fSpan2" th:text="#{enableLightTheme}"></span>
-    <span class="d-block small opacity-50" style="display: none;" id="sSpan1">English</span>
-    <span class="d-block small opacity-50" style="display: none;" id="sSpan2">Русский</span>
-    <span class="d-block small opacity-50" style="display: none;" id="sSpan3">Український</span>
-    <span class="d-block small opacity-50" style="display: none;" id="sSpan4">Беларускі</span>
-    <span class="d-block small opacity-50" style="display: none;" id="sSpan5">Italiano</span>
-    <span class="d-block small opacity-50" style="display: none;" id="sSpan6">Français</span>
-    <span class="d-block small opacity-50" style="display: none;" id="sSpan7">Deutsch</span>
-    <span th:if="${@userAuth.isAuth()}" class="d-block small opacity-50" id="thSpan1">Отправить письмо</span>
-    <span th:if="${@userAuth.isAuth()}" class="d-block small opacity-50" id="thSpan2" th:text="'Текущая: ' + ${@userAuth.getCurrentEmail()}"></span>
-
-
 
     <header th:replace="header :: header ('settings', ${theme})"></header>
 
@@ -53,8 +40,14 @@
         <form th:if="${@userAuth.isAuth()}">
             <div style="margin: 4rem auto; margin-top: 2rem;" class="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
                 <p style="text-right: left; margin-right: auto;" th:class="'mb-2 fs-2 fw-bold ' + ${theme == 'dark'? 'text-light' : 'text-dark'}">Безопасность</p>
-                <button class="h-auto" style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;" th:class="'btn btn-' + ${theme == 'dark'? 'drk' : 'lgt'}" id="chng1" onclick="window.location.href = '/password-change'" type="button">Сменить пароль</button>
-                <button class="h-auto" style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;" th:class="'btn btn-' + ${theme == 'dark'? 'drk' : 'lgt'}" id="chng2" onclick="window.location.href = '/change-email?from=settings'" type="button">Сменить почту</button>
+                <button class="h-auto" style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;" th:class="'btn btn-' + ${theme == 'dark'? 'drk' : 'lgt'}" id="chng1" onclick="window.location.href = '/password-change'" type="button">
+                    Сменить пароль
+                    <span class="d-block small opacity-50" id="thSpan1">Отправить письмо</span>
+                </button>
+                <button class="h-auto" style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;" th:class="'btn btn-' + ${theme == 'dark'? 'drk' : 'lgt'}" id="chng2" onclick="window.location.href = '/change-email?from=settings'" type="button">
+                    Сменить почту
+                    <span class="d-block small opacity-50" id="thSpan2" th:text="'Текущая: ' + ${@userAuth.getCurrentEmail()}"></span>
+                </button>
             </div>
 
             <div class="b-example-divider"></div>
@@ -65,86 +58,23 @@
             <div style="margin: 4rem auto; margin-top: 2rem;" class="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
                 <p style="text-right: left; margin-right: auto;" th:class="'mb-2 fs-2 fw-bold ' + ${theme == 'dark'? 'text-light' : 'text-dark'}" th:text="#{theme}"></p>
                 <input class="list-group-item-check pe-none" onclick="toDark();" type="radio" name="listGroupCheckableRadios" id="fListGroupCheckableRadios1" value="" data-np-checked="1">
-                <label id="fLabel1" th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" for="fListGroupCheckableRadios1" th:text="#{darkTheme}">
-                </label>
+                <label id="fLabel1" th:class="${(theme == 'light' ? 'light-theme' : 'dark-theme') + ' rounded-3 py-3'}" style="cursor: pointer;" for="fListGroupCheckableRadios1">
+                    Тёмная тема
+                    <span class="d-block small opacity-50" style="" id="fSpan1">Включить тёмную тему</span></label>
 
                 <input class="list-group-item-check pe-none" type="radio" onclick="toLight();" name="listGroupCheckableRadios" id="fListGroupCheckableRadios2" value="" data-np-checked="1">
-                <label th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="fLabel2" for="fListGroupCheckableRadios2" th:text="#{lightTheme}">
-                </label>
+                <label id="fLabel2" th:class="${(theme == 'light' ? 'light-theme' : 'dark-theme') + ' rounded-3 py-3'}" style="cursor: pointer;" for="fListGroupCheckableRadios2">
+                    Светлая тема
+                    <span class="d-block small opacity-50" style="" id="fSpan2">Включить светлую тему</span></label>
             </div>
         </form>
 
-        <div class="b-example-divider"></div>
-
-        <form>
-            <div style="margin: 4rem auto; margin-top: 2rem;" class="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
-                <p style="text-right: left; margin-right: auto;" th:class="'mb-2 fs-2 fw-bold ' + ${theme == 'dark'? 'text-light' : 'text-dark'}" th:text="#{language}"></p>
-                <div class="container-xl item-center">
-                    <div class="row">
-                        <div style="padding-left: 0px;" class="col">
-                            <input class="list-group-item-check pe-none" onclick="switchLang('en')" type="radio" name="listGroupCheckableRadios" id="sListGroupCheckableRadios1" value="" data-np-checked="1">
-                            <label id="sLabel1" th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" for="sListGroupCheckableRadios1" th:text="#{language.en}">
-                            </label>
-                        </div>
-
-                        <div style="padding-left: 0px; padding-right: 0px;" class="col">
-                            <input class="list-group-item-check pe-none" type="radio" onclick="switchLang('ru')" name="listGroupCheckableRadios" id="sListGroupCheckableRadios2" value="" data-np-checked="1">
-                            <label th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel2" for="sListGroupCheckableRadios2" th:text="#{language.ru}">
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="mb-2"></div>
-
-                    <div class="row">
-                        <div style="padding-left: 0px;" class="col">
-                            <input class="list-group-item-check pe-none" type="radio" onclick="switchLang('uk')" name="listGroupCheckableRadios" id="sListGroupCheckableRadios3" value="" data-np-checked="1">
-                            <label th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel3" for="sListGroupCheckableRadios3" th:text="#{language.uk}">
-                            </label>
-                        </div>
-
-                        <div style="padding-left: 0px; padding-right: 0px;" class="col">
-                            <input class="list-group-item-check pe-none" type="radio" onclick="switchLang('be')" name="listGroupCheckableRadios" id="sListGroupCheckableRadios4" value="" data-np-checked="1">
-                            <label th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel4" for="sListGroupCheckableRadios4" th:text="#{language.be}">
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="mb-2"></div>
-
-                    <div class="row">
-                        <div style="padding-left: 0px;" class="col">
-                            <input class="list-group-item-check pe-none" type="radio" onclick="switchLang('it')" name="listGroupCheckableRadios" id="sListGroupCheckableRadios5" value="" data-np-checked="1">
-                            <label th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel5" for="sListGroupCheckableRadios5" th:text="#{language.it}">
-                            </label>
-                        </div>
-
-                        <div style="padding-left: 0px; padding-right: 0px;" class="col">
-                            <input class="list-group-item-check pe-none" type="radio" onclick="switchLang('fr')" name="listGroupCheckableRadios" id="sListGroupCheckableRadios6" value="" data-np-checked="1">
-                            <label th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" id="sLabel6" for="sListGroupCheckableRadios6" th:text="#{language.fr}">
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="mb-2"></div>
-
-                    <div class="row">
-                        <div style="padding-left: 0px; padding-right: 0px;" class="col">
-                            <input class="list-group-item-check pe-none" type="radio" name="listGroupCheckableRadios" id="sListGroupCheckableRadios7" value="" data-np-checked="1">
-                            <label th:class="${theme == 'light'? 'light-theme' : 'dark-theme'} + ' rounded-3 py-3'" onclick="switchLang('de')" id="sLabel7" for="sListGroupCheckableRadios7" th:text="#{language.de}">
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
     </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
-    <script src="https://getbootstrap.com/docs/5.2/examples/sidebars/sidebars.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
     <script th:replace="resources :: settings-script"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
     <script src="upload.js" th:scr="@{../static/upload.js}"></script>

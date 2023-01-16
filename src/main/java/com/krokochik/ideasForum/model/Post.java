@@ -8,7 +8,7 @@ import org.hibernate.annotations.Type;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 
 @Data
 @RequiredArgsConstructor
@@ -23,22 +23,21 @@ public class Post
     Long id;
 
     @NotNull
-    @Column(length = 45)
     String title;
     @NotNull
     @Column(length = 60_000)
     String content;
 
-    @Column(length = 45)
-    String fulltextTitle;
+    String fulltextTitle = "";
     @Column(length = 60_000)
-    String fulltextContent;
+    String fulltextContent = "";
+    
 
     @NotNull
     String tags;
     @NotNull
     String author;
 
-    @Type(type = "java.util.Date")
-    Date creationDate = new Date();
+    @Type(type = "java.sql.Date")
+    Date creationDate = new Date(System.currentTimeMillis());
 }

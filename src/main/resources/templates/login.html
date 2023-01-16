@@ -24,7 +24,7 @@
 
     <meta charset="UTF-8">
 
-    <title>Login</title>
+    <title>Вход</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
@@ -42,7 +42,7 @@
       <div class="row full-height justify-content-center">
         <div class="col-12 text-center align-self-center py-5">
           <div class="section pb-5 pt-5 pt-sm-2 text-center">
-            <h6 class="mb-0 pb-3"><span th:text="#{login}"></span><span th:text="#{register}">Sign Up</span></h6>
+            <h6 class="mb-0 pb-3"><span th:text="Войти"></span><span th:text="Регистрация">Sign Up</span></h6>
             <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" th:checked="${mode}"/>
             <label for="reg-log"></label>
             <div class="card-3d-wrap mx-auto h-auto" style="min-height: 450px;">
@@ -51,11 +51,11 @@
                   <div onclick="window.location.href = '/main'" class="closeModal" style="top: 20px;"></div>
                   <div class="center-wrap">
                     <div class="section text-center">
-                      <h4 th:unless="${param.loginError}" class="mb-4 pb-3" th:text="#{login}"></h4>
-                      <h4 th:if="${param.loginError}" class="mb-1 pb-3" th:text="#{login}"></h4>
+                      <h4 th:unless="${param.loginError}" class="mb-4 pb-3" th:text="Войти"></h4>
+                      <h4 th:if="${param.loginError}" class="mb-1 pb-3" th:text="Войти"></h4>
                       <form th:action="@{/login}" method="post">
                         <div th:if="${param.loginError}" class="text-bg-danger rounded mb-3 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
-                          <p style="padding: 8px;" th:text="#{error.login}"></p>
+                          <p style="padding: 8px;" th:text="Неверный пароль или никнейм."></p>
                         </div>
                         <div class="form-group">
                           <input th:value="${name}" type="text" name="username" class="form-style" th:placeholder="#{your.nickname}" id="username" autocomplete="off">

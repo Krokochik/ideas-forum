@@ -33,6 +33,8 @@ public class User
     String passwordAbortToken;
     boolean confirmMailSent = false;
     boolean passwordAbortSent = false;
+    String verifier;
+    String salt;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))

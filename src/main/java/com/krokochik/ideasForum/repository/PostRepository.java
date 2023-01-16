@@ -1,6 +1,7 @@
 package com.krokochik.ideasForum.repository;
 
 import com.krokochik.ideasForum.model.Post;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,20 +10,21 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     @Override
-    <S extends Post> S save(S entity);
+    <S extends Post> @NotNull S save(@NotNull S entity);
 
     @Override
-    Optional<Post> findById(Long aLong);
+    @NotNull
+    Optional<Post> findById(@NotNull Long aLong);
 
     @Transactional
     @Query(value = """
-            SELECT * FROM public.pst
+            SELECT * FROM pst
             ORDER BY id ASC""", nativeQuery = true)
     Post[] getAllPostsASC();
 
     @Transactional
     @Query(value = """
-            SELECT * FROM public.pst
+            SELECT * FROM pst
             ORDER BY id DESC""", nativeQuery = true)
     Post[] getAllPostsDESC();
 
@@ -32,6 +34,21 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             WHERE pst.title=?1
             ORDER BY id ASC""", nativeQuery = true)
     Post[] findAllPostsWithTitle(String title);
+
+    @Transactional
+    @Query(value = """
+            SELECT * FROM pst
+            WHERE tsquery(?1) @@ (tsvector(pst."fulltext_title") || tsvector(pst."fulltext_content"))
+            """, nativeQuery = true)
+    Post[] fulltextSearch(String ts_query);
+
+    @Transactional
+    @Query(value = """
+            SELECT * FROM pst
+            WHERE tsquery(?1) @@ tsvector(pst."fulltext_content")
+            """, nativeQuery = true)
+    Post[] fulltextContentSearch(String ts_query);
+
 
     @Transactional
     @Query(value = """

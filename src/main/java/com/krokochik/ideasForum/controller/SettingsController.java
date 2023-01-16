@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.krokochik.ideasForum.ideasForum.HOST;
+import static com.krokochik.ideasForum.Main.HOST;
 
 @Controller
 public class SettingsController {
@@ -29,11 +29,9 @@ public class SettingsController {
 
     @GetMapping("/settings")
     public String settingsPage(Model model, HttpServletRequest request, HttpServletResponse response,
-                               @RequestParam(name = "lang", defaultValue = "", required = false) String language,
                                @RequestParam(name = "theme", defaultValue = "", required = false) String theme) {
 
         model.addAttribute("theme", theme.equals("light") ? "light" : "dark");
-        model.addAttribute("lang", !language.equals("") ? language : request.getHeader("Accept-Language").substring(0, 2));
         return "settings";
     }
     @GetMapping("/password-change")
