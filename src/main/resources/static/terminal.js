@@ -5312,7 +5312,7 @@ var shellprompt = '$ ';
 
   var command = '';
 
-  const requestURL = 'http://localhost:6606/terminal/logic'
+  const requestURL = 'https://ideasforum.herokuapp.com/terminal/logic'
 
   function sendRequest(method, url, body = null) {
     return new Promise((resolve, reject) => {

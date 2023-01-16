@@ -212,11 +212,6 @@
 			<version>9.4.2</version>
 		</dependency>
 		<dependency>
-			<groupId>com.krokochik</groupId>
-			<artifactId>ideas-forum</artifactId>
-			<version>0.5-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.jetbrains</groupId>
 			<artifactId>annotations</artifactId>
 			<version>23.0.0</version>
