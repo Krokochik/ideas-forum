@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 
 @Controller
 public class MainController {
@@ -34,10 +33,6 @@ public class MainController {
     public String mainPage(Model model, HttpServletRequest request, HttpServletResponse response,
                            @RequestParam(name = "theme", defaultValue = "", required = false) String theme,
                            @PathVariable(name = "index", required = false) String index) {
-
-        Arrays.stream(postService.fulltextSearch("локалки", PostService.SearchColumns.FULLTEXT_CONTENT, true)).forEach(x -> {
-            System.out.println(x.getId());
-        });
 
         try {
             if (Integer.parseInt(index) >= 0) {
