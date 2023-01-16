@@ -5,10 +5,7 @@ import com.google.gson.JsonParser;
 import com.krokochik.ideasForum.controller.AuthController;
 import com.krokochik.ideasForum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -21,6 +18,7 @@ public class RequestsController {
     UserRepository userRepository;
 
     @ResponseBody
+    @CrossOrigin(originPatterns = "https://ideas-forum.herokuapp.com/**")
     @PostMapping(value = "/profile", produces = "application/json")
     public Map<String, String> profile(@RequestBody String requestBodyStr, HttpServletResponse response) {
         JsonObject requestBody;
