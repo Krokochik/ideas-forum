@@ -34,25 +34,6 @@
 
   <body translate="no">
 
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content" style="background-color: #2a2b38; background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg')">
-        <button type="button" style="background: none; border: none; top: 20px;" class="closeModal" data-bs-dismiss="modal"></button>
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Log out?</h5>
-        </div>
-        <div class="modal-body">
-          Do You really wanna log out?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-          <button type="button" onclick="window.location.href = '/logout'" class="btn btn-primary">Yes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="section">
     <div class="container">
       <div class="row full-height justify-content-center">
@@ -64,10 +45,10 @@
                   <a th:href="${from != null? from : '/main'}" class="closeModal" style="top: 15px; right: 15px"></a>
                   <div class="center-wrap">
                     <div class="section text-center">
-                      <h4 class="mb-4 pb-3">Change Your password</h4>
+                      <h4 class="mb-4 pb-3">Измените Ваш пароль</h4>
                       <div class="form-group">
                       </div>
-                      <p class="mb-0 mt-4 text-center">Change your password by link in the letter.</p>
+                      <p class="mb-0 mt-4 text-center">Измените Ваш пароль по ссылке в письме.</p>
                     </div>
                   </div>
                 </div>

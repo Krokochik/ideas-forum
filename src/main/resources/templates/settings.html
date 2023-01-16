@@ -13,7 +13,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title th:text="#{settings}"></title>
+    <title>Настройки</title>
     <meta name="description" content="Форум для Ваших идей. Смотрите, делитесь, вдохнавляйтесь и воплащайте!">
 
     <style th:replace="resources :: list-groups"></style>
@@ -31,7 +31,6 @@
 </head>
 
 <body style="min-height: 100vh;" th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
-    <input type="hidden" id="language" th:value="${lang}">
     <input type="hidden" id="theme" th:value="${theme}">
 
     <header th:replace="header :: header ('settings', ${theme})"></header>
@@ -56,7 +55,7 @@
 
         <form>
             <div style="margin: 4rem auto; margin-top: 2rem;" class="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
-                <p style="text-right: left; margin-right: auto;" th:class="'mb-2 fs-2 fw-bold ' + ${theme == 'dark'? 'text-light' : 'text-dark'}" th:text="#{theme}"></p>
+                <p style="text-right: left; margin-right: auto;" th:class="'mb-2 fs-2 fw-bold ' + ${theme == 'dark'? 'text-light' : 'text-dark'}">Тема</p>
                 <input class="list-group-item-check pe-none" onclick="toDark();" type="radio" name="listGroupCheckableRadios" id="fListGroupCheckableRadios1" value="" data-np-checked="1">
                 <label id="fLabel1" th:class="${(theme == 'light' ? 'light-theme' : 'dark-theme') + ' rounded-3 py-3'}" style="cursor: pointer;" for="fListGroupCheckableRadios1">
                     Тёмная тема

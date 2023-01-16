@@ -33,7 +33,10 @@ public class User
     String passwordAbortToken;
     boolean confirmMailSent = false;
     boolean passwordAbortSent = false;
+
+    @Column(length = 1000)
     String verifier;
+    @Column(length = 1000)
     String salt;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)

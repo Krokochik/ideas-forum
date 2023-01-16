@@ -42,7 +42,7 @@
       <div class="row full-height justify-content-center">
         <div class="col-12 text-center align-self-center py-5">
           <div class="section pb-5 pt-5 pt-sm-2 text-center">
-            <h6 class="mb-0 pb-3"><span th:text="Войти"></span><span th:text="Регистрация">Sign Up</span></h6>
+            <h6 class="mb-0 pb-3"><span>Авторизация</span><span>Регистрация</span></h6>
             <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" th:checked="${mode}"/>
             <label for="reg-log"></label>
             <div class="card-3d-wrap mx-auto h-auto" style="min-height: 450px;">
@@ -51,30 +51,30 @@
                   <div onclick="window.location.href = '/main'" class="closeModal" style="top: 20px;"></div>
                   <div class="center-wrap">
                     <div class="section text-center">
-                      <h4 th:unless="${param.loginError}" class="mb-4 pb-3" th:text="Войти"></h4>
-                      <h4 th:if="${param.loginError}" class="mb-1 pb-3" th:text="Войти"></h4>
+                      <h4 th:unless="${param.loginError}" class="mb-4 pb-3">Авторизация</h4>
+                      <h4 th:if="${param.loginError}" class="mb-1 pb-3">Авторизация</h4>
                       <form th:action="@{/login}" method="post">
                         <div th:if="${param.loginError}" class="text-bg-danger rounded mb-3 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
-                          <p style="padding: 8px;" th:text="Неверный пароль или никнейм."></p>
+                          <p style="padding: 8px;">Неверный пароль или никнейм</p>
                         </div>
                         <div class="form-group">
-                          <input th:value="${name}" type="text" name="username" class="form-style" th:placeholder="#{your.nickname}" id="username" autocomplete="off">
+                          <input th:value="${name}" type="text" name="username" class="form-style" placeholder="Ваш логин" id="username" autocomplete="off">
                           <i class="input-icon uil uil-user"></i>
                         </div>
                         <div class="form-group mt-2">
-                          <input th:value="${pass}" type="password" name="password" class="form-style" th:placeholder="#{your.password}" id="password" autocomplete="off">
+                          <input th:value="${pass}" type="password" name="password" class="form-style" placeholder="Ваш пароль" id="password" autocomplete="off">
                           <i class="input-icon uil uil-lock-alt"></i>
                           <i class="uil uil-eye-slash" id="eye" style="cursor: pointer;right: 5px;position: absolute;top: 5px;text-align: right;font-size: 21px;color: #ffeba7;" onclick="document.getElementById('eye').className=document.getElementById('eye').className==='uil uil-eye-slash'? 'uil uil-eye' : 'uil uil-eye-slash'; document.getElementById('password').type=document.getElementById('password').type==='text'?'password':'text';"></i>
                         </div>
-                        <button type="submit" id="sbmLogin" class="btn mt-4" th:text="#{submit}"></button>
+                        <button type="submit" id="sbmLogin" class="btn mt-4">Подтвердить</button>
                         <div class="form-group mt-4" style="text-align: left;">
                           <div class="checkbox-yellow" style="margin-left: auto;margin-right:auto;width:auto;height:auto;text-align: center;">
                             <input type="checkbox" checked="checked" name="remember-me" id="squaredFour"/>
                             <label for="squaredFour"></label>
-                            <span style="margin-left: 30px; white-space: nowrap;" th:text="#{remember}"></span>
+                            <span style="margin-left: 30px; white-space: nowrap;">Запомнить меня</span>
                           </div>
                         </div>
-                        <p class="mb-0 mt-4 text-center"><a style="text-decoration: underline;" href="/password-abort" class="link" th:text="#{help.password}"></a></p>
+                        <p class="mb-0 mt-4 text-center"><a style="text-decoration: underline; font-weight: 700" href="/password-abort" class="link">Забыли пароль?</a></p>
                       </form>
                     </div>
                   </div>
@@ -83,39 +83,39 @@
                   <div onclick="window.location.href = '/main'" class="closeModal" style="top: 20px;"></div>
                   <div class="center-wrap">
                     <div class="section text-center">
-                      <h4 th:unless="${param.regErr}" class="mb-4 pb-3" th:text="#{register}"></h4>
-                      <h4 th:if="${param.regErr}" class="mb-1 pb-3" th:text="#{register}"></h4>
+                      <h4 th:unless="${param.regErr}" class="mb-4 pb-3">Регистрация</h4>
+                      <h4 th:if="${param.regErr}" class="mb-1 pb-3">Регистрация</h4>
                       <form th:action="@{/sign-up}" method="post">
                         <div class="form-group">
-                          <input type="text" name="username1" class="form-style" th:placeholder="#{your.nickname}" id="username1" autocomplete="off">
+                          <input type="text" name="username1" class="form-style" placeholder="Ваш логин" id="username1" autocomplete="off">
                           <i class="input-icon uil uil-user"></i>
                         </div>
                         <div th:if="${param.nameTakenErr}" class="text-bg-danger rounded mb-2 mt-2 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
-                          <p style="padding: 8px;" th:text="#{error.taken}"></p>
+                          <p style="padding: 8px;">Этот логин уже занят.</p>
                         </div>
                         <div th:if="${param.nameLenErr}" class="text-bg-danger rounded mb-2 mt-2 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
-                          <p style="padding: 8px;" th:text="#{error.length}"></p>
+                          <p style="padding: 8px;">Никнейм логин содержать не менее 4 символов.</p>
                         </div>
                         <div th:if="${param.nameErr}" class="text-bg-danger rounded mb-2 mt-2 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
-                          <p style="padding: 8px;" th:text="#{error.null}"></p>
+                          <p style="padding: 8px;">Пожалуйста, введите логин.</p>
                         </div>
                         <div class="form-group mt-2">
-                          <input type="email" name="email1" class="form-style" th:placeholder="#{your.email}" id="logemail" autocomplete="off">
+                          <input type="email" name="email1" class="form-style" placeholder="Ваш е-мейл" id="logemail" autocomplete="off">
                           <i class="input-icon uil uil-at"></i>
                         </div>
                         <div th:if="${param.emailFormErr}" class="text-bg-danger rounded mb-2 mt-2 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
-                          <p style="padding: 8px;" th:text="#{error.rfc}"></p>
+                          <p style="padding: 8px;">Электронная почта должна соответствовать стандарту RFC.</p>
                         </div>
                         <div class="form-group mt-2">
-                          <input type="password" name="password1" class="form-style" th:placeholder="#{your.password}" id="logpass" autocomplete="off">
+                          <input type="password" name="password1" class="form-style" placeholder="Ваш пароль" id="logpass" autocomplete="off">
                           <i class="input-icon uil uil-lock-alt"></i>
                           <i class="uil uil-eye-slash" id="eye1" style="cursor: pointer;right: 5px;position: absolute;top: 5px;text-align: right;font-size: 21px;color: #ffeba7;" onclick="document.getElementById('eye1').className=document.getElementById('eye1').className==='uil uil-eye-slash'? 'uil uil-eye' : 'uil uil-eye-slash'; document.getElementById('logpass').type=document.getElementById('logpass').type==='text'?'password':'text';"></i>
                         </div>
                         <div th:if="${param.passInsecureErr}" class="text-bg-danger rounded mb-0 mt-2 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
-                          <p class="mb-0" style="padding: 8px;" th:text="#{error.password}"></p>
+                          <p class="mb-0" style="padding: 8px;">Пароль должен содержать прописную букву, строчную букву, цифру и иметь длину не менее 8 символов.</p>
                         </div>
-                        <button th:unless="${param.passInsecureErr}" type="submit" class="btn mt-4" th:text="#{submit}"></button>
-                        <button th:if="${param.passInsecureErr}" type="submit" class="btn mt-2" th:text="#{submit}"></button>
+                        <button th:unless="${param.passInsecureErr}" type="submit" class="btn mt-4">Подтвердить</button>
+                        <button th:if="${param.passInsecureErr}" type="submit" class="btn mt-2">Подтвердить</button>
                       </form>
                     </div>
                   </div>

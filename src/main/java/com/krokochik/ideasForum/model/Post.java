@@ -25,7 +25,7 @@ public class Post
     @NotNull
     String title;
     @NotNull
-    @Column(length = 60_000)
+    @Column(length = 10_000)
     String content;
 
     String fulltextTitle = "";

@@ -46,13 +46,13 @@
                   <a th:href="${from != null? from : '/mail-confirm'}" class="closeModal" style="top: 20px;"></a>
                   <div class="center-wrap">
                     <div class="section text-center">
-                      <h4 class="mb-4 pb-3">Change your email</h4>
+                      <h4 class="mb-4 pb-3">Изменение е-мейла</h4>
                       <form th:action="@{/change-email}" method="post">
                         <div class="form-group">
-                            <input type="email" name="email" class="form-style" placeholder="New Email" id="email" autocomplete="off">
+                            <input type="email" name="email" class="form-style" placeholder="Новый е-мейл" id="email" autocomplete="off">
                             <i class="input-icon uil uil-at"></i>
                           </div>
-                        <button type="submit" class="btn mt-4">submit</button>
+                        <button type="submit" class="btn mt-4">Подтвердить</button>
                       </form>
                     </div>
                   </div>

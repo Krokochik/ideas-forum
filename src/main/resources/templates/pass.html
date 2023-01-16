@@ -46,21 +46,21 @@
                   <div onclick="window.location.href = '/login'" class="closeModal" style="top: 20px;"></div>
                   <div class="center-wrap">
                     <div class="section text-center">
-                      <h4 class="mb-4 pb-3" th:text="#{change.password}"></h4>
+                      <h4 class="mb-4 pb-3">Изменить пароль</h4>
                       <form th:action="@{/password-abort}" method="post">
                         <div class="form-group">
                           <div th:if="${param.nameErr}" class="text-bg-danger rounded mb-3 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
-                            <p style="padding: 8px;" th:text="#{error.null}"></p>
+                            <p style="padding: 8px;">Пожалуйста, введите логин.</p>
                           </div>
                           <div th:if="${param.notFoundErr}" class="text-bg-danger rounded mb-3 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
-                            <p style="padding: 8px;" th:text="#{error.logged}"></p>
+                            <p style="padding: 8px;">Пользователь с таким логином не найден.</p>
                           </div>
                           <div class="form-group mt-2">
-                            <input type="text" name="nick" class="form-style" th:placeholder="#{your.nickname}" id="nick" autocomplete="off">
+                            <input type="text" name="nick" class="form-style" placeholder="Ваш логин" id="nick" autocomplete="off">
                             <i class="input-icon uil uil-user"></i>
                           </div>
                         </div>
-                        <button type="submit" class="btn mt-4" th:text="#{submit}"></button>
+                        <button type="submit" class="btn mt-4" th:text="Подтвердить"></button>
                       </form>
                     </div>
                   </div>

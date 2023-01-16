@@ -26,8 +26,8 @@
            <input id="nickname" th:placeholder="${@userAuth.getNickname()}" th:style="'margin-bottom: 30px;box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'"/>
          </div>
          <div th:class="'modal-footer text-bg-' + ${theme}">
-           <button type="button" onclick="dismissChanges()" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-           <button type="button" onclick="saveChanges()" class="btn btn-primary">Save changes</button>
+           <button type="button" onclick="dismissChanges()" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+           <button type="button" onclick="saveChanges()" class="btn btn-primary">охранить изменения</button>
          </div>
        </div>
      </div>

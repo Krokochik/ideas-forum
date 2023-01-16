@@ -96,7 +96,7 @@ public class AuthController {
                     Mail mail = new Mail();
                     mail.setReceiver(userRepository.findByUsername(context.getAuthentication().getName()).getEmail());
                     mail.setTheme("Email confirmation");
-                    mail.setLink("https://" + host + "/confirm?name=" + context.getAuthentication().getName() + "&token=" + userToken);
+                    mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/confirm?name=" + context.getAuthentication().getName() + "&token=" + userToken);
                     mailService.sendActiveMail(mail, context.getAuthentication().getName());
                 });
                 mailSending.start();
@@ -148,7 +148,7 @@ public class AuthController {
                     Mail mail = new Mail();
                     mail.setTheme("Password abort");
                     mail.setReceiver(userRepository.findByUsername(name).getEmail());
-                    mail.setLink("https://" + host + "/abortPass?name=" + name + "&token=" + passToken);
+                    mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/abortPass?name=" + name + "&token=" + passToken);
                     userRepository.setPasswordAbortTokenById(passToken, userRepository.findByUsername(name).getId());
                     mailService.sendEmail(mail, name, "abort.html");
                     userRepository.setPasswordAbortSentById(true, userRepository.findByUsername(name).getId());
