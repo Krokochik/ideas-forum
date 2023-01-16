@@ -25,7 +25,7 @@
 
 
 
-    <link rel="icon" href="https://raw.githubusercontent.com/Krokochik/resources/main/signage.png">
+    <link rel="icon" th:href="@{/images/favicon.png}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/5.2/examples/sidebars/sidebars.css" rel="stylesheet" crossorigin="anonymous">
 </head>
@@ -76,7 +76,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
     <script th:replace="resources :: settings-script"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
-    <script src="upload.js" th:scr="@{../static/upload.js}"></script>
+    <script src="/upload.js" th:src="@{/scripts/upload.js}"></script>
 
 
 </body>

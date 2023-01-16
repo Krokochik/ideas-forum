@@ -36,7 +36,7 @@
    <div class="d-flex flex-wrap align-items-center justify-content-center container">
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <a href="/main" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-            <img src="https://raw.githubusercontent.com/Krokochik/resources/main/signage.png" alt="" width="23" height="24">
+            <img th:src="@{/images/favicon.png}" alt="" width="23" height="24">
           </a>
           <li><a th:href="'/main?theme=' + ${theme}" th:class="'nav-link px-2 ' + ${mainPage == 'main' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}">Главная</a></li>
           <li><a th:href="'/add-note?theme=' + ${theme}" th:class="'nav-link px-2 ' + ${mainPage == 'add-note' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}">Добавить запись</a></li>

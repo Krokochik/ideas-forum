@@ -24,13 +24,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/", "/main", "/main/**", "/settings", "/mail-confirm", "/password-abort", "/abortPass", "/pass-abort-notify", "/terminal", "/terminal/**", "/upload.js")
+                .antMatchers("/", "/main", "/main/**", "/settings", "/mail-confirm", "/password-abort", "/abortPass", "/pass-abort-notify", "/terminal", "/terminal/**", "/scripts/upload.js", "/images/**")
                     .permitAll()
                 .antMatchers("/login", "/sign-up", "/password-abort")
-                    .not().hasAnyAuthority(Role.USER.name(), Role.DEVELOPER.name(), Role.ADMIN.name(), Role.MODER.name(), Role.ANONYM.name())
+                    .not().hasAnyAuthority(Role.USER.name(), Role.DEVELOPER.name(), Role.ADMIN.name(), Role.ANONYM.name())
                 .antMatchers("/add-note")
                     .hasAnyAuthority(Role.USER.name(), Role.ADMIN.name(), Role.DEVELOPER.name())
-                .antMatchers("/terminal.js")
+                .antMatchers("/scripts/terminal.js")
                     .hasAnyAuthority(Role.DEVELOPER.name())
                 .anyRequest()
                     .authenticated()
