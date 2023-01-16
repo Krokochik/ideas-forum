@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .csrf()
                         .ignoringAntMatchers("/terminal/**", "/profile", "/sign-up")
-                .and().cors();
+                .and().cors().disable();
     }
 
     @Override
