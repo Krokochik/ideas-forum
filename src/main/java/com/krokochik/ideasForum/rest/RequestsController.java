@@ -18,7 +18,6 @@ public class RequestsController {
     UserRepository userRepository;
 
     @ResponseBody
-    @CrossOrigin(originPatterns = "https://ideas-forum.herokuapp.com/**")
     @PostMapping(value = "/profile", produces = "application/json")
     public Map<String, String> profile(@RequestBody String requestBodyStr, HttpServletResponse response) {
         JsonObject requestBody;
