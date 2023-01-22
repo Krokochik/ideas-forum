@@ -3,12 +3,14 @@ package com.krokochik.ideasForum.controller;
 import com.krokochik.ideasForum.model.Message;
 import com.krokochik.ideasForum.service.MessageDecoder;
 import com.krokochik.ideasForum.service.MessageEncoder;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.HashMap;
 
+@RequestMapping("/mfa")
 @ServerEndpoint(
         value = "/mfa",
         decoders = MessageDecoder.class,
