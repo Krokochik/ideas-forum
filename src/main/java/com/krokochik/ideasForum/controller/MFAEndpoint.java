@@ -23,7 +23,7 @@ public class MFAEndpoint {
 
     @OnOpen
     public void onOpen(Session session) throws IOException {
-        session.getAsyncRemote().sendObject(new Message(new HashMap<>(){{put("hello", "world!");}}));
+        session.getAsyncRemote().sendObject(new Message(new HashMap<>(){{put("content", "hello client!");}}));
     }
 
     @OnMessage
@@ -32,7 +32,7 @@ public class MFAEndpoint {
     }
 
     @OnClose
-    public void onClose(Session session) throws IOException {
+    public void onClose(Session session, CloseReason closeReason) throws IOException {
         // WebSocket connection closes
     }
 

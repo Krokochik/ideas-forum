@@ -8,7 +8,7 @@ import javax.websocket.EndpointConfig;
 
 public class MessageDecoder implements Decoder.Text<Message> {
 
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     @Override
     public Message decode(String s) {
