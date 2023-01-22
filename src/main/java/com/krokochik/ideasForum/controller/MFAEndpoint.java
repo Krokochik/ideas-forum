@@ -23,7 +23,7 @@ public class MFAEndpoint {
 
     @OnOpen
     public void onOpen(Session session) throws IOException {
-        session.getAsyncRemote().sendObject(new Message(new HashMap<>(){{put("content", "hello client!");}}));
+        session.getAsyncRemote().sendObject(new Message(new HashMap<>(){{put("msg", "hello client!");}}));
     }
 
     @OnMessage
