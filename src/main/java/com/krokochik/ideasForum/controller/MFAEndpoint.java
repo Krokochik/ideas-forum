@@ -1,10 +1,10 @@
 package com.krokochik.ideasForum.controller;
 
+import com.krokochik.ideasForum.config.CustomSpringConfigurator;
 import com.krokochik.ideasForum.model.Message;
 import com.krokochik.ideasForum.service.MessageDecoder;
 import com.krokochik.ideasForum.service.MessageEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -15,7 +15,7 @@ import java.util.HashMap;
         value = "/mfa",
         decoders = MessageDecoder.class,
         encoders = MessageEncoder.class,
-        configurator = SpringConfigurator.class)
+        configurator = CustomSpringConfigurator.class)
 @Component
 public class MFAEndpoint {
 
