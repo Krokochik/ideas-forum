@@ -18,7 +18,7 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
     }
 
     @Bean
-    public MFAEndpoint echoWebSocket() {
+    public MFAEndpoint mfaEndpoint() {
         return new MFAEndpoint();
     }
 

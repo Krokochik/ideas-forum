@@ -3,6 +3,7 @@ package com.krokochik.ideasForum.controller;
 import com.krokochik.ideasForum.model.Message;
 import com.krokochik.ideasForum.service.MessageDecoder;
 import com.krokochik.ideasForum.service.MessageEncoder;
+import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -13,6 +14,7 @@ import java.util.HashMap;
         value = "/mfa",
         decoders = MessageDecoder.class,
         encoders = MessageEncoder.class)
+@Component
 public class MFAEndpoint {
 
     Session session;
