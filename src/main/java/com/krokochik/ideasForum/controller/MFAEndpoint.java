@@ -1,40 +1,14 @@
 package com.krokochik.ideasForum.controller;
 
-import com.krokochik.ideasForum.model.Message;
-import com.krokochik.ideasForum.service.MessageDecoder;
-import com.krokochik.ideasForum.service.MessageEncoder;
-
-import javax.websocket.*;
-import javax.websocket.server.ServerEndpoint;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 import java.io.IOException;
-import java.util.HashMap;
 
-@ServerEndpoint(
-        value = "/mfa",
-        decoders = MessageDecoder.class,
-        encoders = MessageEncoder.class )
-public class MFAEndpoint {
-
-    Session session;
-
-    @OnOpen
-    public void onOpen(Session session) throws IOException {
-        session.getAsyncRemote().sendObject(new Message(new HashMap<>(){{put("hello", "world!");}}));
+public class MFAEndpoint extends AbstractWebSocketHandler {
+    @Override
+    protected void handleTextMessage(@NotNull WebSocketSession session, TextMessage message) throws IOException {
+        System.out.println(message.toString());
     }
-
-    @OnMessage
-    public void onMessage(Session session, Message message) throws IOException {
-        System.out.println(message);
-    }
-
-    @OnClose
-    public void onClose(Session session) throws IOException {
-        // WebSocket connection closes
-    }
-
-    @OnError
-    public void onError(Session session, Throwable throwable) {
-        // Do error handling here
-    }
-
 }

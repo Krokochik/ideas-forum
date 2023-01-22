@@ -195,6 +195,14 @@
 			<version>2.0.0.RELEASE</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<version>6.0.4</version>
+		</dependency>
+
+
 		<!-- Зависимость отправки электронной почты -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
