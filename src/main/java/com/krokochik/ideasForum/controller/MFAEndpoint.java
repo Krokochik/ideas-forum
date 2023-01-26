@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
-import java.io.EOFException;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -21,22 +20,26 @@ import java.util.HashMap;
 public class MFAEndpoint {
 
     @OnOpen
-    public void onOpen(Session session) throws IOException {
+    public void onOpen(Session session) throws EncodeException {
         session.setMaxTextMessageBufferSize(2000);
         session.setMaxBinaryMessageBufferSize(-1);
         session.setMaxIdleTimeout(-1);
         System.out.println("OPENED");
-        session.getAsyncRemote().sendObject(new Message(new HashMap<>(){{put("msg", "hello client!");}}));
+        try {
+            session.getBasicRemote().sendObject(new Message(new HashMap<>(){{put("msg", "hello client!");}}));
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
     }
 
     @OnMessage
-    public void onMessage(Session session, Message message) throws IOException {
+    public void onMessage(Session session, Message message) {
         System.out.println("MESSAGE");
         System.out.println(message);
     }
 
     @OnClose
-    public void onClose(Session session, CloseReason closeReason) throws IOException {
+    public void onClose(Session session, CloseReason closeReason) {
         System.out.println("CLOSED");
         System.out.println(closeReason.getCloseCode());
         System.out.println(closeReason.getReasonPhrase());
@@ -45,8 +48,7 @@ public class MFAEndpoint {
     @OnError
     public void onError(Session session, Throwable throwable) {
         System.out.println("ERROR");
-        if (!(throwable instanceof EOFException))
-            throwable.printStackTrace();
+        throwable.printStackTrace();
     }
 
 }
