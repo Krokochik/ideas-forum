@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -44,7 +45,8 @@ public class MFAEndpoint {
     @OnError
     public void onError(Session session, Throwable throwable) {
         System.out.println("ERROR");
-        throwable.printStackTrace();
+        if (!(throwable instanceof EOFException))
+            throwable.printStackTrace();
     }
 
 }
