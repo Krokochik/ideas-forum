@@ -36,7 +36,6 @@ public class MFAEndpoint {
     public void onClose(Session session, CloseReason closeReason) {
         System.out.println("CLOSED");
         System.out.println(closeReason.getCloseCode());
-        System.out.println(closeReason.getReasonPhrase());
     }
 
     @OnError
