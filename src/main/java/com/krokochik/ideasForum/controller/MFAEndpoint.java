@@ -19,26 +19,29 @@ import java.util.HashMap;
 @Component
 public class MFAEndpoint {
 
-    Session session;
-
     @OnOpen
     public void onOpen(Session session) throws IOException {
+        System.out.println("OPENED");
         session.getAsyncRemote().sendObject(new Message(new HashMap<>(){{put("msg", "hello client!");}}));
     }
 
     @OnMessage
     public void onMessage(Session session, Message message) throws IOException {
+        System.out.println("MESSAGE");
         System.out.println(message);
     }
 
     @OnClose
     public void onClose(Session session, CloseReason closeReason) throws IOException {
-        // WebSocket connection closes
+        System.out.println("CLOSED");
+        System.out.println(closeReason.getCloseCode());
+        System.out.println(closeReason.getReasonPhrase());
     }
 
     @OnError
     public void onError(Session session, Throwable throwable) {
-        // Do error handling here
+        System.out.println("ERROR");
+        throwable.printStackTrace();
     }
 
 }
