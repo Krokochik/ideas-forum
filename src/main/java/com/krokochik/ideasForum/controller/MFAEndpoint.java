@@ -21,6 +21,7 @@ public class MFAEndpoint {
 
     @OnOpen
     public void onOpen(Session session) throws IOException {
+        session.setMaxIdleTimeout(-1);
         System.out.println("OPENED");
         session.getAsyncRemote().sendObject(new Message(new HashMap<>(){{put("msg", "hello client!");}}));
     }
