@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
 import java.util.HashMap;
 
 @ServerEndpoint(
@@ -20,22 +19,17 @@ import java.util.HashMap;
 public class MFAEndpoint {
 
     @OnOpen
-    public void onOpen(Session session) throws EncodeException {
-        session.setMaxTextMessageBufferSize(2000);
-        session.setMaxBinaryMessageBufferSize(-1);
-        session.setMaxIdleTimeout(-1);
+    public void onOpen(Session session) {
         System.out.println("OPENED");
-        try {
-            session.getBasicRemote().sendObject(new Message(new HashMap<>(){{put("msg", "hello client!");}}));
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
+        session.getAsyncRemote().sendObject(new Message(new HashMap<>(){{put("msg", "hello client!");}}));
     }
 
     @OnMessage
     public void onMessage(Session session, Message message) {
-        System.out.println("MESSAGE");
-        System.out.println(message);
+        if(!message.getContent().get("msg").equals("ping")) {
+            System.out.println("MESSAGE");
+            System.out.println(message);
+        }
     }
 
     @OnClose
