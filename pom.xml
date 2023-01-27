@@ -214,6 +214,14 @@
 			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/at.favre.lib/singlestep-kdf -->
+		<dependency>
+			<groupId>at.favre.lib</groupId>
+			<artifactId>singlestep-kdf</artifactId>
+			<version>0.2.0</version>
+		</dependency>
+
+
 		<!-- https://mvnrepository.com/artifact/org.eclipse.jetty.websocket/websocket-server -->
 		<dependency>
 			<groupId>org.eclipse.jetty.websocket</groupId>

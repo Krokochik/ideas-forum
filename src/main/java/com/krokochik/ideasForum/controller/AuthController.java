@@ -5,7 +5,7 @@ import com.krokochik.ideasForum.model.Role;
 import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MFAService;
-import com.krokochik.ideasForum.service.MailConfirmationTokenService;
+import com.krokochik.ideasForum.service.TokenService;
 import com.krokochik.ideasForum.service.MailService;
 import com.krokochik.ideasForum.service.UserValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +90,7 @@ public class AuthController {
             return "redirect:/main";
         if (hasRole(Role.ANONYM)) {
             if (!userRepository.findByUsername(context.getAuthentication().getName()).isConfirmMailSent()) {
-                String userToken = new MailConfirmationTokenService().generateToken();
+                String userToken = new TokenService().generateToken();
                 userRepository.setMailConfirmationTokenById(userToken, userRepository.findByUsername(context.getAuthentication().getName()).getId());
                 Thread mailSending = new Thread(() -> {
                     Mail mail = new Mail();
@@ -144,7 +144,7 @@ public class AuthController {
         if (!name.isEmpty()) {
             if (userRepository.findByUsername(name) != null) {
                 Thread mailSending = new Thread(() -> {
-                    String passToken = new MailConfirmationTokenService().generateToken();
+                    String passToken = new TokenService().generateToken();
                     Mail mail = new Mail();
                     mail.setTheme("Password abort");
                     mail.setReceiver(userRepository.findByUsername(name).getEmail());

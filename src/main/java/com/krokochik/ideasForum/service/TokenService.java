@@ -9,22 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class MailConfirmationTokenService {
+public class TokenService {
     @Autowired
     UserRepository userRepository;
 
-    private static final Byte STANDARD_TOKEN_LENGTH = 40;
-    private final Byte tokenLength;
+    private static final Long STANDARD_TOKEN_LENGTH = 40L;
+    private final Long tokenLength;
 
-    public MailConfirmationTokenService(Byte tokenLength) {
+    public TokenService(Long tokenLength) {
         this.tokenLength = tokenLength;
     }
 
-    public MailConfirmationTokenService() {
+    public TokenService() {
         tokenLength = STANDARD_TOKEN_LENGTH;
     }
 
-    public String generateToken(Byte tokenLength) {
+    public String generateToken(Long tokenLength) {
         String chars = shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
         SecureRandom secureRandom = new SecureRandom();
         StringBuilder builder = new StringBuilder();

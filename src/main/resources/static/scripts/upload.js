@@ -47,6 +47,9 @@ function saveChanges() {
                 var newNickname = ""
                 if (document.getElementById("nickname").value === "")
                     newNickname = document.getElementById("nickname").placeholder
+                else
+                    newNickname = document.getElementById("nickname").value
+
 
     if (input1 !== null) {
         var file = input1.files[0];

@@ -2,7 +2,7 @@ package com.krokochik.ideasForum.controller;
 
 import com.krokochik.ideasForum.model.Mail;
 import com.krokochik.ideasForum.repository.UserRepository;
-import com.krokochik.ideasForum.service.MailConfirmationTokenService;
+import com.krokochik.ideasForum.service.TokenService;
 import com.krokochik.ideasForum.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
@@ -38,7 +38,7 @@ public class SettingsController {
     public String changePassword(Model model) {
         SecurityContext context = AuthController.getContext();
         Thread mailSending = new Thread(() -> {
-            String passToken = new MailConfirmationTokenService().generateToken();
+            String passToken = new TokenService().generateToken();
             Mail mail = new Mail();
             mail.setTheme("Password abort");
             mail.setReceiver(userRepository.findByUsername(context.getAuthentication().getName()).getEmail());

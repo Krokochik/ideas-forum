@@ -136,6 +136,8 @@
     <orderEntry type="library" name="Maven: org.bouncycastle:bcprov-jdk15on:1.56" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-websocket:2.7.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-websocket:5.3.21" level="project" />
+    <orderEntry type="library" name="Maven: at.favre.lib:singlestep-kdf:0.2.0" level="project" />
+    <orderEntry type="library" name="Maven: at.favre.lib:bytes:0.8.0" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty.websocket:websocket-server:9.4.50.v20221201" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty.websocket:websocket-common:9.4.48.v20220622" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty.websocket:websocket-api:9.4.48.v20220622" level="project" />
