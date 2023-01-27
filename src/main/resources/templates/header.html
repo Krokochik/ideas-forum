@@ -35,8 +35,8 @@
 
    <div class="d-flex flex-wrap align-items-center justify-content-center container">
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <a href="/main" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-            <img th:src="@{/images/favicon.png}" style="margin-bottom: 0!important;" alt="" width="23" height="24">
+          <a href="/main" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none" style="margin-bottom: 0!important;">
+            <img th:src="@{/images/favicon.png}" alt="" width="23" height="24">
           </a>
           <li><a href="/main" th:class="'nav-link px-2 ' + ${mainPage == 'main' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}" style="font-size: 20px">Главная</a></li>
           <li><a href="/add-note" th:class="'nav-link px-2 ' + ${mainPage == 'add-note' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}" style="font-size: 20px">Добавить запись</a></li>
