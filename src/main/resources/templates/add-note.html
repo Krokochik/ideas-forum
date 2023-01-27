@@ -61,7 +61,6 @@
         sendRequest('POST', 'https://ideas-forum.herokuapp.com/avatar')
             .then(data => {
                     document.getElementById('temp').setAttribute('style', document.getElementById('temp').getAttribute('style') + 'background-image: url(' + data + ');');
-                    console.log(document.getElementById('temp').getAttribute('style'));
                     document.getElementById('avatar').setAttribute('style', document.getElementById('temp').getAttribute('style'));
                     document.getElementById('avatar').style.visibility = '';
                     document.getElementById('imagePreview').setAttribute('style', document.getElementById('temp').getAttribute('style'));
