@@ -19,7 +19,7 @@
                <label for="imageUpload"></label>
              </div>
              <div class="avatar-preview">
-               <div id="imagePreview" th:style="${@userAuth.isAuth() ? ('background-image: url(' + @userAuth.getAvatar() + ');') : ');'}" th:src="${@userAuth.isAuth() ? '' : 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png'}">
+               <div id="imagePreview">
                </div>
              </div>
            </div>
@@ -47,8 +47,7 @@
           <button class="btn btn-outline-success me-2" type="button" th:text="Поиск"></button>
           <div class="dropdown text-end">
             <a href="#" th:class="'d-block text-decoration-none dropdown-toggle ' + ${theme == 'dark'? 'text-bg-dark link-light' : 'text-bg-light link-dark'}" data-bs-toggle="dropdown" aria-expanded="false">
-              <div id="avatar" th:style="'background-size: cover;background-repeat: no-repeat;background-position: center;width: 35px;height: 35px;display: inline-block; vertical-align: middle;' + ${@userAuth.isAuth()? 'background-image: url(' + @userAuth.getAvatar() + ');' : 'background-image: url(https://raw.githubusercontent.com/Krokochik/resources/main/guest.png);'}"
-                   class="rounded-circle"> </div>
+              <div id="avatar" class = "rounded-circle"> </div>
             </a>
             <ul th:class="'dropdown-menu light ' + ${theme == 'dark'? 'dropdown-menu-dark' : ''}">
               <li th:if="${@userAuth.isAuth()}"><a class="dropdown-item" th:href="'/add-note?theme=' + ${theme}">Добавить запись</a></li>
