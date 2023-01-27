@@ -24,7 +24,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/", "/main", "/main/**", "/settings", "/mail-confirm", "/password-abort", "/abortPass", "/pass-abort-notify", "/terminal", "/terminal/**", "/scripts/upload.js", "/images/**", "/mfa", "/googleb8fcdd64aa45ba54.html")
+                .antMatchers(
+                        "/", "/main", "/main/**",
+                        "/settings",
+                        "/mail-confirm", "/password-abort", "/abortPass", "/pass-abort-notify",
+                        "/terminal", "/terminal/**",
+                        "/scripts/upload.js",
+                        "/images/**",
+                        "/mfa",
+                        "/googleb8fcdd64aa45ba54.html", "/yandex_f4f03a518326d43b.html")
                     .permitAll()
                 .antMatchers("/login", "/sign-up", "/password-abort")
                     .not().hasAnyAuthority(Role.USER.name(), Role.DEVELOPER.name(), Role.ADMIN.name(), Role.ANONYM.name())
