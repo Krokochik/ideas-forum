@@ -19,7 +19,7 @@
                <label for="imageUpload"></label>
              </div>
              <div class="avatar-preview">
-               <div id="imagePreview" th:style="${@userAuth.isAuth() ? ('background-image: url(' + @userAuth.getAvatar() + ');') : ');'}" th:src="${@userAuth.isAuth() ? '' : 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png'}">
+               <div id="imagePreview">
                </div>
              </div>
            </div>

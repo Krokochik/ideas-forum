@@ -1,4 +1,6 @@
 var input1 = null;
+document.getElementById('imagePreview').setAttribute('style', document.getElementById('avatar').getAttribute('style'));
+document.getElementById('imagePreview').style.width = ''; document.getElementById('imagePreview').style.height = '';
 var style = document.getElementById("imagePreview").getAttribute('style');
 
 function readURL(input) {
