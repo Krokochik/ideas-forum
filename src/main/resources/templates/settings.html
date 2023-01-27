@@ -96,7 +96,7 @@
                     xhr.send(JSON.stringify(body));
        })
   }
-        sendRequest('POST', 'http://localhost:6606/avatar')
+        sendRequest('POST', 'https://ideas-forum.herokuapp.com/avatar')
             .then(data => {
                     document.getElementById('temp').setAttribute('style', document.getElementById('temp').getAttribute('style') + 'background-image: url(' + data + ');');
                     console.log(document.getElementById('temp').getAttribute('style'));
