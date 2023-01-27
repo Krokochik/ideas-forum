@@ -220,9 +220,10 @@
     <script>
         document.getElementById('avatar').setAttribute('style', document.getElementById('temp').getAttribute('style'));
         document.getElementById('avatar').style.visibility = '';
-        document.getElementById('temp').remove();
-        document.getElementById('imagePreview').setAttribute('style', document.getElementById('avatar').getAttribute('style'));
+        document.getElementById('imagePreview').setAttribute('style', document.getElementById('temp').getAttribute('style'));
         document.getElementById('imagePreview').style.width = ''; document.getElementById('imagePreview').style.height = '';
+        document.getElementById('imagePreview').style.visibility = '';
+        document.getElementById('temp').remove();
     </script>
 </body>
 </html>

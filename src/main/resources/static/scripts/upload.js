@@ -1,5 +1,4 @@
 var input1 = null;
-var style = document.getElementById("imagePreview").getAttribute('style');
 
 function readURL(input) {
     if (input.files && input.files[0]) {
@@ -70,6 +69,7 @@ function saveChanges() {
 }
 
 function dismissChanges() {
-    document.getElementById("imagePreview").setAttribute('style', style);
+    document.getElementById('imagePreview').setAttribute('style', document.getElementById('avatar').getAttribute('style'));
+    document.getElementById('imagePreview').style.width = ''; document.getElementById('imagePreview').style.height = '';
     document.getElementById("nickname").value = '';
 }
