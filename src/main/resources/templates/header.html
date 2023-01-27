@@ -38,8 +38,8 @@
           <a href="/main" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
             <img th:src="@{/images/favicon.png}" alt="" width="23" height="24">
           </a>
-          <li><a th:href="'/main?theme=' + ${theme}" th:class="'nav-link px-2 ' + ${mainPage == 'main' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}">Главная</a></li>
-          <li><a th:href="'/add-note?theme=' + ${theme}" th:class="'nav-link px-2 ' + ${mainPage == 'add-note' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}">Добавить запись</a></li>
+          <li><a href="/main" th:class="'nav-link px-2 ' + ${mainPage == 'main' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}">Главная</a></li>
+          <li><a href="/add-note" th:class="'nav-link px-2 ' + ${mainPage == 'add-note' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}">Добавить запись</a></li>
         </ul>
 
         <div class="d-flex" role="search" data-np-checked="1">
@@ -50,9 +50,9 @@
               <div id="avatar" class = "rounded-circle"> </div>
             </a>
             <ul th:class="'dropdown-menu light ' + ${theme == 'dark'? 'dropdown-menu-dark' : ''}">
-              <li th:if="${@userAuth.isAuth()}"><a class="dropdown-item" th:href="'/add-note?theme=' + ${theme}">Добавить запись</a></li>
+              <li th:if="${@userAuth.isAuth()}"><a class="dropdown-item" href="/add-note">Добавить запись</a></li>
               <li th:if="${@userAuth.isAuth()}"><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Профиль</button></li>
-              <li><a class="dropdown-item" th:href="'/settings?theme=' + ${theme}">Настройки</a></li>
+              <li><a class="dropdown-item" href="/settings">Настройки</a></li>
               <li><hr th:class="'dropdown-divider ' + ${theme == 'dark'? 'bg-light' : 'bg-dark'}"></li>
               <li><a class="dropdown-item" th:href="${@userAuth.isAuth()? '/logout' : '/login'}" th:text="${@userAuth.isAuth()? 'Выйти' : 'Войти'}"></a></li>
             </ul>

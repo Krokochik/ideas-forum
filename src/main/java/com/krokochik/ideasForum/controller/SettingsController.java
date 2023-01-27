@@ -2,14 +2,14 @@ package com.krokochik.ideasForum.controller;
 
 import com.krokochik.ideasForum.model.Mail;
 import com.krokochik.ideasForum.repository.UserRepository;
-import com.krokochik.ideasForum.service.TokenService;
 import com.krokochik.ideasForum.service.MailService;
+import com.krokochik.ideasForum.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,9 +29,9 @@ public class SettingsController {
 
     @GetMapping("/settings")
     public String settingsPage(Model model, HttpServletRequest request, HttpServletResponse response,
-                               @RequestParam(name = "theme", defaultValue = "", required = false) String theme) {
+                               @CookieValue(name = "theme", required = false, defaultValue = "dark") String theme) {
 
-        model.addAttribute("theme", theme.equals("light") ? "light" : "dark");
+        model.addAttribute("theme", theme);
         return "settings";
     }
     @GetMapping("/password-change")

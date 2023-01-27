@@ -670,13 +670,15 @@ input {
     </style>
    <script th:fragment="settings-script">
        function toLight() {
-           if(!document.getElementById('theme').value != 'light')
-               window.location.href = '/settings?theme=light';
+           if(document.cookie.theme != 'light')
+               document.cookie = 'theme=light'
+               window.location.href = window.location.href;
        }
 
        function toDark() {
-           if(document.getElementById('theme').value != 'dark')
-               window.location.href = '/settings?theme=dark';
+           if(document.cookie.theme != 'dark')
+               document.cookie = 'theme=dark'
+               window.location.href = window.location.href;
        }
 
        function onLoad() {
