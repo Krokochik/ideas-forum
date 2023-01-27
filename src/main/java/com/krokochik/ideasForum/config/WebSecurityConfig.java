@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .tokenValiditySeconds(5 * 24 * 60 * 60)
                 .and()
                     .csrf()
-                        .ignoringAntMatchers("/terminal/**", "/profile", "/sign-up");
+                        .ignoringAntMatchers("/terminal/**", "/profile", "/sign-up", "/avatar");
     }
 
     @Override

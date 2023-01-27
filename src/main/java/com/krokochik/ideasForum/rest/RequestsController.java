@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,11 @@ public class RequestsController {
 
     @Autowired
     UserRepository userRepository;
+
+    @PostMapping("/avatar")
+    public String avatar() {
+        return new String(userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getAvatar(), StandardCharsets.UTF_8);
+    }
 
     @ResponseBody
     @PostMapping(value = "/profile", produces = "application/json")
