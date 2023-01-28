@@ -50,12 +50,24 @@ async function saveAvatar() {
   await loadAvatar().then(avatar => document.cookie = 'avatar=' + avatar);
 }
 
+function saveAvatar(avatar) {
+  document.cookie = 'avatar=' + avatar;
+}
+
 function getAvatar() {
   var cookieAvatar = document.cookie.avatar;
   if (cookieAvatar !== undefined)
     return cookieAvatar;
-  else 
-    return 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png';
+  else {
+    loadAvatar().then(avatar => {
+      if (avatar === 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png')
+        return avatar;
+      else {
+        saveAvatar(avatar);
+        return avatar;
+      }  
+    })
+  };
 }
 
 function deleteAvatar() {
