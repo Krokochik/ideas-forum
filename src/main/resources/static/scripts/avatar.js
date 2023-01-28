@@ -47,7 +47,11 @@ async function loadAndSaveAvatar() {
   sendRequest('POST', 'https://ideas-forum.herokuapp.com/avatar', saveAvatar);
 }
 
+function replaceAll(string, search, replacement) {
+  return a.split(b).join(c);
+}
+
 function saveAvatar(avatar) {
-  document.cookie = 'avatar=' + avatar.replaceAll(';', 'SEMICOLON').replaceAll('=', 'EQUALS');
+  document.cookie = 'avatar=' + replaceAll(replaceAll(avatar, ';', 'SEMICOLON'), '=', 'EQUALS');
   loadAndSaveAvatar();
 }
