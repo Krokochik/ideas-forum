@@ -22,30 +22,10 @@ function sendRequest(method, url, callback) {
 }
 
 function getCookie(name) {
-
-	var name_cook = name+"=";
-	var spl = document.cookie.split(";");
-	
-	for(var i=0; i<spl.length; i++) {
-	
-		var c = spl[i];
-		
-		while(c.charAt(0) == " ") {
-		
-			c = c.substring(1, c.length);
-			
-		}
-		
-		if(c.indexOf(name_cook) == 0) {
-			
-			return c.substring(name_cook.length, c.length);
-			
-		}
-		
-	}
-	
-	return null;
-	
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
 function tuneImages(avatar) {
@@ -60,7 +40,7 @@ function tuneImages(avatar) {
 
 async function loadAndSaveAvatar() {
   var cookieAvatar = getCookie('avatar');
-  if (cookieAvatar !== null) {
+  if (cookieAvatar !== undefined) {
     tuneImages(cookieAvatar.replaceAll('SEMICOLON', ';').replaceAll('EQUALS', '='));
     return;
   }
