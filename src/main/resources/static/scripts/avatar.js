@@ -1,25 +1,24 @@
-function sendRequest(method, url, body = null) {
+function sendRequest(method, url, callback) {
     const xhr = new XMLHttpRequest();
 
     xhr.open(method, url);
 
     xhr.responseType = 'text';
-    xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = () => {
       if (xhr.status == 302 || (xhr.responseURL !== url)) {
-        return 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png';
+        callback('https://raw.githubusercontent.com/Krokochik/resources/main/guest.png');
       }
       else {
-        return xhr.response;
+        callback(xhr.response);
       }
     }
 
     xhr.onerror = () => {
-      return xhr.response;
+      callback('https://raw.githubusercontent.com/Krokochik/resources/main/guest.png');
     }
 
-    xhr.send(JSON.stringify(body));
+    xhr.send();
 }
 
 function tuneImages(avatar) {
@@ -32,36 +31,16 @@ function tuneImages(avatar) {
   document.getElementById('temp').remove();
 }
 
-async function loadAvatar() {
-  var response = await sendRequest('POST', 'https://ideas-forum.herokuapp.com/avatar');
-  return response;
-}
-
-function saveAvatar() {
-  document.cookie = 'avatar=' + loadAvatar();
+async function loadAndSaveAvatar() {
+  var cookieAvatar = document.cookie.avatar;
+  if (cookieAvatar !== undefined) {
+    tuneImages(cookieAvatar);
+    return;
+  }
+  sendRequest('POST', 'https://ideas-forum.herokuapp.com/avatar', saveAvatar);
 }
 
 function saveAvatar(avatar) {
   document.cookie = 'avatar=' + avatar;
-}
-
-function getAvatar() {
-  var cookieAvatar = document.cookie.avatar;
-  alert(cookieAvatar);
-  if (cookieAvatar !== undefined) {
-    return cookieAvatar;
-  }
-  else {
-    var avatar = loadAvatar();
-
-    if (avatar !== 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png') {
-      saveAvatar(avatar);
-    }
-    return avatar;
-
-  }
-}
-
-function deleteAvatar() {
-  document.cookie.avatar = '';
+  loadAndSaveAvatar();
 }
