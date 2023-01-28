@@ -21,11 +21,31 @@ function sendRequest(method, url, callback) {
     xhr.send();
 }
 
-function getCookie(name) {
-  let matches = document.cookie.match(new RegExp(
-    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-  ));
-  return matches ? decodeURIComponent(matches[1]) : undefined;
+function readCookie(name) {
+
+	var name_cook = name+"=";
+	var spl = document.cookie.split(";");
+	
+	for(var i=0; i<spl.length; i++) {
+	
+		var c = spl[i];
+		
+		while(c.charAt(0) == " ") {
+		
+			c = c.substring(1, c.length);
+			
+		}
+		
+		if(c.indexOf(name_cook) == 0) {
+			
+			return c.substring(name_cook.length, c.length);
+			
+		}
+		
+	}
+	
+	return null;
+	
 }
 
 function tuneImages(avatar) {
