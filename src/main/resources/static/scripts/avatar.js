@@ -51,7 +51,11 @@ function saveAvatar() {
 }
 
 function getAvatar() {
-  return document.cookie.avatar;
+  var cookieAvatar = document.cookie.avatar;
+  if (avatar !== undefined)
+    return cookieAvatar;
+  else 
+    return 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png';
 }
 
 function deleteAvatar() {
