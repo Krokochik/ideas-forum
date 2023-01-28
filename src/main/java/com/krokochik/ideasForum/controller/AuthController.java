@@ -5,8 +5,8 @@ import com.krokochik.ideasForum.model.Role;
 import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MFAService;
-import com.krokochik.ideasForum.service.TokenService;
 import com.krokochik.ideasForum.service.MailService;
+import com.krokochik.ideasForum.service.TokenService;
 import com.krokochik.ideasForum.service.UserValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static com.krokochik.ideasForum.Main.HOST;
@@ -88,10 +87,8 @@ public class AuthController {
     @GetMapping("/mail-confirm")
     public String mailConfirmation(HttpServletResponse response) {
         SecurityContext context = getContext();
-        if (isAuthenticated()) {
-            response.setHeader("Set-Cookie", "avatar=" + Arrays.toString(userRepository.findByUsername(getContext().getAuthentication().getName()).getAvatar()));
+        if (isAuthenticated())
             return "redirect:/main";
-        }
         if (hasRole(Role.ANONYM)) {
             if (!userRepository.findByUsername(context.getAuthentication().getName()).isConfirmMailSent()) {
                 String userToken = new TokenService().generateToken();
