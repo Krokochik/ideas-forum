@@ -35,7 +35,7 @@ function tuneImages(avatar) {
 }
 
 async function loadAvatar() {
-  sendRequest('POST', 'https://ideas-forum.herokuapp.com/avatar')
+  await sendRequest('POST', 'https://ideas-forum.herokuapp.com/avatar')
     .then(
       data => {
         return data;
@@ -61,15 +61,13 @@ function getAvatar() {
     return cookieAvatar;
   }
   else {
-    loadAvatar().then(avatar => {
-      if (avatar === 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png') {
-        return avatar;
-      }
-      else {
-        saveAvatar(avatar);
-        return avatar;
-      }  
-    })
+    var avatar = loadAvatar();
+
+    if (avatar !== 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png') {
+      saveAvatar(avatar);
+    }
+    return avatar;
+
   }
 }
 
