@@ -21,7 +21,7 @@ function sendRequest(method, url, callback) {
     xhr.send();
 }
 
-function readCookie(name) {
+function getCookie(name) {
 
 	var name_cook = name+"=";
 	var spl = document.cookie.split(";");
