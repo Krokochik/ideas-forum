@@ -56,12 +56,14 @@ function saveAvatar(avatar) {
 
 function getAvatar() {
   var cookieAvatar = document.cookie.avatar;
-  if (cookieAvatar !== undefined)
+  if (cookieAvatar !== undefined) {
     return cookieAvatar;
+  }
   else {
     loadAvatar().then(avatar => {
-      if (avatar === 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png')
+      if (avatar === 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png') {
         return avatar;
+      }
       else {
         saveAvatar(avatar);
         return avatar;
