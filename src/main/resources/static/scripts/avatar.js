@@ -1,23 +1,23 @@
 function sendRequest(method, url, body = null) {
   return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest()
+    const xhr = new XMLHttpRequest();
 
-    xhr.open(method, url)
+    xhr.open(method, url);
 
-    xhr.responseType = 'text'
-    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.responseType = 'text';
+    xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = () => {
       if (xhr.status == 302 || (xhr.responseURL !== url)) {
-        reject(xhr.response)
+        reject(xhr.response);
       }
       else {
-        resolve(xhr.response)
+        resolve(xhr.response);
       }
     }
 
     xhr.onerror = () => {
-      reject(xhr.response)
+      reject(xhr.response);
     }
 
     xhr.send(JSON.stringify(body));
@@ -56,6 +56,7 @@ function saveAvatar(avatar) {
 
 function getAvatar() {
   var cookieAvatar = document.cookie.avatar;
+  alert(cookieAvatar);
   if (cookieAvatar !== undefined) {
     return cookieAvatar;
   }
