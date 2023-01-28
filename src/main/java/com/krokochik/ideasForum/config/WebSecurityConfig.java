@@ -28,18 +28,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/", "/main", "/main/**",
                         "/settings",
                         "/mail-confirm", "/password-abort", "/abortPass", "/pass-abort-notify",
-                        "/terminal", "/terminal/**",
-                        "/scripts/upload.js",
+                        "/scripts/**",
                         "/images/**",
                         "/mfa",
                         "/googleb8fcdd64aa45ba54.html", "/yandex_f4f03a518326d43b.html", "/bootstrap.min.css.map")
                     .permitAll()
                 .antMatchers("/login", "/sign-up", "/password-abort")
-                    .not().hasAnyAuthority(Role.USER.name(), Role.DEVELOPER.name(), Role.ADMIN.name(), Role.ANONYM.name())
+                    .not().hasAnyAuthority(Role.USER.name(), Role.ADMIN.name(), Role.ANONYM.name())
                 .antMatchers("/add-note")
-                    .hasAnyAuthority(Role.USER.name(), Role.ADMIN.name(), Role.DEVELOPER.name())
-                .antMatchers("/scripts/terminal.js")
-                    .hasAnyAuthority(Role.DEVELOPER.name())
+                    .hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
                 .anyRequest()
                     .authenticated()
                 .and()
@@ -62,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .tokenValiditySeconds(5 * 24 * 60 * 60)
                 .and()
                     .csrf()
-                        .ignoringAntMatchers("/terminal/**", "/profile", "/sign-up", "/avatar");
+                        .ignoringAntMatchers("/profile", "/sign-up", "/avatar");
     }
 
     @Override

@@ -22,6 +22,7 @@ public class MFAEndpoint {
 
     @OnOpen
     public void onOpen(Session session) {
+
     }
 
     @OnMessage

@@ -7,6 +7,5 @@ public enum Role
 {
     USER,
     ADMIN,
-    ANONYM,
-    DEVELOPER
+    ANONYM
 }
