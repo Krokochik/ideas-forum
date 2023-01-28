@@ -48,7 +48,7 @@ async function loadAndSaveAvatar() {
 }
 
 function replaceAll(string, search, replacement) {
-  return a.split(b).join(c);
+  return string.split(search).join(replacement);
 }
 
 function saveAvatar(avatar) {
