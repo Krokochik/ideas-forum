@@ -30,7 +30,6 @@ $("#imageUpload").change(function() {
 
       xhr.onload = () => {
           resolve(xhr.response)
-          console.log(xhr.response)
       }
 
       xhr.onerror = () => {

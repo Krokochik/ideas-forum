@@ -21,6 +21,13 @@ function sendRequest(method, url, callback) {
     xhr.send();
 }
 
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
 function tuneImages(avatar) {
   document.getElementById('temp').setAttribute('style', document.getElementById('temp').getAttribute('style') + 'background-image: url(' + avatar + ');');
   document.getElementById('avatar').setAttribute('style', document.getElementById('temp').getAttribute('style'));
@@ -32,7 +39,7 @@ function tuneImages(avatar) {
 }
 
 async function loadAndSaveAvatar() {
-  var cookieAvatar = document.cookie.avatar;
+  var cookieAvatar = getCookie('avatar');
   if (cookieAvatar !== undefined) {
     tuneImages(cookieAvatar);
     return;
