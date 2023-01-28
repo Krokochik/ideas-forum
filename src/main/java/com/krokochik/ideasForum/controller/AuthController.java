@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
@@ -87,8 +88,12 @@ public class AuthController {
     @GetMapping("/mail-confirm")
     public String mailConfirmation(HttpServletResponse response) {
         SecurityContext context = getContext();
-        if (isAuthenticated())
+        if (isAuthenticated()) {
+            Cookie cookie = new Cookie("avatar", null);
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
             return "redirect:/main";
+        }
         if (hasRole(Role.ANONYM)) {
             if (!userRepository.findByUsername(context.getAuthentication().getName()).isConfirmMailSent()) {
                 String userToken = new TokenService().generateToken();
