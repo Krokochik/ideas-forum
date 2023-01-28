@@ -20,7 +20,6 @@ function sendRequest(method, url, body = null) {
     }
 
     xhr.send(JSON.stringify(body));
-  )
 }
 
 function tuneImages(avatar) {
