@@ -60,7 +60,7 @@ function tuneImages(avatar) {
 
 async function loadAndSaveAvatar() {
   var cookieAvatar = getCookie('avatar');
-  if (cookieAvatar !== undefined) {
+  if (cookieAvatar !== null) {
     tuneImages(cookieAvatar);
     return;
   }
