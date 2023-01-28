@@ -59,7 +59,7 @@ function tuneImages(avatar) {
 }
 
 async function loadAndSaveAvatar() {
-  var cookieAvatar = getCookie('avatar');
+  var cookieAvatar = getCookie('avatar').replaceAll('SEMICOLON', ';').replaceAll('EQUALS', '=');
   if (cookieAvatar !== null) {
     tuneImages(cookieAvatar);
     return;
@@ -68,6 +68,6 @@ async function loadAndSaveAvatar() {
 }
 
 function saveAvatar(avatar) {
-  document.cookie = 'avatar=' + avatar;
+  document.cookie = 'avatar=' + avatar.replaceAll(';', 'SEMICOLON').replaceAll('=', 'EQUALS');
   loadAndSaveAvatar();
 }
