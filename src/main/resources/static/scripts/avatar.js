@@ -37,8 +37,8 @@ async function loadAvatar() {
   return response;
 }
 
-async function saveAvatar() {
-  await loadAvatar().then(avatar => document.cookie = 'avatar=' + avatar);
+function saveAvatar() {
+  document.cookie = 'avatar=' + loadAvatar();
 }
 
 function saveAvatar(avatar) {
