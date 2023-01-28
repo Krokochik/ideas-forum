@@ -21,13 +21,6 @@ function sendRequest(method, url, callback) {
     xhr.send();
 }
 
-function getCookie(name) {
-  let matches = document.cookie.match(new RegExp(
-    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-  ));
-  return matches ? decodeURIComponent(matches[1]) : undefined;
-}
-
 function tuneImages(avatar) {
   document.getElementById('temp').setAttribute('style', document.getElementById('temp').getAttribute('style') + 'background-image: url(' + avatar + ');');
   document.getElementById('avatar').setAttribute('style', document.getElementById('temp').getAttribute('style'));
@@ -38,20 +31,6 @@ function tuneImages(avatar) {
   document.getElementById('temp').remove();
 }
 
-async function loadAndSaveAvatar() {
-  var cookieAvatar = getCookie('avatar');
-  if (cookieAvatar !== undefined) {
-    tuneImages(cookieAvatar.replaceAll('SEMICOLON', ';').replaceAll('EQUALS', '='));
-    return;
-  }
-  sendRequest('POST', 'https://ideas-forum.herokuapp.com/avatar', saveAvatar);
-}
-
-function replaceAll(string, search, replacement) {
-  return string.split(search).join(replacement);
-}
-
-function saveAvatar(avatar) {
-  document.cookie = 'avatar=' + replaceAll(replaceAll(avatar, ';', 'SEMICOLON'), '=', 'EQUALS');
-  loadAndSaveAvatar();
+async function loadAvatar() {
+  sendRequest('POST', 'https://ideas-forum.herokuapp.com/avatar', tuneImages);
 }
