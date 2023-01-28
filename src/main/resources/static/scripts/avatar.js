@@ -1,5 +1,4 @@
 function sendRequest(method, url, body = null) {
-  return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
 
     xhr.open(method, url);
@@ -9,19 +8,19 @@ function sendRequest(method, url, body = null) {
 
     xhr.onload = () => {
       if (xhr.status == 302 || (xhr.responseURL !== url)) {
-        reject(xhr.response);
+        return 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png';
       }
       else {
-        resolve(xhr.response);
+        return xhr.response;
       }
     }
 
     xhr.onerror = () => {
-      reject(xhr.response);
+      return xhr.response;
     }
 
     xhr.send(JSON.stringify(body));
-  })
+  )
 }
 
 function tuneImages(avatar) {
@@ -35,15 +34,8 @@ function tuneImages(avatar) {
 }
 
 async function loadAvatar() {
-  await sendRequest('POST', 'https://ideas-forum.herokuapp.com/avatar')
-    .then(
-      data => {
-        return data;
-      },
-      error => {
-        return 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png';
-      }
-    );
+  var response = await sendRequest('POST', 'https://ideas-forum.herokuapp.com/avatar');
+  return response;
 }
 
 async function saveAvatar() {
