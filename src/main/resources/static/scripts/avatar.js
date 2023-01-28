@@ -52,7 +52,7 @@ function saveAvatar() {
 
 function getAvatar() {
   var cookieAvatar = document.cookie.avatar;
-  if (avatar !== undefined)
+  if (cookieAvatar !== undefined)
     return cookieAvatar;
   else 
     return 'https://raw.githubusercontent.com/Krokochik/resources/main/guest.png';
