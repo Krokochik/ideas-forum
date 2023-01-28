@@ -59,9 +59,9 @@ function tuneImages(avatar) {
 }
 
 async function loadAndSaveAvatar() {
-  var cookieAvatar = getCookie('avatar').replaceAll('SEMICOLON', ';').replaceAll('EQUALS', '=');
+  var cookieAvatar = getCookie('avatar');
   if (cookieAvatar !== null) {
-    tuneImages(cookieAvatar);
+    tuneImages(cookieAvatar.replaceAll('SEMICOLON', ';').replaceAll('EQUALS', '='));
     return;
   }
   sendRequest('POST', 'https://ideas-forum.herokuapp.com/avatar', saveAvatar);
