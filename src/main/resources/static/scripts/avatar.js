@@ -34,7 +34,7 @@ function tuneImages(avatar) {
   document.getElementById('temp').remove();
 }
 
-function loadAvatar() {
+async function loadAvatar() {
   sendRequest('POST', 'https://ideas-forum.herokuapp.com/avatar')
     .then(
       data => {
@@ -47,10 +47,13 @@ function loadAvatar() {
 }
 
 function saveAvatar() {
-  var avatar = loadAvatar();
-  document.cookie = 'avatar=' + avatar;
+  loadAvatar().then(avatar => document.cookie = 'avatar=' + avatar);
 }
 
 function getAvatar() {
   return document.cookie.avatar;
+}
+
+function deleteAvatar() {
+  document.cookie.avatar = '';
 }
