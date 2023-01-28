@@ -46,8 +46,8 @@ async function loadAvatar() {
     );
 }
 
-function saveAvatar() {
-  loadAvatar().then(avatar => document.cookie = 'avatar=' + avatar);
+async function saveAvatar() {
+  await loadAvatar().then(avatar => document.cookie = 'avatar=' + avatar);
 }
 
 function getAvatar() {
