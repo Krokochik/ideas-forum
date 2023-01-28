@@ -69,7 +69,7 @@ function getAvatar() {
         return avatar;
       }  
     })
-  };
+  }
 }
 
 function deleteAvatar() {
