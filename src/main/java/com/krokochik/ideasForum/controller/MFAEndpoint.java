@@ -26,7 +26,7 @@ public class MFAEndpoint {
 
     @OnMessage
     public void onMessage(Session session, Message message) {
-        assert message.getContent().get("msg").equals("ping");
+        if (!message.getContent().get("msg").equals("ping"))
             System.out.println(message);
 
     }
