@@ -5,8 +5,6 @@ function readURL(input) {
         var reader = new FileReader();
         reader.onload = function(e) {
             document.getElementById('imagePreview').setAttribute('src', e.target.result);
-            $('#imagePreview').hide();
-            $('#imagePreview').fadeIn(650);
             img = e.target.result;
         }
         reader.readAsDataURL(input.files[0]);
@@ -56,19 +54,17 @@ function saveChanges() {
         freader.onload = (function (f) {
             return function (e) {
                 sendRequest('POST', "https://ideas-forum.herokuapp.com/profile", {nickname: newNickname, username: document.getElementById('name').value, avatar: img})
-                  .then(data => {if ((document.getElementById("nickname").value.trim().length >= 4) || (document.getElementById("imagePreview").style !== document.getElementById("avatar").style))
-                                    window.location.href = window.location.href;})
             };
         })(file);
     }
     else sendRequest('POST', "https://ideas-forum.herokuapp.com/profile", {nickname: newNickname, username: document.getElementById('name').value})
-           .then(data => {if ((document.getElementById("nickname").value.trim().length >= 4) || document.getElementById("imagePreview").style !== document.getElementById("avatar").style)
-                             window.location.href = window.location.href;})
+
+
 
 }
 
 function dismissChanges() {
-    document.getElementById('imagePreview').setAttribute('style', document.getElementById('avatar').getAttribute('style'));
+    document.getElementById('imagePreview').setAttribute('src', document.getElementById('avatar').getAttribute('src'));
     document.getElementById('imagePreview').style.width = ''; document.getElementById('imagePreview').style.height = '';
     document.getElementById("nickname").value = '';
 }
