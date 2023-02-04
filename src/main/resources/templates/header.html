@@ -18,10 +18,7 @@
                <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
                <label for="imageUpload"></label>
              </div>
-             <div class="avatar-preview">
-               <div id="imagePreview">
-               </div>
-             </div>
+                 <img id="imagePreview" class="avatar-preview" th:src="@{/avatar}">
            </div>
            <input id="nickname" th:placeholder="${@userAuth.getNickname()}" th:style="'margin-bottom: 30px;box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'"/>
          </div>
@@ -47,7 +44,7 @@
           <button class="btn btn-outline-success me-2" type="button" th:text="Поиск"></button>
           <div class="dropdown text-end">
             <a href="#" th:class="'d-block text-decoration-none dropdown-toggle ' + ${theme == 'dark'? 'text-bg-dark link-light' : 'text-bg-light link-dark'}" data-bs-toggle="dropdown" aria-expanded="false">
-              <div id="avatar" class = "rounded-circle"> </div>
+                <img th:src="@{/avatar}" style="background-size: cover;background-repeat: no-repeat;background-position: center;margin-top: 0.3rem;width: 40px;height: 40px;display: inline-block; vertical-align: middle;" class="rounded-circle">
             </a>
             <ul th:class="'dropdown-menu light ' + ${theme == 'dark'? 'dropdown-menu-dark' : ''}">
               <li th:if="${@userAuth.isAuth()}"><a class="dropdown-item" href="/add-note">Добавить запись</a></li>

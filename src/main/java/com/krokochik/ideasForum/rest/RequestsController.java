@@ -3,12 +3,15 @@ package com.krokochik.ideasForum.rest;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.krokochik.ideasForum.controller.AuthController;
+import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,9 +21,14 @@ public class RequestsController {
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("/avatar")
-    public String avatar() {
-        return new String(userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getAvatar(), StandardCharsets.UTF_8);
+    @ResponseBody
+    @GetMapping(value = "/avatar", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] avatar(HttpServletResponse response) throws IOException {
+        return Base64.decodeBase64(
+                AuthController.isAuthenticated() ?
+                        userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getAvatar() :
+                        new User().getAvatar()
+        );
     }
 
     @ResponseBody
@@ -37,13 +45,14 @@ public class RequestsController {
             requestBody = jsonParser.parse(requestBodyStr).getAsJsonObject();
             try {
                 avatar = requestBody.get("avatar").getAsString();
+                if (avatar.startsWith("data:image/png;base64,"))
+                    avatar = avatar.substring("data:image/png;base64,".length());
             } catch (Exception ignored) {
             }
 
             username = requestBody.get("username").getAsString();
             nickname = requestBody.get("nickname").getAsString();
         } catch (Exception exception) {
-            statusCode = 500;
             exception.printStackTrace();
         }
 
@@ -56,19 +65,15 @@ public class RequestsController {
 
                 if ((avatar.length() / BYTES_IN_MEGABYTE / INFELICITY_COEFFICIENT) <= MAX_AVATAR_WEIGHT) {
                     userRepository.setAvatarById(avatar.getBytes(), userRepository.findByUsername(username).getId());
-                    statusCode = 200;
                 } else {
-                    statusCode = 400;
                     message = "Avatar is too hard.";
                 }
             } else {
-                statusCode = 400;
                 message = "Avatar is null.";
             }
 
             if (!nickname.isEmpty() && nickname.length() >= 4) {
                 userRepository.setNicknameById(nickname, userRepository.findByUsername(username).getId());
-                statusCode = 200;
             } else {
                 statusCode = 400;
                 message = "New name is null.";
