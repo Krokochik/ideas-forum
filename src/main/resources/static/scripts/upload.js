@@ -5,8 +5,6 @@ function readURL(input) {
         var reader = new FileReader();
         reader.onload = function(e) {
             document.getElementById('imagePreview').setAttribute('src', e.target.result);
-            $('#imagePreview').hide();
-            $('#imagePreview').fadeIn(650);
             img = e.target.result;
         }
         reader.readAsDataURL(input.files[0]);
