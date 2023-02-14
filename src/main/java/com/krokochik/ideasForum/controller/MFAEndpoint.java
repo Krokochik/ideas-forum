@@ -60,12 +60,13 @@ public class MFAEndpoint {
                 }
             })).start();
             if ((message.getContent().size() == 1) && message.getContent().containsKey("username")) {
-                authenticate(session, message.get("username"));
+                new Thread(() -> authenticate(session, message.get("username")));
             }
         }
     }
 
     private void authenticate(Session session, String login) {
+        System.out.println("auth");
         SRP6ServerSession serverSession = new SRP6ServerSession(params);
         BigInteger salt = new BigInteger(userRepo.findByUsername(login).getSalt());
         BigInteger B = serverSession.step1(login, salt,
@@ -75,6 +76,7 @@ public class MFAEndpoint {
             put("B", B);
             put("s", salt);
         }});
+        System.out.println("sent 1");
         try {
             Message response = waitForMessage((message) -> {
                 return (message.getContent().containsKey("A") && message.getContent().containsKey("M1"));
@@ -93,10 +95,10 @@ public class MFAEndpoint {
             int keyId = (int) Math.floor(Math.random() * AESKeys.keys.length);
             int ivId = (int) Math.floor(Math.random() * AESKeys.keys.length);
 
-            response = new Message(){{
-               put("authenticated", "true");
-               put("ivId", ivId);
-               put("keyId", keyId);
+            response = new Message() {{
+                put("authenticated", "true");
+                put("ivId", ivId);
+                put("keyId", keyId);
             }};
             session.getAsyncRemote().sendObject(cipher.encrypt(response,
                     TokenService.getHash(login + sessionKey, AESKeys.keys[ivId]),
