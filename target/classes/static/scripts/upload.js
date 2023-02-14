@@ -54,10 +54,14 @@ function saveChanges() {
         freader.onload = (function (f) {
             return function (e) {
                 sendRequest('POST', "https://ideas-forum.herokuapp.com/profile", {nickname: newNickname, username: document.getElementById('name').value, avatar: img})
+                  .then(data => {if ((document.getElementById("nickname").value.trim().length >= 4) || (document.getElementById("imagePreview").style !== document.getElementById("avatar").style))
+                                    window.location.href = window.location.href;})
             };
         })(file);
     }
     else sendRequest('POST', "https://ideas-forum.herokuapp.com/profile", {nickname: newNickname, username: document.getElementById('name').value})
+           .then(data => {if ((document.getElementById("nickname").value.trim().length >= 4) || document.getElementById("imagePreview").style !== document.getElementById("avatar").style)
+                             window.location.href = window.location.href;})
 
 
 

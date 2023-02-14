@@ -4,6 +4,10 @@ import com.krokochik.ideasForum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,5 +56,19 @@ public class TokenService {
         }
 
         return builder.toString();
+    }
+
+    public static String getHash(String str, String salt) {
+        MessageDigest crypt = null;
+        try { crypt = MessageDigest.getInstance("SHA3-512"); } catch (NoSuchAlgorithmException unreachable) {}
+        crypt.update(str.getBytes(StandardCharsets.UTF_8));
+
+        byte[] bytes = crypt.digest();
+        BigInteger bi = new BigInteger(1, bytes);
+        return String.format("%0" + (bytes.length << 1) + "x", bi);
+    }
+
+    public static String getHash(String str) {
+        return getHash(str, "");
     }
 }

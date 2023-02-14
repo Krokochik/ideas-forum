@@ -5,10 +5,12 @@ import com.krokochik.ideasForum.model.Message;
 import com.krokochik.ideasForum.service.MessageDecoder;
 import com.krokochik.ideasForum.service.MessageEncoder;
 import com.krokochik.ideasForum.service.StorageService;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+import java.util.HashMap;
 
 @ServerEndpoint(
         value = "/mfa",
@@ -20,9 +22,11 @@ public class MFAEndpoint {
 
     StorageService<String, String> storage = new StorageService<>();
 
+    @SneakyThrows
     @OnOpen
     public void onOpen(Session session) {
-
+        Thread.sleep(5000);
+        session.getAsyncRemote().sendObject(new Message(new HashMap<>() {{ put("msg", "duty"); }}));
     }
 
     @OnMessage
