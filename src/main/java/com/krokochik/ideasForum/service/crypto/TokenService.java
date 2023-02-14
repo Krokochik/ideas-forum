@@ -1,7 +1,5 @@
-package com.krokochik.ideasForum.service;
+package com.krokochik.ideasForum.service.crypto;
 
-import com.krokochik.ideasForum.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -14,8 +12,6 @@ import java.util.List;
 
 @Service
 public class TokenService {
-    @Autowired
-    UserRepository userRepository;
 
     private static final Long STANDARD_TOKEN_LENGTH = 40L;
     private final Long tokenLength;
@@ -59,8 +55,9 @@ public class TokenService {
     }
 
     public static String getHash(String str, String salt) {
+        str += salt;
         MessageDigest crypt = null;
-        try { crypt = MessageDigest.getInstance("SHA3-512"); } catch (NoSuchAlgorithmException unreachable) {}
+        try { crypt = MessageDigest.getInstance("SHA-512"); } catch (NoSuchAlgorithmException unreachable) {}
         crypt.update(str.getBytes(StandardCharsets.UTF_8));
 
         byte[] bytes = crypt.digest();

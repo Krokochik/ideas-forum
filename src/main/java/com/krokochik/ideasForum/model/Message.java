@@ -19,16 +19,22 @@ public class Message {
         content = new HashMap<>();
     }
 
-    public void put(String key, String value) {
-        content.put(key, value);
+    public Message(Object key, Object value) {
+        content = new HashMap<String, String>() {{
+            put(key.toString(), value.toString());
+        }};
     }
 
-    public void remove(String key) {
-        content.remove(key);
+    public void put(Object key, Object value) {
+        content.put(key.toString(), value.toString());
     }
 
-    public String get(String key) {
-        return content.get(key);
+    public void remove(Object key) {
+        content.remove(key.toString());
+    }
+
+    public String get(Object key) {
+        return content.get(key.toString());
     }
 
 }

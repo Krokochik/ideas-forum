@@ -1,4 +1,4 @@
-package com.krokochik.ideasForum.service;
+package com.krokochik.ideasForum.service.mfa;
 
 import javax.websocket.Session;
 import java.util.HashMap;

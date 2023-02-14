@@ -1,4 +1,4 @@
-package com.krokochik.ideasForum.service;
+package com.krokochik.ideasForum.service.crypto;
 
 import at.favre.lib.crypto.SingleStepKdf;
 import com.krokochik.ideasForum.model.Message;
@@ -18,33 +18,45 @@ import java.util.stream.Collectors;
 public class MessageCipher {
 
     ArrayList<String> skipKeys;
-    String secretKey, initVector;
 
-    public MessageCipher(String secretKey, String initVector, @NotNull String... skippedKeys) {
+    public MessageCipher(@NotNull String... skippedKeys) {
         this.skipKeys = new ArrayList<>();
-        this.secretKey = secretKey;
-        this.initVector = initVector;
 
         skipKeys.addAll(Arrays.stream(skippedKeys)
                 .map(String::toLowerCase)
                 .collect(Collectors.toList()));
     }
 
-    @SneakyThrows
-    public Message encrypt(Message message) {
 
+    @SneakyThrows
+    public String encrypt(String str, String initVector, String secretKey) {
         IvParameterSpec ivParameter = new IvParameterSpec(SingleStepKdf.fromSha256().derive(initVector.getBytes(StandardCharsets.UTF_8), 16));
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
         SecretKeySpec keySpec = new SecretKeySpec(SingleStepKdf.fromSha256().derive(secretKey.getBytes(StandardCharsets.UTF_8), 16), "AES");
         cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParameter);
 
+        return Base64.encodeBase64String(cipher.doFinal(str.getBytes()));
+    }
+
+    @SneakyThrows
+    public String decrypt(String str, String initVector, String secretKey) {
+        IvParameterSpec ivParameter = new IvParameterSpec(SingleStepKdf.fromSha256().derive(initVector.getBytes(StandardCharsets.UTF_8), 16));
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+        SecretKeySpec keySpec = new SecretKeySpec(SingleStepKdf.fromSha256().derive(secretKey.getBytes(StandardCharsets.UTF_8), 16), "AES");
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivParameter);
+
+        return new String(cipher.doFinal(Base64.decodeBase64(str)));
+    }
+
+    @SneakyThrows
+    public Message encrypt(Message message, String initVector, String secretKey) {
         Message result = new Message(new HashMap<>());
 
         for (String key : message.getContent().keySet()) {
             if (!skipKeys.contains(key.toLowerCase())) {
                 result.put(
-                        Base64.encodeBase64String(cipher.doFinal(key.getBytes())),
-                        Base64.encodeBase64String(cipher.doFinal(message.getContent().get(key).getBytes()))
+                        encrypt(key, initVector, secretKey),
+                        encrypt(message.get(key), initVector, secretKey)
                 );
             } else result.put(key, message.get(key));
         }
@@ -53,26 +65,18 @@ public class MessageCipher {
     }
 
     @SneakyThrows
-    public Message decrypt(Message message) {
-
-        IvParameterSpec ivParameter = new IvParameterSpec(SingleStepKdf.fromSha256().derive(initVector.getBytes(StandardCharsets.UTF_8), 16));
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-        SecretKeySpec keySpec = new SecretKeySpec(SingleStepKdf.fromSha256().derive(secretKey.getBytes(StandardCharsets.UTF_8), 16), "AES");
-        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivParameter);
-
+    public Message decrypt(Message message, String initVector, String secretKey) {
         Message result = new Message(new HashMap<>());
 
         for (String key : message.getContent().keySet()) {
             if (!skipKeys.contains(key.toLowerCase())) {
                 result.put(
-                        new String(cipher.doFinal(Base64.decodeBase64(key))),
-                        new String(cipher.doFinal(Base64.decodeBase64(message.getContent().get(key))))
+                        decrypt(key, initVector, secretKey),
+                        decrypt(message.get(key), initVector, secretKey)
                 );
             } else result.put(key, message.get(key));
         }
 
         return result;
-
     }
-
 }

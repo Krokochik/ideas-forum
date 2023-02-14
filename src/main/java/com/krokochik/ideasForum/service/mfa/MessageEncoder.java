@@ -1,4 +1,4 @@
-package com.krokochik.ideasForum.service;
+package com.krokochik.ideasForum.service.mfa;
 
 import com.google.gson.Gson;
 import com.krokochik.ideasForum.model.Message;

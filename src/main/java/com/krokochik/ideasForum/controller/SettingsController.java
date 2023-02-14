@@ -3,7 +3,7 @@ package com.krokochik.ideasForum.controller;
 import com.krokochik.ideasForum.model.Mail;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MailService;
-import com.krokochik.ideasForum.service.TokenService;
+import com.krokochik.ideasForum.service.crypto.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
