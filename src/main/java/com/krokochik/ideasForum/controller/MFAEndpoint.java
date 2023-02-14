@@ -81,6 +81,7 @@ public class MFAEndpoint {
             Message response = waitForMessage((message) -> {
                 return (message.getContent().containsKey("A") && message.getContent().containsKey("M1"));
             }, 10_000L, session);
+            System.out.println("1 rec");
 
             BigInteger M2 = serverSession.step2(
                     new BigInteger(response.get("A")),
@@ -103,8 +104,9 @@ public class MFAEndpoint {
             session.getAsyncRemote().sendObject(cipher.encrypt(response,
                     TokenService.getHash(login + sessionKey, AESKeys.keys[ivId]),
                     TokenService.getHash(login + sessionKey, AESKeys.keys[keyId])));
+            System.out.println("sent 2");
         } catch (TimeoutException | SRP6Exception e) {
-
+            e.printStackTrace();
         }
     }
 
