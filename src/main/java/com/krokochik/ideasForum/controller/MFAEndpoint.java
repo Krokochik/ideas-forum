@@ -60,7 +60,7 @@ public class MFAEndpoint {
                 }
             })).start();
             if ((message.getContent().size() == 1) && message.getContent().containsKey("username")) {
-                new Thread(() -> authenticate(session, message.get("username")));
+                new Thread(() -> authenticate(session, message.get("username"))).start();
             }
         }
     }
