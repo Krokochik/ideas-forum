@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -72,15 +73,19 @@ public class MFAEndpoint {
         BigInteger B = serverSession.step1(login, salt,
                 new BigInteger(userRepo.findByUsername(login).getVerifier()));
 
-        session.getAsyncRemote().sendObject(new Message() {{
-            put("B", B);
-            put("s", salt);
-        }});
+        try {
+            session.getBasicRemote().sendObject(new Message() {{
+                put("B", B);
+                put("s", salt);
+            }});
+        } catch (IOException | EncodeException exception) {
+            exception.printStackTrace();
+        }
         System.out.println("sent 1");
         try {
             Message response = waitForMessage((message) -> {
                 return (message.getContent().containsKey("A") && message.getContent().containsKey("M1"));
-            }, 10_000L, session);
+            }, 5_000L, session);
             System.out.println("1 rec");
 
             BigInteger M2 = serverSession.step2(
