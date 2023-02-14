@@ -23,16 +23,9 @@ public class MFAEndpoint {
 
     @OnOpen
     public void onOpen(Session session) {
-        Thread thread = new Thread(() -> {
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException exception) {
-                exception.printStackTrace();
-            }
-            session.getAsyncRemote().sendObject(new Message(new HashMap<>() {{
-                put("msg", "duty");
-            }}));
-        });
+        session.getAsyncRemote().sendObject(new Message(new HashMap<>() {{
+            put("msg", "duty");
+        }}));
     }
 
     @OnMessage
