@@ -84,6 +84,7 @@ public class MFAEndpoint {
     }
 
     private void authenticateStepTwo(String A, String M1, Session session) {
+        System.out.println("auth 2");
         SRP6ServerSession serverSession = serverSessions.get(session);
         String login = logins.get(session);
         BigInteger salt = salts.get(session);
@@ -91,6 +92,7 @@ public class MFAEndpoint {
 
 
         if ((login != null) && (serverSession != null) && (salt != null) && (B != null)) {
+            System.out.println("step 2");
             try {
                 SRP6ClientSession clientSession = new SRP6ClientSession();
                 clientSession.step1(login, userRepo.findByUsername(login).getPassword());
