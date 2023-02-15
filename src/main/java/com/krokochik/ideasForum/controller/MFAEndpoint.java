@@ -93,17 +93,7 @@ public class MFAEndpoint {
         if ((login != null) && (serverSession != null) && (salt != null) && (B != null)) {
             System.out.println("step 2");
             try {
-                System.out.println(userRepo.findByUsername(login).getPassword());
-                SRP6ClientSession clientSession = new SRP6ClientSession();
-                clientSession.step1(login, userRepo.findByUsername(login).getPassword());
-                SRP6ClientCredentials credentials = clientSession.step2(params, salt, B);
-
-                System.out.println(credentials.M1);
-                System.out.println(credentials.A);
-
-                BigInteger M2 = serverSession.step2(
-                        new BigInteger(A),
-                        new BigInteger(M1));
+                serverSession.step2(new BigInteger(A), new BigInteger(M1));
 
                 String sessionKey = serverSession.getSessionKey(false).toString(16);
                 System.out.println(sessionKey);
@@ -115,12 +105,9 @@ public class MFAEndpoint {
                 int keyId = (int) Math.floor(Math.random() * AESKeys.keys.length);
                 int ivId = (int) Math.floor(Math.random() * AESKeys.keys.length);
 
-                // emulate client
-
-                boolean authenticated = credentials.M1.equals(new BigInteger(M1));
 
                 Message response = new Message(new HashMap<>() {{
-                    put("authenticated", authenticated ? "true" : "false");
+                    put("authenticated", "true");
                     put("ivId", ivId + "");
                     put("keyId", keyId + "");
                 }});
