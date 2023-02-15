@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -47,6 +46,7 @@ public class MFAEndpoint {
 
     @OnOpen
     public void onOpen(Session session) {
+        session.getAsyncRemote().sendObject(new Message("msg", "opened"));
         onMessageTasksStorage.save(session, "onMessage", new ArrayList<>());
     }
 
@@ -69,50 +69,47 @@ public class MFAEndpoint {
                     BigInteger B = serverSession.step1(login, salt,
                             new BigInteger(userRepo.findByUsername(login).getVerifier()));
 
-                    try {
-                        session.getBasicRemote().sendObject(new Message() {{
-                            put("B", B);
-                            put("s", salt);
-                        }});
-                    } catch (IOException | EncodeException exception) {
-                        exception.printStackTrace();
-                    }
-                    System.out.println("sent 1");
-                    try {
-                        Message response = waitForMessage((msg) -> {
-                            return (msg.getContent().containsKey("A") && msg.getContent().containsKey("M1"));
-                        }, 5_000L, session);
-                        System.out.println("1 rec");
+                    session.getAsyncRemote().sendObject(new Message() {{
+                        put("B", B);
+                        put("s", salt);
+                    }});
+                        System.out.println("sent 1");
+                try {
+                    Message response = waitForMessage((msg) -> {
+                        return (msg.getContent().containsKey("A") && msg.getContent().containsKey("M1"));
+                    }, 5_000L, session);
+                    System.out.println("1 rec");
 
-                        BigInteger M2 = serverSession.step2(
-                                new BigInteger(response.get("A")),
-                                new BigInteger(response.get("M1")));
+                    BigInteger M2 = serverSession.step2(
+                            new BigInteger(response.get("A")),
+                            new BigInteger(response.get("M1")));
 
-                        String sessionKey = serverSession.getSessionKey(false).toString(16);
-                        sessionKeyStorage.save(session, sessionKey);
+                    String sessionKey = serverSession.getSessionKey(false).toString(16);
+                    sessionKeyStorage.save(session, sessionKey);
 
-                        MessageCipher cipher = new MessageCipher("username", "keyId", "ivId");
-                        messageCipherStorage.save(session, cipher);
+                    MessageCipher cipher = new MessageCipher("username", "keyId", "ivId");
+                    messageCipherStorage.save(session, cipher);
 
-                        int keyId = (int) Math.floor(Math.random() * AESKeys.keys.length);
-                        int ivId = (int) Math.floor(Math.random() * AESKeys.keys.length);
+                    int keyId = (int) Math.floor(Math.random() * AESKeys.keys.length);
+                    int ivId = (int) Math.floor(Math.random() * AESKeys.keys.length);
 
-                        response = new Message() {{
-                            put("authenticated", "true");
-                            put("ivId", ivId);
-                            put("keyId", keyId);
-                        }};
-                        session.getAsyncRemote().sendObject(cipher.encrypt(response,
-                                TokenService.getHash(login + sessionKey, AESKeys.keys[ivId]),
-                                TokenService.getHash(login + sessionKey, AESKeys.keys[keyId])));
-                        System.out.println("sent 2");
-                    } catch (TimeoutException | SRP6Exception e) {
-                        e.printStackTrace();
-                    }
-                }).start();
-            }
+                    response = new Message() {{
+                        put("authenticated", "true");
+                        put("ivId", ivId);
+                        put("keyId", keyId);
+                    }};
+                    session.getAsyncRemote().sendObject(cipher.encrypt(response,
+                            TokenService.getHash(login + sessionKey, AESKeys.keys[ivId]),
+                            TokenService.getHash(login + sessionKey, AESKeys.keys[keyId])));
+                    System.out.println("sent 2");
+                } catch (TimeoutException | SRP6Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
         }
     }
+
+}
 
     private void setOnMessage(CallbackTask<Message> task, Session session) {
         onMessageTasksStorage.get(session, "onMessage").add(task);
@@ -171,6 +168,7 @@ public class MFAEndpoint {
 
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
+        System.out.println("closed");
     }
 
     @OnError
