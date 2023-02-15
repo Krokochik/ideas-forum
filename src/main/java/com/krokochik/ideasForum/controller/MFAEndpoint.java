@@ -2,7 +2,6 @@ package com.krokochik.ideasForum.controller;
 
 import com.krokochik.ideasForum.config.CustomSpringConfigurator;
 import com.krokochik.ideasForum.model.CallbackTask;
-import com.krokochik.ideasForum.model.Condition;
 import com.krokochik.ideasForum.model.Message;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.res.AESKeys;
@@ -11,10 +10,7 @@ import com.krokochik.ideasForum.service.crypto.TokenService;
 import com.krokochik.ideasForum.service.mfa.MessageDecoder;
 import com.krokochik.ideasForum.service.mfa.MessageEncoder;
 import com.krokochik.ideasForum.service.mfa.StorageService;
-import com.nimbusds.srp6.SRP6CryptoParams;
-import com.nimbusds.srp6.SRP6Exception;
-import com.nimbusds.srp6.SRP6ServerSession;
-import lombok.SneakyThrows;
+import com.nimbusds.srp6.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,11 +19,6 @@ import javax.websocket.server.ServerEndpoint;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 @ServerEndpoint(
         value = "/mfa",
@@ -42,6 +33,10 @@ public class MFAEndpoint {
 
     StorageService<String, ArrayList<CallbackTask<Message>>> onMessageTasksStorage = new StorageService<>();
     StorageService<Session, String> sessionKeyStorage = new StorageService<>();
+    HashMap<Session, SRP6ServerSession> serverSessions = new HashMap<>();
+    HashMap<Session, BigInteger> B = new HashMap<>();
+    HashMap<Session, BigInteger> salts = new HashMap<>();
+    HashMap<Session, String> logins = new HashMap<>();
     StorageService<Session, MessageCipher> messageCipherStorage = new StorageService<>();
     SRP6CryptoParams params = SRP6CryptoParams.getInstance(2048, "SHA-512");
 
@@ -65,35 +60,45 @@ public class MFAEndpoint {
                 } catch (Exception ignored) {
                 }
             })).start();
-            if ((message.getContent().size() == 1) && message.getContent().containsKey("username")) {
-                authenticate(message.get("username"), session);
-            }
+            if ((message.getContent().size() == 1) && message.getContent().containsKey("username"))
+                authenticateStepOne(message.get("username"), session);
+            if (message.getContent().containsKey("A") && message.getContent().containsKey("M1"))
+                authenticateStepTwo(message.get("A"), message.get("M1"), session);
         }
 
     }
 
-    private void authenticate(String login, Session session) {
+    private void authenticateStepOne(String login, Session session) {
         new Thread(() -> {
             System.out.println("auth");
             SRP6ServerSession serverSession = new SRP6ServerSession(params);
             BigInteger salt = new BigInteger(userRepo.findByUsername(login).getSalt());
             BigInteger B = serverSession.step1(login, salt,
                     new BigInteger(userRepo.findByUsername(login).getVerifier()));
+            serverSessions.put(session, serverSession);
+            this.B.put(session, B);
+            salts.put(session, salt);
+            logins.put(session, login);
 
             session.getAsyncRemote().sendObject(new Message(new HashMap<>(){{
                 put("B", B.toString());
                 put("s", salt.toString());
             }}));
             System.out.println("sent 1");
-            try {
-                Message response = waitForMessage((msg) -> {
-                    return (msg.getContent().containsKey("A") && msg.getContent().containsKey("M1"));
-                }, 5_000L, session);
-                System.out.println("1 rec");
+        }).start();
+    }
 
+    private void authenticateStepTwo(String A, String M1, Session session) {
+        SRP6ServerSession serverSession = serverSessions.get(session);
+        String login = logins.get(session);
+        BigInteger salt = salts.get(session);
+        BigInteger B = this.B.get(session);
+
+        if ((login != null) && (serverSession != null) && (salt != null) && (B != null)) {
+            try {
                 BigInteger M2 = serverSession.step2(
-                        new BigInteger(response.get("A")),
-                        new BigInteger(response.get("M1")));
+                        new BigInteger(A),
+                        new BigInteger(M1));
 
                 String sessionKey = serverSession.getSessionKey(false).toString(16);
                 sessionKeyStorage.save(session, sessionKey);
@@ -104,8 +109,15 @@ public class MFAEndpoint {
                 int keyId = (int) Math.floor(Math.random() * AESKeys.keys.length);
                 int ivId = (int) Math.floor(Math.random() * AESKeys.keys.length);
 
-                response = new Message(new HashMap<>(){{
-                    put("authenticated", "true");
+                // emulate client
+                SRP6ClientSession clientSession = new SRP6ClientSession();
+                clientSession.step1(login, userRepo.findByUsername(login).getPassword());
+                SRP6ClientCredentials credentials = clientSession.step2(params, salt, B);
+
+                boolean authenticated = credentials.M1.equals(new BigInteger(M1));
+
+                Message response = new Message(new HashMap<>() {{
+                    put("authenticated", authenticated ? "true" : "false");
                     put("ivId", ivId + "");
                     put("keyId", keyId + "");
                 }});
@@ -113,67 +125,12 @@ public class MFAEndpoint {
                         TokenService.getHash(login + sessionKey, AESKeys.keys[ivId]),
                         TokenService.getHash(login + sessionKey, AESKeys.keys[keyId])));
                 System.out.println("sent 2");
-            } catch (TimeoutException | SRP6Exception e) {
+            } catch (SRP6Exception e) {
                 e.printStackTrace();
             }
-        }).start();
-    }
-
-
-    private void setOnMessage(CallbackTask<Message> task, Session session) {
-        onMessageTasksStorage.get(session, "onMessage").add(task);
-    }
-
-    public void removeOnMessage(CallbackTask<Message> task, Session session) {
-        onMessageTasksStorage.get(session, "onMessage").remove(task);
-    }
-
-    public Message waitForMessage(final Condition<Message> test, final Long timeout, Session session) throws TimeoutException {
-        AtomicReference<Message> msg = new AtomicReference<>();
-        AtomicBoolean wait = new AtomicBoolean(true);
-
-        AtomicReference<CallbackTask<Message>> onMessageTask = new AtomicReference<>();
-        onMessageTask.set((message) -> {
-            for (int i = 0; i < message.getContent().size(); i++) {
-                if (test.check(message)) {
-                    msg.set(message);
-                    wait.set(false);
-                    removeOnMessage(onMessageTask.get(), session);
-                }
-            }
-        });
-
-        new Timer().schedule(new TimerTask() {
-            public void run() {
-                msg.set(null);
-                wait.set(false);
-            }
-        }, timeout);
-
-        setOnMessage(onMessageTask.get(), session);
-
-        while (wait.get()) {
         }
-
-        if (msg.get() == null)
-            throw new TimeoutException();
-        return msg.get();
     }
 
-    @SneakyThrows
-    public Message waitForMessage(final Condition<Message> test, Session session) {
-        return waitForMessage(test, Long.MAX_VALUE, session);
-    }
-
-    @SneakyThrows
-    public Message waitForMessage(final Long timeout, Session session) {
-        return waitForMessage((msg) -> true, timeout, session);
-    }
-
-    @SneakyThrows
-    public Message waitForMessage(Session session) {
-        return waitForMessage((msg) -> true, Long.MAX_VALUE, session);
-    }
 
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
