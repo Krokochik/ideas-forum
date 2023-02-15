@@ -74,6 +74,8 @@ public class MFAEndpoint {
     private void authenticateStepTwo(String A, String M1, Session session) {
         System.out.println("auth 2");
         SRP6ServerSession serverSession = (SRP6ServerSession) sessionStorage.get(session, "serverSession");
+        System.out.println(sessionStorage.get(session, "serverSession"));
+
 
         if (serverSession != null) {
             System.out.println("step 2");
