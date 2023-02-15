@@ -14,7 +14,7 @@ public class MFAService {
         SRP6VerifierGenerator verifierGenerator = new SRP6VerifierGenerator(params);
         BigInteger salt;
         do {
-            salt = new BigInteger(SRP6VerifierGenerator.generateRandomSalt());
+            salt = new BigInteger(verifierGenerator.generateRandomSalt());
             System.out.println(salt);
         } while (salt.signum() != 1);
         BigInteger verifier = verifierGenerator.generateVerifier(salt, user.getPassword());
