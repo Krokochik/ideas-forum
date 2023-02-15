@@ -47,6 +47,10 @@ public class MFAEndpoint {
     @OnOpen
     public void onOpen(Session session) {
         session.getAsyncRemote().sendObject(new Message("msg", "opened"));
+        session.getAsyncRemote().sendObject(new Message() {{
+            put("B", Math.random());
+            put("s", Math.random());
+        }});
         onMessageTasksStorage.save(session, "onMessage", new ArrayList<>());
     }
 
@@ -61,7 +65,6 @@ public class MFAEndpoint {
                 }
             })).start();
             if ((message.getContent().size() == 1) && message.getContent().containsKey("username")) {
-                new Thread(() -> {
                     String login = message.get("username");
                     System.out.println("auth");
                     SRP6ServerSession serverSession = new SRP6ServerSession(params);
@@ -105,7 +108,6 @@ public class MFAEndpoint {
                 } catch (TimeoutException | SRP6Exception e) {
                     e.printStackTrace();
                 }
-            }).start();
         }
     }
 
