@@ -42,11 +42,6 @@ public class MFAEndpoint {
 
     @OnOpen
     public void onOpen(Session session) {
-        session.getAsyncRemote().sendObject(new Message("msg", "opened"));
-        session.getAsyncRemote().sendObject(new Message(new HashMap<>() {{
-            put("B", Math.random() + "");
-            put("s", Math.random() + "");
-        }}));
         onMessageTasksStorage.save(session, "onMessage", new ArrayList<>());
     }
 
@@ -94,8 +89,16 @@ public class MFAEndpoint {
         BigInteger salt = salts.get(session);
         BigInteger B = this.B.get(session);
 
+
         if ((login != null) && (serverSession != null) && (salt != null) && (B != null)) {
             try {
+                SRP6ClientSession clientSession = new SRP6ClientSession();
+                clientSession.step1(login, userRepo.findByUsername(login).getPassword());
+                SRP6ClientCredentials credentials = clientSession.step2(params, salt, B);
+
+                System.out.println(credentials.M1);
+                System.out.println(credentials.A);
+
                 BigInteger M2 = serverSession.step2(
                         new BigInteger(A),
                         new BigInteger(M1));
@@ -110,9 +113,6 @@ public class MFAEndpoint {
                 int ivId = (int) Math.floor(Math.random() * AESKeys.keys.length);
 
                 // emulate client
-                SRP6ClientSession clientSession = new SRP6ClientSession();
-                clientSession.step1(login, userRepo.findByUsername(login).getPassword());
-                SRP6ClientCredentials credentials = clientSession.step2(params, salt, B);
 
                 boolean authenticated = credentials.M1.equals(new BigInteger(M1));
 
