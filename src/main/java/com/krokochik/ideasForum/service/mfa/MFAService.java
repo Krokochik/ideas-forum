@@ -13,7 +13,7 @@ public class MFAService {
     public static User writeSaltAndVerifier(User user) {
         SRP6VerifierGenerator verifierGenerator = new SRP6VerifierGenerator(params);
 
-        BigInteger salt = new BigInteger(SRP6VerifierGenerator.generateRandomSalt());
+        BigInteger salt = new BigInteger(verifierGenerator.generateRandomSalt(16));
         BigInteger verifier = verifierGenerator.generateVerifier(salt, user.getPassword());
 
         user.setSalt(salt.toString());
