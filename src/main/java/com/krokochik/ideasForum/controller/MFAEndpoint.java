@@ -90,10 +90,10 @@ public class MFAEndpoint {
         BigInteger salt = salts.get(session);
         BigInteger B = this.B.get(session);
 
-
         if ((login != null) && (serverSession != null) && (salt != null) && (B != null)) {
             System.out.println("step 2");
             try {
+                System.out.println(userRepo.findByUsername(login).getPassword());
                 SRP6ClientSession clientSession = new SRP6ClientSession();
                 clientSession.step1(login, userRepo.findByUsername(login).getPassword());
                 SRP6ClientCredentials credentials = clientSession.step2(params, salt, B);
@@ -106,6 +106,7 @@ public class MFAEndpoint {
                         new BigInteger(M1));
 
                 String sessionKey = serverSession.getSessionKey(false).toString(16);
+                System.out.println(sessionKey);
                 sessionKeyStorage.save(session, sessionKey);
 
                 MessageCipher cipher = new MessageCipher("username", "keyId", "ivId");
