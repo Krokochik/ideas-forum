@@ -93,6 +93,12 @@ public class MFAEndpoint {
         if ((login != null) && (serverSession != null) && (salt != null) && (B != null)) {
             System.out.println("step 2");
             try {
+                SRP6ClientSession clientSession = new SRP6ClientSession();
+                clientSession.step1(login, userRepo.findByUsername(login).getPassword());
+                SRP6ClientCredentials credentials = clientSession.step2(params, salts.get(session), this.B.get(session));
+                System.out.println(credentials.A);
+                System.out.println(credentials.M1);
+
                 serverSession.step2(new BigInteger(A), new BigInteger(M1));
 
                 String sessionKey = serverSession.getSessionKey().toString(16);
