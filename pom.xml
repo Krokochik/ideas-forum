@@ -192,12 +192,14 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>5.6.10.Final</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.openhab.osgiify/com.nimbusds.srp6a -->
+
+		<!-- https://mvnrepository.com/artifact/com.nimbusds/srp6a -->
 		<dependency>
-			<groupId>org.openhab.osgiify</groupId>
-			<artifactId>com.nimbusds.srp6a</artifactId>
-			<version>1.5.2</version>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>srp6a</artifactId>
+			<version>2.1.0</version>
 		</dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>

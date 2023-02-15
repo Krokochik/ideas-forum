@@ -95,7 +95,7 @@ public class MFAEndpoint {
             try {
                 serverSession.step2(new BigInteger(A), new BigInteger(M1));
 
-                String sessionKey = serverSession.getSessionKey(false).toString(16);
+                String sessionKey = serverSession.getSessionKey().toString(16);
                 System.out.println(sessionKey);
                 sessionKeyStorage.save(session, sessionKey);
 
