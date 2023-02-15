@@ -22,6 +22,7 @@ import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
@@ -47,10 +48,10 @@ public class MFAEndpoint {
     @OnOpen
     public void onOpen(Session session) {
         session.getAsyncRemote().sendObject(new Message("msg", "opened"));
-        session.getAsyncRemote().sendObject(new Message() {{
-            put("B", Math.random());
-            put("s", Math.random());
-        }});
+        session.getAsyncRemote().sendObject(new Message(new HashMap<>(){{
+            put("B", Math.random() + "");
+            put("s", Math.random() + "");
+        }}));
         onMessageTasksStorage.save(session, "onMessage", new ArrayList<>());
     }
 
