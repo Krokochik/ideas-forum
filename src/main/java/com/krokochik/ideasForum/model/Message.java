@@ -20,7 +20,7 @@ public class Message {
     }
 
     public Message(Object key, Object value) {
-        content = new HashMap<String, String>() {{
+        content = new HashMap<>() {{
             put(key.toString(), value.toString());
         }};
     }
