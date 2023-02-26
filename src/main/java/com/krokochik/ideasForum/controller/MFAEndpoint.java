@@ -11,6 +11,8 @@ import com.krokochik.ideasForum.service.mfa.MessageDecoder;
 import com.krokochik.ideasForum.service.mfa.MessageEncoder;
 import com.krokochik.ideasForum.service.mfa.StorageService;
 import com.nimbusds.srp6.*;
+import lombok.NonNull;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +21,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
 @ServerEndpoint(
         value = "/mfa",
@@ -32,7 +35,7 @@ public class MFAEndpoint {
     UserRepository userRepo;
 
     StorageService<String, ArrayList<CallbackTask<Message>>> onMessageTasksStorage = new StorageService<>();
-    StorageService<Session, String> sessionKeyStorage = new StorageService<>();
+    HashMap<String, String> sessionKeys = new HashMap<>();
     HashMap<Session, SRP6ServerSession> serverSessions = new HashMap<>();
     HashMap<Session, BigInteger> B = new HashMap<>();
     HashMap<Session, BigInteger> salts = new HashMap<>();
@@ -49,18 +52,76 @@ public class MFAEndpoint {
     public void onMessage(Session session, Message message) {
         if ((message.getContent().get("msg") == null) || !message.getContent().get("msg").equals("ping")) {
             System.out.println(message);
+
             new Thread(() -> onMessageTasksStorage.get(session, "onMessage").forEach(task -> {
                 try {
                     task.run(message);
                 } catch (Exception ignored) {
                 }
             })).start();
+
             if ((message.getContent().size() == 1) && message.getContent().containsKey("username"))
                 authenticateStepOne(message.get("username"), session);
-            if (message.getContent().containsKey("A") && message.getContent().containsKey("M1"))
+            if (message.getContent().containsKey("A") && message.getContent().containsKey("M1") && message.getContent().containsKey("username"))
                 authenticateStepTwo(message.get("A"), message.get("M1"), session);
+
+            if ((message.getContent().size() > 1) && message.getContent().containsKey("username"))
+                processMessage(message, session);
         }
 
+    }
+
+    private void processMessage(Message message, Session session) {
+        message = decrypt(message).orElseGet(Message::new);
+        if (message.getContent().containsKey("get"))
+            getRequestProcessor(message, session);
+    }
+
+    private void getRequestProcessor(Message message, Session session) {
+        Message response;
+        switch (message.get("get")) {
+            case "avatar" -> response = new Message("avatar",
+                    userRepo.findByUsername(message.get("username"))
+                    .getAvatar());
+            case "email" -> response = new Message("email",
+                    userRepo.findByUsername(message.get("username"))
+                    .getEmail());
+            case "auth" -> {
+                if (sessionKeys.get(message.get("username")) != null)
+                    response = new Message("auth", "true");
+                else
+                    response = new Message("auth", "false");
+
+                session.getAsyncRemote().sendObject(response);
+                return;
+            }
+            default -> response = new Message();
+        }
+        response = encrypt(response, message.get("username"));
+        session.getAsyncRemote().sendObject(response);
+    }
+
+    private Message encrypt(@NonNull Message message, String username) {
+        int keyId = (int) Math.floor(Math.random() * AESKeys.keys.length);
+        int ivId = (int) Math.floor(Math.random() * AESKeys.keys.length);
+
+        message.put("keyId", keyId);
+        message.put("ivId", keyId);
+        val sessionKey = sessionKeys.get(username);
+        return cipher.encrypt(message,
+                TokenService.getHash(username + sessionKey, AESKeys.keys[ivId]),
+                TokenService.getHash(username + sessionKey, AESKeys.keys[keyId]));
+    }
+
+    private Optional<Message> decrypt(@NonNull Message message) {
+        if (!message.getContent().containsKey("keyId") || !message.getContent().containsKey("ivId"))
+            return Optional.empty();
+
+        val username = message.get("username");
+        val sessionKey = sessionKeys.get(username);
+        return Optional.of(cipher.decrypt(message,
+                TokenService.getHash(username + sessionKey, AESKeys.keys[Integer.parseInt(message.get("ivId"))]),
+                TokenService.getHash(username + sessionKey, AESKeys.keys[Integer.parseInt(message.get("keyId"))])));
     }
 
     private void authenticateStepOne(String login, Session session) {
@@ -75,7 +136,7 @@ public class MFAEndpoint {
             salts.put(session, salt);
             logins.put(session, login);
 
-            session.getAsyncRemote().sendObject(new Message(new HashMap<>(){{
+            session.getAsyncRemote().sendObject(new Message(new HashMap<>() {{
                 put("B", B.toString());
                 put("s", salt.toString());
             }}));
@@ -103,7 +164,7 @@ public class MFAEndpoint {
 
                 String sessionKey = serverSession.getSessionKey().toString(16);
                 System.out.println(sessionKey);
-                sessionKeyStorage.save(session, sessionKey);
+                sessionKeys.put(login, sessionKey);
 
                 int keyId = (int) Math.floor(Math.random() * AESKeys.keys.length);
                 int ivId = (int) Math.floor(Math.random() * AESKeys.keys.length);

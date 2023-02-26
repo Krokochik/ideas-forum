@@ -12,10 +12,10 @@ public class UserValidationService {
     );
 
     public static boolean validate(User user) throws EmailFormatException, UsernameLengthException, PasswordInsecureException, NullPointerException {
-        if (user.getPassword().matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.\\S+$).{8,}$")) {
+        if (validatePassword(user.getPassword())) {
             if (!user.getUsername().isEmpty()) {
                 if (user.getUsername().length() >= 4) {
-                    if (rfc2822.matcher(user.getEmail()).matches()) {
+                    if (validateEmail(user.getEmail())) {
                         return true;
                     } else throw new EmailFormatException();
                 } else throw new UsernameLengthException();
