@@ -80,9 +80,9 @@ public class MFAEndpoint {
         Message response;
         switch (message.get("get")) {
             case "avatar" -> {
-                response = new Message("avatar",
+                response = new Message("avatar", new String(
                         userRepo.findByUsername(message.get("username"))
-                                .getAvatar());
+                                .getAvatar()));
                 session.getAsyncRemote().sendObject(response);
                 System.out.println("avatar sent");
                 return;
