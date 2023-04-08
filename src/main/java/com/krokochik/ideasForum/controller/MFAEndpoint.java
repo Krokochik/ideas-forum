@@ -80,12 +80,17 @@ public class MFAEndpoint {
     private void getRequestProcessor(Message message, Session session) {
         Message response;
         switch (message.get("get")) {
-            case "avatar" -> response = new Message("avatar",
-                    userRepo.findByUsername(message.get("username"))
-                    .getAvatar());
+            case "avatar" -> {
+                response = new Message("avatar",
+                        userRepo.findByUsername(message.get("username"))
+                                .getAvatar());
+                session.getAsyncRemote().sendObject(response);
+                System.out.println("avatar sent");
+                return;
+            }
             case "email" -> response = new Message("email",
                     userRepo.findByUsername(message.get("username"))
-                    .getEmail());
+                            .getEmail());
             case "auth" -> {
                 if (sessionKeys.get(message.get("username")) != null)
                     response = new Message("auth", "true");
