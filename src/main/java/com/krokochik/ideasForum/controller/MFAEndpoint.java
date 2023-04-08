@@ -72,7 +72,6 @@ public class MFAEndpoint {
     }
 
     private void processMessage(Message message, Session session) {
-        message = decrypt(message).orElseGet(Message::new);
         if (message.getContent().containsKey("get"))
             getRequestProcessor(message, session);
     }
