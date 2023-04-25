@@ -40,7 +40,7 @@ public class MFAEndpoint {
     HashMap<Session, BigInteger> B = new HashMap<>();
     HashMap<Session, BigInteger> salts = new HashMap<>();
     HashMap<Session, String> logins = new HashMap<>();
-    MessageCipher cipher = new MessageCipher("username", "keyId", "ivId");
+    MessageCipher cipher = new MessageCipher("username", "keyId", "ivId", "content");
     SRP6CryptoParams params = SRP6CryptoParams.getInstance(2048, "SHA-512");
 
     @OnOpen
