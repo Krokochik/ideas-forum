@@ -109,6 +109,7 @@ public class MFAEndpoint {
         message.put("keyId", keyId);
         message.put("ivId", keyId);
         val sessionKey = sessionKeys.get(username);
+        System.out.println(sessionKey);
         return cipher.encrypt(message,
                 TokenService.getHash(username + sessionKey, AESKeys.keys[ivId]),
                 TokenService.getHash(username + sessionKey, AESKeys.keys[keyId]));
