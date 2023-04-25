@@ -162,6 +162,16 @@ public class MFAEndpoint {
 
                 int keyId = (int) Math.floor(Math.random() * AESKeys.keys.length);
                 int ivId = (int) Math.floor(Math.random() * AESKeys.keys.length);
+
+
+                Message response = new Message(new HashMap<>() {{
+                    put("test", "test");
+                    put("ivId", ivId + "");
+                    put("keyId", keyId + "");
+                }});
+                session.getAsyncRemote().sendObject(cipher.encrypt(response,
+                        TokenService.getHash(login + sessionKey, AESKeys.keys[ivId]),
+                        TokenService.getHash(login + sessionKey, AESKeys.keys[keyId])));
             } catch (SRP6Exception e) {
                 e.printStackTrace();
             }
