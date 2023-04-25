@@ -90,16 +90,13 @@ public class MFAEndpoint {
             case "email" -> response = new Message("email",
                     userRepo.findByUsername(message.get("username"))
                             .getEmail());
-            case "auth" -> {
-                if (sessionKeys.get(message.get("username")) != null)
-                    response = new Message("auth", "true");
-                else
-                    response = new Message("auth", "false");
-
-                session.getAsyncRemote().sendObject(response);
-                return;
+            case "authCheckingMessage" -> {
+                response = new Message(new HashMap<>() {{
+                    put("content", "authCheckingMessage");
+                    put("test", "test");
+                }});
             }
-            default -> response = new Message();
+            default -> response = new Message("error", "unknown request");
         }
         response = encrypt(response, message.get("username"));
         session.getAsyncRemote().sendObject(response);
@@ -130,7 +127,6 @@ public class MFAEndpoint {
 
     private void authenticateStepOne(String login, Session session) {
         new Thread(() -> {
-            System.out.println("auth");
             SRP6ServerSession serverSession = new SRP6ServerSession(params);
             BigInteger salt = new BigInteger(userRepo.findByUsername(login).getSalt());
             BigInteger B = serverSession.step1(login, salt,
@@ -144,45 +140,28 @@ public class MFAEndpoint {
                 put("B", B.toString());
                 put("s", salt.toString());
             }}));
-            System.out.println("sent 1");
         }).start();
     }
 
     private void authenticateStepTwo(String A, String M1, Session session) {
-        System.out.println("auth 2");
         SRP6ServerSession serverSession = serverSessions.get(session);
         String login = logins.get(session);
         BigInteger salt = salts.get(session);
         BigInteger B = this.B.get(session);
 
         if ((login != null) && (serverSession != null) && (salt != null) && (B != null)) {
-            System.out.println("step 2");
             try {
                 SRP6ClientSession clientSession = new SRP6ClientSession();
                 clientSession.step1(login, userRepo.findByUsername(login).getPassword());
                 SRP6ClientCredentials credentials = clientSession.step2(params, salts.get(session), this.B.get(session));
-                System.out.println(credentials.A);
-                System.out.println(credentials.M1);
 
                 serverSession.step2(new BigInteger(A), new BigInteger(M1));
 
                 String sessionKey = serverSession.getSessionKey().toString(16);
-                System.out.println(sessionKey);
                 sessionKeys.put(login, sessionKey);
 
                 int keyId = (int) Math.floor(Math.random() * AESKeys.keys.length);
                 int ivId = (int) Math.floor(Math.random() * AESKeys.keys.length);
-
-
-                Message response = new Message(new HashMap<>() {{
-                    put("authenticated", "true");
-                    put("ivId", ivId + "");
-                    put("keyId", keyId + "");
-                }});
-                session.getAsyncRemote().sendObject(cipher.encrypt(response,
-                        TokenService.getHash(login + sessionKey, AESKeys.keys[ivId]),
-                        TokenService.getHash(login + sessionKey, AESKeys.keys[keyId])));
-                System.out.println("sent 2");
             } catch (SRP6Exception e) {
                 e.printStackTrace();
             }
