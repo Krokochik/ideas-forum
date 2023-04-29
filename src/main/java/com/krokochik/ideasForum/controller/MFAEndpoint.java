@@ -111,8 +111,8 @@ public class MFAEndpoint {
         val sessionKey = sessionKeys.get(username);
         System.out.println(sessionKey);
         return cipher.encrypt(message,
-                TokenService.getHash(username + sessionKey, AESKeys.keys[ivId]),
-                TokenService.getHash(username + sessionKey, AESKeys.keys[keyId]));
+                TokenService.getHash(AESKeys.keys[ivId], username + sessionKey),
+                TokenService.getHash(AESKeys.keys[keyId], username + sessionKey));
     }
 
     private Optional<Message> decrypt(@NonNull Message message) {
@@ -122,8 +122,8 @@ public class MFAEndpoint {
         val username = message.get("username");
         val sessionKey = sessionKeys.get(username);
         return Optional.of(cipher.decrypt(message,
-                TokenService.getHash(username + sessionKey, AESKeys.keys[Integer.parseInt(message.get("ivId"))]),
-                TokenService.getHash(username + sessionKey, AESKeys.keys[Integer.parseInt(message.get("keyId"))])));
+                TokenService.getHash(AESKeys.keys[Integer.parseInt(message.get("ivId"))], username + sessionKey),
+                TokenService.getHash(AESKeys.keys[Integer.parseInt(message.get("keyId"))], username + sessionKey)));
     }
 
     private void authenticateStepOne(String login, Session session) {
@@ -171,8 +171,8 @@ public class MFAEndpoint {
                     put("keyId", keyId + "");
                 }});
                 session.getAsyncRemote().sendObject(cipher.encrypt(response,
-                        TokenService.getHash(login + sessionKey, AESKeys.keys[ivId]),
-                        TokenService.getHash(login + sessionKey, AESKeys.keys[keyId])));
+                        TokenService.getHash(AESKeys.keys[ivId], login + sessionKey),
+                        TokenService.getHash(AESKeys.keys[keyId], login + sessionKey)));
             } catch (SRP6Exception e) {
                 e.printStackTrace();
             }
