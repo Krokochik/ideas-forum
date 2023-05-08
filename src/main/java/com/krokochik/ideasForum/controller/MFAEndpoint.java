@@ -78,27 +78,31 @@ public class MFAEndpoint {
 
     private void getRequestProcessor(Message message, Session session) {
         Message response;
-        switch (message.get("get")) {
-            case "avatar" -> {
-                response = new Message("avatar", new String(
+        try {
+            switch (message.get("get")) {
+                case "avatar" -> {
+                    response = new Message("avatar", new String(
+                            userRepo.findByUsername(message.get("username"))
+                                    .getAvatar()));
+                    session.getAsyncRemote().sendObject(response);
+                    System.out.println("avatar sent");
+                    return;
+                }
+                case "email" -> response = new Message("email",
                         userRepo.findByUsername(message.get("username"))
-                                .getAvatar()));
-                session.getAsyncRemote().sendObject(response);
-                System.out.println("avatar sent");
-                return;
+                                .getEmail());
+                case "authCheckingMessage" -> {
+                    response = new Message(new HashMap<>() {{
+                        put("content", "authCheckingMessage");
+                        put("test", "test");
+                    }});
+                }
+                default -> response = new Message("error", "unknown request");
             }
-            case "email" -> response = new Message("email",
-                    userRepo.findByUsername(message.get("username"))
-                            .getEmail());
-            case "authCheckingMessage" -> {
-                response = new Message(new HashMap<>() {{
-                    put("content", "authCheckingMessage");
-                    put("test", "test");
-                }});
-            }
-            default -> response = new Message("error", "unknown request");
+            response = encrypt(response, message.get("username"));
+        } catch (NullPointerException nullPointerException) {
+            response = new Message("error", "unknown username");
         }
-        response = encrypt(response, message.get("username"));
         session.getAsyncRemote().sendObject(response);
     }
 
