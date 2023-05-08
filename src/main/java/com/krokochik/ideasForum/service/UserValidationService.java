@@ -12,15 +12,15 @@ public class UserValidationService {
     );
 
     public static boolean validate(User user) throws EmailFormatException, UsernameLengthException, PasswordInsecureException, NullPointerException {
-        if (validatePassword(user.getPassword())) {
-            if (!user.getUsername().isEmpty()) {
-                if (user.getUsername().length() >= 4) {
-                    if (validateEmail(user.getEmail())) {
+        if (!user.getUsername().isEmpty()) {
+            if (user.getUsername().length() >= 4) {
+                if (validateEmail(user.getEmail())) {
+                    if (validatePassword(user.getPassword()))
                         return true;
-                    } else throw new EmailFormatException();
-                } else throw new UsernameLengthException();
-            } else throw new NullPointerException();
-        } else throw new PasswordInsecureException();
+                    else throw new PasswordInsecureException();
+                } else throw new EmailFormatException();
+            } else throw new UsernameLengthException();
+        } else throw new NullPointerException();
     }
 
     public static boolean validatePassword(String password) {
