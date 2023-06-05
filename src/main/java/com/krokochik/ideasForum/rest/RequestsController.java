@@ -45,10 +45,8 @@ public class RequestsController {
             requestBody = jsonParser.parse(requestBodyStr).getAsJsonObject();
             try {
                 avatar = requestBody.get("avatar").getAsString();
-                if (avatar.startsWith("data:image/png;base64,"))
-                    avatar = avatar.substring("data:image/png;base64,".length());
-            } catch (Exception ignored) {
-            }
+                avatar = avatar.replaceFirst("^data:image\\/[^;]+;base64,", "");
+            } catch (Exception ignored) { }
 
             username = requestBody.get("username").getAsString();
             nickname = requestBody.get("nickname").getAsString();
