@@ -20,10 +20,12 @@
     <style th:replace="resources :: list-groups-3"></style>
     <style th:replace="resources :: select-none"></style>
     <style th:replace="resources :: close"></style>
+    <style th:replace="resources :: bootstrap"></style>
+    <style th:replace="resources :: profile"></style>
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="prefetch" th:href="@{/avatar}">
     <link rel="icon" th:href="@{/images/favicon.png}">
-    <style th:replace="resources :: bootstrap"></style>
 </head>
 <body style="min-height: 100vh;" th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
     <input type="hidden" id="theme" th:value="${theme}">

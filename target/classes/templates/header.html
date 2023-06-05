@@ -9,22 +9,24 @@
      <div class="modal-dialog modal-dialog-centered">
        <div class="modal-content" style="border: none; border-radius: 10px;">
          <div th:class="'modal-header text-bg-' + ${theme}">
-           <h5 th:class="'modal-title text-bg-' + ${theme}" id="exampleModalLabel" th:text="Профиль"></h5>
-           <button onclick="dismissChanges()" type="button" th:class="'btn-close' + ${theme == 'dark' ? ' btn-close-white' : ''}" data-bs-dismiss="modal"></button>
+           <h5 th:class="'modal-title text-bg-' + ${theme}" id="exampleModalLabel" style="margin: auto; font-size: 2rem;">Профиль</h5><div style="">
+           <div id="ok" onclick="saveChanges()" style="position: absolute;right: 15px;top: 27px;">
+             <i class="fa fa-check fa-2x" style="top: 90px;left: 100px;"></i>
+           </div>
+           <div onclick="dismissChanges()" data-bs-dismiss="modal" id="no" class="" style="position: absolute;top: 27px;right: 55px;">
+             <i class="fa fa-times fa-2x"></i>
+           </div>
+         </div>
          </div>
          <div th:class="'modal-body text-bg-' + ${theme}" style="text-align: center;">
-           <div class="avatar-upload" style="margin-top: 30px;margin-bottom: 35px;">
+           <div class="avatar-upload" style="margin-top: 0px;margin-bottom: 35px;">
              <div class="avatar-edit">
-               <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
+               <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg">
                <label for="imageUpload"></label>
              </div>
-                 <img id="imagePreview" class="avatar-preview" th:src="@{/avatar}">
+             <img id="imagePreview" class="avatar-preview" th:src="@{/avatar}" style="box-shadow: 4px 4px 10px rgb(255 255 255 / 23%);">
            </div>
            <input id="nickname" th:placeholder="${@userAuth.getNickname()}" th:style="'margin-bottom: 30px;box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'"/>
-         </div>
-         <div th:class="'modal-footer text-bg-' + ${theme}">
-           <button type="button" onclick="dismissChanges()" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-           <button type="button" onclick="saveChanges()" class="btn btn-primary">Сохранить изменения</button>
          </div>
        </div>
      </div>
@@ -35,16 +37,16 @@
           <a href="/main" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none" style="margin-bottom: 0!important;">
             <img th:src="@{/images/favicon.png}" alt="" width="23" height="24">
           </a>
-          <li><a href="/main" th:class="'nav-link px-2 ' + ${mainPage == 'main' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}" style="font-size: 20px">Главная</a></li>
-          <li><a href="/add-note" th:class="'nav-link px-2 ' + ${mainPage == 'add-note' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}" style="font-size: 20px">Добавить запись</a></li>
+          <li><a href="/main" th:class="'nav-link px-2 ' + ${mainPage == 'main' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}" th:style="'font-size: 20px; ' + ${theme == 'dark'? 'text-shadow: 0 .15rem .1rem rgb(8, 8, 8)!important;' : ''}">Главная</a></li>
+          <li><a href="/add-note" th:class="'nav-link px-2 ' + ${mainPage == 'add-note' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}" th:style="'font-size: 20px; ' + ${theme == 'dark'? 'text-shadow: 0 .15rem .1rem rgb(8, 8, 8)!important;' : ''}">Добавить запись</a></li>
         </ul>
 
         <div class="d-flex" role="search" data-np-checked="1">
-          <input th:class="'form-control me-2 ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}" placeholder="Поиск..." aria-label="Search" data-np-checked="1">
-          <button class="btn btn-outline-success me-2" type="button" th:text="Поиск"></button>
+          <input th:class="'form-control me-2 ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}" th:style="${theme == 'dark'? 'box-shadow: 0 .2rem .5rem rgb(12, 12, 12)!important;' : ''}" placeholder="Поиск..." aria-label="Search" data-np-checked="1">
+          <button class="btn btn-outline-success me-2" th:style="${theme == 'dark'? 'box-shadow: 0 .2rem .5rem rgb(12, 12, 12)!important;' : ''}" type="button" th:text="Поиск"></button>
           <div class="dropdown text-end">
             <a href="#" th:class="'d-block text-decoration-none dropdown-toggle ' + ${theme == 'dark'? 'text-bg-dark link-light' : 'text-bg-light link-dark'}" data-bs-toggle="dropdown" aria-expanded="false">
-                <img id="avatar" th:src="@{/avatar}" style="background-size: cover;background-repeat: no-repeat;background-position: center;margin-top: 0.3rem;width: 40px;height: 40px;display: inline-block; vertical-align: middle;" class="rounded-circle">
+                <img id="avatar" th:src="@{/avatar}" th:style="'background-size: cover;background-repeat: no-repeat;background-position: center;margin-top: 0.3rem;width: 40px;height: 40px;display: inline-block; vertical-align: middle; ' + ${theme == 'dark'? 'box-shadow: 0 .2rem .5rem rgb(8, 8, 8)!important;' : ''}" th:class="'rounded-circle ' + ${theme == 'light'? 'shadow-sm' : ''}">
             </a>
             <ul th:class="'dropdown-menu light ' + ${theme == 'dark'? 'dropdown-menu-dark' : ''}">
               <li th:if="${@userAuth.isAuth()}"><a class="dropdown-item" href="/add-note">Добавить запись</a></li>

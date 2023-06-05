@@ -9,22 +9,24 @@
      <div class="modal-dialog modal-dialog-centered">
        <div class="modal-content" style="border: none; border-radius: 10px;">
          <div th:class="'modal-header text-bg-' + ${theme}">
-           <h5 th:class="'modal-title text-bg-' + ${theme}" id="exampleModalLabel" th:text="Профиль"></h5>
-           <button onclick="dismissChanges()" type="button" th:class="'btn-close' + ${theme == 'dark' ? ' btn-close-white' : ''}" data-bs-dismiss="modal"></button>
+           <h5 th:class="'modal-title text-bg-' + ${theme}" id="exampleModalLabel" style="margin: auto; font-size: 2rem;">Профиль</h5><div style="">
+           <div id="ok" onclick="saveChanges()" style="position: absolute;right: 20px;top: 27px;">
+             <i class="fa fa-check fa-2x" style="top: 90px;left: 100px;"></i>
+           </div>
+           <div onclick="dismissChanges()" data-bs-dismiss="modal" id="no" class="" style="position: absolute;top: 27px;right: 60px;">
+             <i class="fa fa-times fa-2x"></i>
+           </div>
+         </div>
          </div>
          <div th:class="'modal-body text-bg-' + ${theme}" style="text-align: center;">
-           <div class="avatar-upload" style="margin-top: 30px;margin-bottom: 35px;">
+           <div class="avatar-upload" style="margin-top: 0px;margin-bottom: 35px;">
              <div class="avatar-edit">
-               <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
+               <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg">
                <label for="imageUpload"></label>
              </div>
-                 <img id="imagePreview" class="avatar-preview" th:src="@{/avatar}">
+             <img id="imagePreview" class="avatar-preview" th:src="@{/avatar}" style="box-shadow: 4px 4px 10px rgb(255 255 255 / 23%);">
            </div>
            <input id="nickname" th:placeholder="${@userAuth.getNickname()}" th:style="'margin-bottom: 30px;box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'"/>
-         </div>
-         <div th:class="'modal-footer text-bg-' + ${theme}">
-           <button type="button" onclick="dismissChanges()" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-           <button type="button" onclick="saveChanges()" class="btn btn-primary">Сохранить изменения</button>
          </div>
        </div>
      </div>
