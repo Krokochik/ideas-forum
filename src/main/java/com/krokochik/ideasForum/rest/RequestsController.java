@@ -64,7 +64,7 @@ public class RequestsController {
                 if ((avatar.length() / BYTES_IN_MEGABYTE / INFELICITY_COEFFICIENT) <= MAX_AVATAR_WEIGHT) {
                     userRepository.setAvatarById(avatar.getBytes(), userRepository.findByUsername(username).getId());
                 } else {
-                    message = "Avatar is too hard.";
+                    message = "Avatar is too heavy.";
                 }
             } else {
                 message = "Avatar is null.";
