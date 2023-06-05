@@ -35,16 +35,16 @@
           <a href="/main" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none" style="margin-bottom: 0!important;">
             <img th:src="@{/images/favicon.png}" alt="" width="23" height="24">
           </a>
-          <li><a href="/main" th:class="'nav-link px-2 ' + ${mainPage == 'main' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}" style="font-size: 20px">Главная</a></li>
-          <li><a href="/add-note" th:class="'nav-link px-2 ' + ${mainPage == 'add-note' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}" style="font-size: 20px">Добавить запись</a></li>
+          <li><a href="/main" th:class="'nav-link px-2 ' + ${mainPage == 'main' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}" th:style="'font-size: 20px; ' + ${theme == 'dark'? 'text-shadow: 0 .15rem .1rem rgb(8, 8, 8)!important;' : ''}">Главная</a></li>
+          <li><a href="/add-note" th:class="'nav-link px-2 ' + ${mainPage == 'add-note' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}" th:style="'font-size: 20px; ' + ${theme == 'dark'? 'text-shadow: 0 .15rem .1rem rgb(8, 8, 8)!important;' : ''}">Добавить запись</a></li>
         </ul>
 
         <div class="d-flex" role="search" data-np-checked="1">
-          <input th:class="'form-control me-2 ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}" placeholder="Поиск..." aria-label="Search" data-np-checked="1">
-          <button class="btn btn-outline-success me-2" type="button" th:text="Поиск"></button>
+          <input th:class="'form-control me-2 ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}" th:style="${theme == 'dark'? 'box-shadow: 0 .2rem .5rem rgb(12, 12, 12)!important;' : ''}" placeholder="Поиск..." aria-label="Search" data-np-checked="1">
+          <button class="btn btn-outline-success me-2" th:style="${theme == 'dark'? 'box-shadow: 0 .2rem .5rem rgb(12, 12, 12)!important;' : ''}" type="button" th:text="Поиск"></button>
           <div class="dropdown text-end">
             <a href="#" th:class="'d-block text-decoration-none dropdown-toggle ' + ${theme == 'dark'? 'text-bg-dark link-light' : 'text-bg-light link-dark'}" data-bs-toggle="dropdown" aria-expanded="false">
-                <img id="avatar" th:src="@{/avatar}" style="background-size: cover;background-repeat: no-repeat;background-position: center;margin-top: 0.3rem;width: 40px;height: 40px;display: inline-block; vertical-align: middle;" class="rounded-circle">
+                <img id="avatar" th:src="@{/avatar}" th:style="'background-size: cover;background-repeat: no-repeat;background-position: center;margin-top: 0.3rem;width: 40px;height: 40px;display: inline-block; vertical-align: middle; ' + ${theme == 'dark'? 'box-shadow: 0 .2rem .5rem rgb(8, 8, 8)!important;' : ''}" th:class="'rounded-circle ' + ${theme == 'light'? 'shadow-sm' : ''}">
             </a>
             <ul th:class="'dropdown-menu light ' + ${theme == 'dark'? 'dropdown-menu-dark' : ''}">
               <li th:if="${@userAuth.isAuth()}"><a class="dropdown-item" href="/add-note">Добавить запись</a></li>
