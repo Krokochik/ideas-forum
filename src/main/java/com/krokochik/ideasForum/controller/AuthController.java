@@ -78,7 +78,7 @@ public class AuthController {
         User user = userRepository.findByUsername(name);
         if (user != null && user.getMailConfirmationToken().equals(token)) {
             if (newEmail != null && hasRole(Role.USER)) {
-                user.setEmail(newEmail);
+                userRepository.setEmailById(newEmail, user.getId());
                 return "redirect:/settings";
             }
 
