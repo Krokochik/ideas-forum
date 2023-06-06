@@ -44,7 +44,7 @@ public class SettingsController {
             mail.setReceiver(userRepository.findByUsername(context.getAuthentication().getName()).getEmail());
             mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/abortPass?name=" + context.getAuthentication().getName() + "&token=" + passToken);
             userRepository.setPasswordAbortTokenById(passToken, userRepository.findByUsername(context.getAuthentication().getName()).getId());
-            mailService.sendEmail(mail, context.getAuthentication().getName(), "abort.html");
+            mailService.sendEmail(mail, context.getAuthentication().getName(), "", "abort.html");
             userRepository.setPasswordAbortSentById(true, userRepository.findByUsername(context.getAuthentication().getName()).getId());
         });
         mailSending.start();
