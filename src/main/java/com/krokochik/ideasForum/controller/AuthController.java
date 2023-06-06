@@ -104,7 +104,7 @@ public class AuthController {
                 userRepository.setMailConfirmationTokenById(userToken, user.getId());
                 Thread mailSending = new Thread(() -> {
                     Mail mail = new Mail();
-                    mail.setReceiver(user.getEmail());
+                    mail.setReceiver(hasRole(Role.USER)? newEmail : user.getEmail());
                     mail.setTheme("Email confirmation");
                     mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/confirm?name=" + context.getAuthentication().getName() +
                             "&token=" + userToken + "&new-email=" + newEmail);
