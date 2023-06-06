@@ -174,7 +174,7 @@ public class AuthController {
                     mail.setReceiver(userRepository.findByUsername(name).getEmail());
                     mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/abortPass?name=" + name + "&token=" + passToken);
                     userRepository.setPasswordAbortTokenById(passToken, userRepository.findByUsername(name).getId());
-                    mailService.sendEmail(mail, name, "abort.html");
+                    mailService.sendEmail(mail, name, "",  "abort.html");
                     userRepository.setPasswordAbortSentById(true, userRepository.findByUsername(name).getId());
                 });
                 mailSending.start();
