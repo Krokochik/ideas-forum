@@ -213,7 +213,7 @@ public class AuthController {
         userRepository.setConfirmMailSentById(false, userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
 
         session.setAttribute("newEmail", email);
-        return "redirect:/mail-confirm";
+        return "redirect:/mail-confirm?newEmail";
     }
 
     @PostMapping("/sign-up")
