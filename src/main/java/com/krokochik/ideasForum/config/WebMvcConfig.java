@@ -25,5 +25,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry
                 .addResourceHandler("/images/**")
                 .addResourceLocations("classpath:/static/images/");
+        registry
+                .addResourceHandler("/qr/**")
+                .addResourceLocations("classpath:/dynamic/qr/");
     }
 }

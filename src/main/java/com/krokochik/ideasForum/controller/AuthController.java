@@ -4,10 +4,10 @@ import com.krokochik.ideasForum.model.Mail;
 import com.krokochik.ideasForum.model.Role;
 import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
-import com.krokochik.ideasForum.service.mfa.MFAService;
 import com.krokochik.ideasForum.service.MailService;
-import com.krokochik.ideasForum.service.crypto.TokenService;
 import com.krokochik.ideasForum.service.UserValidationService;
+import com.krokochik.ideasForum.service.crypto.TokenService;
+import com.krokochik.ideasForum.service.mfa.MFAService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
@@ -72,8 +71,17 @@ public class AuthController {
     }
 
     @GetMapping("/confirm")
-    public String confirmMail(@RequestParam(name = "name") String name, @RequestParam(name = "token") String token, HttpServletRequest request, Model model) {
-        if (userRepository.findByUsername(name) != null && userRepository.findByUsername(name).getMailConfirmationToken().equals(token)) {
+    public String confirmMail(@RequestParam(name = "name") String name,
+                              @RequestParam(name = "token") String token,
+                              @RequestParam(name = "new-email", required = false) String newEmail,
+                              HttpServletRequest request, Model model) {
+        User user = userRepository.findByUsername(name);
+        if (user != null && user.getMailConfirmationToken().equals(token)) {
+            if (newEmail != null && hasRole(Role.USER)) {
+                user.setEmail(newEmail);
+                return "redirect:/settings";
+            }
+
             userRepository.setRoleById(Role.USER.name(), userRepository.findByUsername(name).getId());
             SecurityContextHolder.clearContext();
             model.addAttribute("name", name);
@@ -86,31 +94,30 @@ public class AuthController {
     }
 
     @GetMapping("/mail-confirm")
-    public String mailConfirmation(HttpServletResponse response) {
+    public String mailConfirmation(HttpServletResponse response, @RequestParam(value = "new-email", required = false) String newEmail) {
         SecurityContext context = getContext();
-        if (isAuthenticated()) {
-            Cookie cookie = new Cookie("avatar", null);
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
-            return "redirect:/main";
-        }
-        if (hasRole(Role.ANONYM)) {
-            if (!userRepository.findByUsername(context.getAuthentication().getName()).isConfirmMailSent()) {
+
+        User user = userRepository.findByUsername(context.getAuthentication().getName());
+        if (hasRole(Role.ANONYM) || hasRole(Role.USER)) {
+            if (!user.isConfirmMailSent()) {
                 String userToken = new TokenService().generateToken();
-                userRepository.setMailConfirmationTokenById(userToken, userRepository.findByUsername(context.getAuthentication().getName()).getId());
+                userRepository.setMailConfirmationTokenById(userToken, user.getId());
                 Thread mailSending = new Thread(() -> {
                     Mail mail = new Mail();
-                    mail.setReceiver(userRepository.findByUsername(context.getAuthentication().getName()).getEmail());
+                    mail.setReceiver(user.getEmail());
                     mail.setTheme("Email confirmation");
-                    mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/confirm?name=" + context.getAuthentication().getName() + "&token=" + userToken);
+                    mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/confirm?name=" + context.getAuthentication().getName() +
+                            "&token=" + userToken + "&new-email=" + newEmail);
                     mailService.sendActiveMail(mail, context.getAuthentication().getName());
                 });
                 mailSending.start();
-                userRepository.setConfirmMailSentById(true, userRepository.findByUsername(getContext().getAuthentication().getName()).getId());
+                userRepository.setConfirmMailSentById(true, user.getId());
             }
             return "mail";
         }
 
+        if (isAuthenticated())
+            return "redirect:/main";
         return "redirect:/login";
     }
 
@@ -184,15 +191,17 @@ public class AuthController {
 
     @PostMapping("/change-email")
     public String changeEmail(Model model,
-                              @ModelAttribute(name = "email") String email) {
+                              @ModelAttribute(name = "email") String email,
+                              @ModelAttribute(name = "password") String password) {
 
-        if (email.isEmpty() || !UserValidationService.validateEmail(email))
-            return "change-email";
+        if (email.isEmpty() || !UserValidationService.validateEmail(email) ||
+                !password.equals(userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getPassword()))
+            return "redirect:/change-email?error";
 
         userRepository.setEmailById(email, userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
         userRepository.setConfirmMailSentById(false, userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
 
-        return "redirect:/mail-confirm";
+        return "redirect:/mail-confirm?new-email=" + email;
     }
 
     @PostMapping("/sign-up")

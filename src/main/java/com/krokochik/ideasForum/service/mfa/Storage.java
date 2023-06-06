@@ -4,12 +4,12 @@ import javax.websocket.Session;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StorageService<K, V> {
+public class Storage<K, V> {
 
     HashMap<Session, HashMap<K, V>> sessionStorage;
     HashMap<K, V> storage;
 
-    public StorageService() {
+    public Storage() {
         sessionStorage = new HashMap<>();
         storage = new HashMap<>();
     }

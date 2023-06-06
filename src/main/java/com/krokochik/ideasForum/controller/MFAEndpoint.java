@@ -9,7 +9,7 @@ import com.krokochik.ideasForum.service.crypto.MessageCipher;
 import com.krokochik.ideasForum.service.crypto.TokenService;
 import com.krokochik.ideasForum.service.mfa.MessageDecoder;
 import com.krokochik.ideasForum.service.mfa.MessageEncoder;
-import com.krokochik.ideasForum.service.mfa.StorageService;
+import com.krokochik.ideasForum.service.mfa.Storage;
 import com.nimbusds.srp6.*;
 import lombok.NonNull;
 import lombok.val;
@@ -34,7 +34,7 @@ public class MFAEndpoint {
     @Autowired
     UserRepository userRepo;
 
-    StorageService<String, ArrayList<CallbackTask<Message>>> onMessageTasksStorage = new StorageService<>();
+    Storage<String, ArrayList<CallbackTask<Message>>> onMessageTasksStorage = new Storage<>();
     HashMap<String, String> sessionKeys = new HashMap<>();
     HashMap<Session, SRP6ServerSession> serverSessions = new HashMap<>();
     HashMap<Session, BigInteger> B = new HashMap<>();

@@ -7,7 +7,7 @@
    <input type="hidden" id="name" th:value="${@userAuth.getCurrentName()}">
    <div class="modal fade" id="exampleModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
      <div class="modal-dialog modal-dialog-centered">
-       <div class="modal-content" style="border: none; border-radius: 10px;">
+       <div class="modal-content" style="border: none; border-radius: 10px;background-color: rgb(33, 37, 41);">
          <div th:class="'modal-header text-bg-' + ${theme}">
            <h5 th:class="'modal-title text-bg-' + ${theme}" id="exampleModalLabel" style="margin: auto; font-size: 2rem;font-weight: bold;">Профиль</h5><div style="">
            <div id="ok" onclick="saveChanges()" th:style="'position: absolute;right: 20px;top: 27px;color: ' + ${theme == 'dark'? '#fff' : '#000'}">

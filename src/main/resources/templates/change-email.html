@@ -2,60 +2,72 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru">
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <link rel="icon" th:href="@{/images/favicon.png}">
+    <meta charset="utf-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="icon" th:href="@{/images/favicon.png}">
 
-  <style>html,body{overflow:hidden;height:100%}.fullpage{padding-bottom:0;margin:0;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column}.fullpage .main-header{min-width:0}.fullpage .mobile-action-button{display:block;width:48%;float:left;text-align:center;margin:0 4% 10px 0}.fullpage .mobile-action-button:nth-child(even){margin-right:0}.fullpage .jump-view{width:48%;margin:0 4% 10px 0;float:left}.fullpage .jump-view:nth-child(even){margin-right:0}.fullpage .jump-view:nth-child(3){display:none}.fullpage .jump-label{display:block}.oldie-header{display:none;padding:5px;background:var(--cp-color-20);color:var(--cp-color-1)}html.oldie .oldie-header{display:block}html.oldie .main-header{display:none}#result-iframe-wrap{-webkit-box-flex:1;-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;height:100%;position:relative;overflow:auto;-webkit-overflow-scrolling:touch}html.oldie #result-iframe-wrap{height:100%;height:calc(100% - 32px)}#result{position:absolute;top:0;left:0;border:0;background:var(--cp-color-1);width:100%;height:100%;display:block}#full-view-ad{position:absolute;left:50%;bottom:0;-webkit-transform:translateX(-50%);transform:translateX(-50%);width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;z-index:1}</style>
+    <style>
+        html,body{overflow:hidden;height:100%}.fullpage{padding-bottom:0;margin:0;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column}.fullpage .main-header{min-width:0}.fullpage .mobile-action-button{display:block;width:48%;float:left;text-align:center;margin:0 4% 10px 0}.fullpage .mobile-action-button:nth-child(even){margin-right:0}.fullpage .jump-view{width:48%;margin:0 4% 10px 0;float:left}.fullpage .jump-view:nth-child(even){margin-right:0}.fullpage .jump-view:nth-child(3){display:none}.fullpage .jump-label{display:block}.oldie-header{display:none;padding:5px;background:var(--cp-color-20);color:var(--cp-color-1)}html.oldie .oldie-header{display:block}html.oldie .main-header{display:none}#result-iframe-wrap{-webkit-box-flex:1;-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;height:100%;position:relative;overflow:auto;-webkit-overflow-scrolling:touch}html.oldie #result-iframe-wrap{height:100%;height:calc(100% - 32px)}#result{position:absolute;top:0;left:0;border:0;background:var(--cp-color-1);width:100%;height:100%;display:block}#full-view-ad{position:absolute;left:50%;bottom:0;-webkit-transform:translateX(-50%);transform:translateX(-50%);width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;z-index:1}
+    </style>
 </head>
 <body class="fullpage">
 <div id="result-iframe-wrap" role="main">
-  <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-        xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-  <head>
+    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+          xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
 
-    <meta charset="UTF-8">
+        <meta charset="UTF-8">
 
-    <title>Login</title>
+        <title>Login</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
 
-    <style th:replace="resources :: login"></style>
-  </head>
+        <style th:replace="resources :: login"></style>
+    </head>
 
-  <body translate="no">
+    <body translate="no">
 
-  <div class="section">
-    <div class="container">
-      <div class="row full-height justify-content-center">
-        <div class="col-12 text-center align-self-center py-5">
-          <div class="section pb-5 pt-5 pt-sm-2 text-center">
-            <div class="card-3d-wrap mx-auto" style="height: 300px;">
-              <div class="card-3d-wrapper">
-                <div class="card-front">
-                  <a th:href="${from != null? from : '/mail-confirm'}" class="closeModal" style="top: 20px;"></a>
-                  <div class="center-wrap">
-                    <div class="section text-center">
-                      <h4 class="mb-4 pb-3">Изменение е-мейла</h4>
-                      <form th:action="@{/change-email}" method="post">
-                        <div class="form-group">
-                            <input type="email" name="email" class="form-style" placeholder="Новый е-мейл" id="email" autocomplete="off">
-                            <i class="input-icon uil uil-at"></i>
-                          </div>
-                        <button type="submit" class="btn mt-4">Подтвердить</button>
-                      </form>
+    <div class="section">
+        <div class="container">
+            <div class="row full-height justify-content-center">
+                <div class="col-12 text-center align-self-center py-5">
+                    <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                        <div class="card-3d-wrap mx-auto" style="height: 350px;">
+                            <div class="card-3d-wrapper">
+                              <div class="card-front">
+                                <div onclick="window.location.href = '/settings'" class="closeModal" style="top: 20px;"></div>
+                                <div class="center-wrap">
+                                  <div class="section text-center">
+                                    <h4 th:unless="${param.error}" class="mb-4 pb-3">Изменение почты</h4>
+                                    <h4 th:if="${param.error}" class="mb-1 pb-3">Изменение почты</h4>
+                                    <form th:action="@{/change-email}" method="post">
+                                      <div th:if="${param.error}" class="text-bg-danger rounded mb-3 h-auto" style="--bs-bg-opacity: .3; min-height: 40px!important;">
+                                        <p style="padding: 8px;">Неверный пароль или почта</p>
+                                      </div>
+                                      <div class="form-group">
+                                        <input  type="email" name="email" class="form-style" placeholder="Новая почта" id="email" autocomplete="off">
+                                        <i class="input-icon uil uil-at"></i>
+                                      </div>
+                                      <div class="form-group mt-2">
+                                        <input type="password" name="password" class="form-style" placeholder="Ваш пароль" id="password" autocomplete="off">
+                                        <i class="input-icon uil uil-lock-alt"></i>
+                                        <i class="uil uil-eye-slash" id="eye" style="cursor: pointer;right: 5px;position: absolute;top: 5px;text-align: right;font-size: 21px;color: #ffeba7;" onclick="document.getElementById('eye').className=document.getElementById('eye').className==='uil uil-eye-slash'? 'uil uil-eye' : 'uil uil-eye-slash'; document.getElementById('password').type=document.getElementById('password').type==='text'?'password':'text';"></i>
+                                      </div>
+                                      <button type="submit" id="sbmLogin" class="btn mt-4">Подтвердить</button>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                     </div>
-                  </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-  </body></html>
+    </body>
+    </html>
 </div>
 </body>
 </html>
