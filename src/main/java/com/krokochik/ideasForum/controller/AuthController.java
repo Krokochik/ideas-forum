@@ -198,7 +198,6 @@ public class AuthController {
                 !password.equals(userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getPassword()))
             return "redirect:/change-email?error";
 
-        userRepository.setEmailById(email, userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
         userRepository.setConfirmMailSentById(false, userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
 
         return "redirect:/mail-confirm?new-email=" + email;
