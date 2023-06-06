@@ -40,7 +40,7 @@ public class MainController {
         model.addAttribute("tagsExample", tagsExample);
 
         model.addAttribute("theme", theme);
-        return "main";
+        return "main.html";
     }
 
     @GetMapping("/add-note")
