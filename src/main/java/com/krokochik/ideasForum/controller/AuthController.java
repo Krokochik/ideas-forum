@@ -102,9 +102,10 @@ public class AuthController {
             if (!user.isConfirmMailSent()) {
                 String userToken = new TokenService().generateToken();
                 userRepository.setMailConfirmationTokenById(userToken, user.getId());
+                boolean isAnonym = hasRole(Role.ANONYM);
                 Thread mailSending = new Thread(() -> {
                     Mail mail = new Mail();
-                    mail.setReceiver(hasRole(Role.USER)? newEmail : user.getEmail());
+                    mail.setReceiver(isAnonym? user.getEmail() : newEmail);
                     mail.setTheme("Email confirmation");
                     mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/confirm?name=" + context.getAuthentication().getName() +
                             "&token=" + userToken + "&newEmail=" + newEmail);
