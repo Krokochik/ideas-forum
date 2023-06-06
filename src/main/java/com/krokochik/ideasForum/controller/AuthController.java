@@ -73,7 +73,7 @@ public class AuthController {
     @GetMapping("/confirm")
     public String confirmMail(@RequestParam(name = "name") String name,
                               @RequestParam(name = "token") String token,
-                              @RequestParam(name = "new-email", required = false) String newEmail,
+                              @RequestParam(name = "newEmail", required = false) String newEmail,
                               HttpServletRequest request, Model model) {
         User user = userRepository.findByUsername(name);
         if (user != null && user.getMailConfirmationToken().equals(token)) {
@@ -94,7 +94,7 @@ public class AuthController {
     }
 
     @GetMapping("/mail-confirm")
-    public String mailConfirmation(HttpServletResponse response, @RequestParam(name = "new-email", required = false) String newEmail) {
+    public String mailConfirmation(HttpServletResponse response, @RequestParam(name = "newEmail", required = false) String newEmail) {
         SecurityContext context = getContext();
 
         User user = userRepository.findByUsername(context.getAuthentication().getName());
@@ -107,7 +107,7 @@ public class AuthController {
                     mail.setReceiver(hasRole(Role.USER)? newEmail : user.getEmail());
                     mail.setTheme("Email confirmation");
                     mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/confirm?name=" + context.getAuthentication().getName() +
-                            "&token=" + userToken + "&new-email=" + newEmail);
+                            "&token=" + userToken + "&newEmail=" + newEmail);
                     mailService.sendActiveMail(mail, user.getUsername());
                 });
                 mailSending.start();
@@ -191,8 +191,8 @@ public class AuthController {
 
     @PostMapping("/change-email")
     public String changeEmail(Model model,
-                              @ModelAttribute(name = "email") String email,
-                              @ModelAttribute(name = "password") String password) {
+                              @ModelAttribute(name = "email", binding = false) String email,
+                              @ModelAttribute(name = "password", binding = false) String password) {
 
         if (email.isEmpty() || !UserValidationService.validateEmail(email) ||
                 !password.equals(userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getPassword()))
@@ -200,7 +200,7 @@ public class AuthController {
 
         userRepository.setConfirmMailSentById(false, userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
 
-        return "redirect:/mail-confirm?new-email=" + email;
+        return "redirect:/mail-confirm?newEmail=" + email;
     }
 
     @PostMapping("/sign-up")

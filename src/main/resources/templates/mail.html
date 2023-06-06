@@ -67,12 +67,12 @@
                                             </div>
                                             <p class="mb-0 mt-4 text-center">Подвердите почту, перейдя по ссылке в
                                                 письме.</p>
-                                            <p th:unless="${param.new-email}" class="mb-0 mt-4 text-center"
+                                            <p th:unless="${param.newEmail}" class="mb-0 mt-4 text-center"
                                                th:text="'Письмо было отправлено на: ' + ${@userAuth.getCurrentEmail()} + '.'"></p>
-                                            <p th:if="${param.new-email}" class="mb-0 mt-4 text-center"
+                                            <p th:if="${param.newEmail}" class="mb-0 mt-4 text-center"
                                                th:text="'Письмо было отправлено на: ' + ${param.new-email} + '.'"></p>
                                             <div class="row" style="width: 100%; margin: auto;"
-                                                 th:unless="${param.new-email}">
+                                                 th:unless="${param.newEmail}">
                                                 <div class="col">
                                                     <p class="mb-2 mt-4 text-center" style="font-weight: 700"><a
                                                             href="/change-email" class="link">Неверный е-мейл?</a></p>
