@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Collections;
 
 import static com.krokochik.ideasForum.Main.HOST;
@@ -94,7 +94,16 @@ public class AuthController {
     }
 
     @GetMapping("/mail-confirm")
-    public String mailConfirmation(HttpServletResponse response, @RequestParam(name = "newEmail", required = false) String newEmail) {
+    public String mailConfirmation(HttpSession session) {
+        String newEmail = null;
+        try {
+            newEmail = session.getAttribute("newEmail").toString();
+            session.removeAttribute("newEmail");
+        } catch (NullPointerException exception) {
+            exception.printStackTrace();
+        }
+        if (hasRole(Role.USER) && newEmail == null)
+            return "redirect:/main";
         SecurityContext context = getContext();
 
         User user = userRepository.findByUsername(context.getAuthentication().getName());
@@ -103,12 +112,13 @@ public class AuthController {
                 String userToken = new TokenService().generateToken();
                 userRepository.setMailConfirmationTokenById(userToken, user.getId());
                 boolean isAnonym = hasRole(Role.ANONYM);
+                String finalNewEmail = newEmail;
                 Thread mailSending = new Thread(() -> {
                     Mail mail = new Mail();
-                    mail.setReceiver(isAnonym? user.getEmail() : newEmail);
+                    mail.setReceiver(isAnonym? user.getEmail() : finalNewEmail);
                     mail.setTheme("Email confirmation");
                     mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/confirm?name=" + context.getAuthentication().getName() +
-                            "&token=" + userToken + "&newEmail=" + newEmail);
+                            "&token=" + userToken + "&newEmail=" + finalNewEmail);
                     mailService.sendActiveMail(mail, user.getUsername());
                 });
                 mailSending.start();
@@ -192,8 +202,9 @@ public class AuthController {
 
     @PostMapping("/change-email")
     public String changeEmail(Model model,
-                              @ModelAttribute(name = "email", binding = false) String email,
-                              @ModelAttribute(name = "password", binding = false) String password) {
+                              @ModelAttribute(name = "email") String email,
+                              @ModelAttribute(name = "password") String password,
+                              HttpSession session) {
 
         if (email.isEmpty() || !UserValidationService.validateEmail(email) ||
                 !password.equals(userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getPassword()))
@@ -201,7 +212,8 @@ public class AuthController {
 
         userRepository.setConfirmMailSentById(false, userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
 
-        return "redirect:/mail-confirm?newEmail=" + email;
+        session.setAttribute("newEmail", email);
+        return "redirect:/mail-confirm";
     }
 
     @PostMapping("/sign-up")

@@ -62,7 +62,7 @@
                                          style="top: 15px; right: 15px"></div>
                                     <div class="center-wrap">
                                         <div class="section text-center">
-                                            <h4 class="mb-4 pb-3" style="font-weight: bold">Подтвердите вашу почту</h4>
+                                            <h4 class="mb-4 pb-3" style="font-weight: bold" th:text="'Подтвердите ' + ${param.newEmail? 'новую' : 'вашу'} + 'почту'"></h4>
                                             <div class="form-group">
                                             </div>
                                             <p class="mb-0 mt-4 text-center">Подвердите почту, перейдя по ссылке в
