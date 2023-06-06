@@ -70,7 +70,7 @@
                                             <p th:unless="${param.newEmail}" class="mb-0 mt-4 text-center"
                                                th:text="'Письмо было отправлено на: ' + ${@userAuth.getCurrentEmail()} + '.'"></p>
                                             <p th:if="${param.newEmail}" class="mb-0 mt-4 text-center"
-                                               th:text="'Письмо было отправлено на: ' + ${param.new-email} + '.'"></p>
+                                               th:text="'Письмо было отправлено на: ' + ${param.newEmail} + '.'"></p>
                                             <div class="row" style="width: 100%; margin: auto;"
                                                  th:unless="${param.newEmail}">
                                                 <div class="col">
