@@ -101,7 +101,7 @@ public class AuthController {
         } catch (NullPointerException exception) {
             exception.printStackTrace();
         }
-        if (hasRole(Role.USER) && mode == null)
+        if (hasRole(Role.USER) && (mode == null || newEmail == null))
             return "redirect:/main";
         SecurityContext context = getContext();
 
