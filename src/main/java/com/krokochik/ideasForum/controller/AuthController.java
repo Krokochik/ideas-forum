@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 
@@ -74,11 +73,12 @@ public class AuthController {
     public String confirmMail(@RequestParam(name = "name") String name,
                               @RequestParam(name = "token") String token,
                               @RequestParam(name = "newEmail", required = false) String newEmail,
-                              HttpServletRequest request, Model model) {
+                              HttpSession session, Model model) {
         User user = userRepository.findByUsername(name);
         if (user != null && user.getMailConfirmationToken().equals(token)) {
             if (newEmail != null && hasRole(Role.USER)) {
                 userRepository.setEmailById(newEmail, user.getId());
+                session.removeAttribute("newEmail");
                 return "redirect:/settings";
             }
 
@@ -94,14 +94,14 @@ public class AuthController {
     }
 
     @GetMapping("/mail-confirm")
-    public String mailConfirmation(HttpSession session, Model model) {
+    public String mailConfirmation(@RequestParam(name = "newEmail", required = false) String mode, HttpSession session, Model model) {
         String newEmail = null;
         try {
             newEmail = session.getAttribute("newEmail").toString();
         } catch (NullPointerException exception) {
             exception.printStackTrace();
         }
-        if (hasRole(Role.USER) && newEmail == null)
+        if (hasRole(Role.USER) && mode == null)
             return "redirect:/main";
         SecurityContext context = getContext();
 
@@ -191,8 +191,11 @@ public class AuthController {
     }
 
     @GetMapping("/change-email")
-    public String changeEmailGet(Model model,
+    public String changeEmailGet(Model model, HttpSession session,
                                  @RequestParam(name = "from", required = false) String from) {
+
+        if (session.getAttribute("newEmail") != null)
+            return "redirect:/mail-confirm?newEmail";
 
         if (from != null)
             model.addAttribute("from", "/" + from);
