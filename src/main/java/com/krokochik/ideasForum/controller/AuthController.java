@@ -98,7 +98,6 @@ public class AuthController {
         String newEmail = null;
         try {
             newEmail = session.getAttribute("newEmail").toString();
-            session.removeAttribute("newEmail");
         } catch (NullPointerException exception) {
             exception.printStackTrace();
         }
