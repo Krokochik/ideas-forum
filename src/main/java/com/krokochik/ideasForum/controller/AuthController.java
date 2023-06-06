@@ -94,7 +94,7 @@ public class AuthController {
     }
 
     @GetMapping("/mail-confirm")
-    public String mailConfirmation(HttpServletResponse response, @RequestParam(value = "new-email", required = false) String newEmail) {
+    public String mailConfirmation(HttpServletResponse response, @RequestParam(name = "new-email", required = false) String newEmail) {
         SecurityContext context = getContext();
 
         User user = userRepository.findByUsername(context.getAuthentication().getName());
@@ -108,7 +108,7 @@ public class AuthController {
                     mail.setTheme("Email confirmation");
                     mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/confirm?name=" + context.getAuthentication().getName() +
                             "&token=" + userToken + "&new-email=" + newEmail);
-                    mailService.sendActiveMail(mail, context.getAuthentication().getName());
+                    mailService.sendActiveMail(mail, user.getUsername());
                 });
                 mailSending.start();
                 userRepository.setConfirmMailSentById(true, user.getId());
