@@ -115,10 +115,10 @@ public class AuthController {
                 Thread mailSending = new Thread(() -> {
                     Mail mail = new Mail();
                     mail.setReceiver(isAnonym? user.getEmail() : finalNewEmail);
-                    mail.setTheme("Email confirmation");
+                    mail.setTheme("Подтверждение почты");
                     mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/confirm?name=" + context.getAuthentication().getName() +
-                            "&token=" + userToken + "&newEmail=" + finalNewEmail);
-                    mailService.sendActiveMail(mail, user.getUsername());
+                            "&token=" + userToken + (!isAnonym? "&newEmail=" + finalNewEmail : ""));
+                    mailService.sendConfirmationMail(mail, user.getUsername(), isAnonym? "На вашу почту был зарегестрирован новый аккаунт." : "К вашей почте был привязан аккаунт.");
                 });
                 mailSending.start();
                 userRepository.setConfirmMailSentById(true, user.getId());

@@ -24,7 +24,7 @@ public class MailService {
     @Value("spring.mail.sender.email")
     String senderEmail;
 
-    public void sendEmail(Mail mail, String name, String htmlName) {
+    public void sendEmail(Mail mail, String name, String content, String htmlName) {
         try
         {
             MimeMessage message = javaMailSender.createMimeMessage();
@@ -40,7 +40,7 @@ public class MailService {
             while (scanner.hasNextLine())
                 html.append(scanner.nextLine());
 
-            helper.setText(html.toString().replace("{LINK}", mail.getLink()).replace("{NAME}", name), true);
+            helper.setText(html.toString().replace("{LINK}", mail.getLink()).replace("{NAME}", name).replace("{CONTENT}", content), true);
             javaMailSender.send(message);
         }
         catch (MessagingException | IOException e) {
@@ -48,8 +48,8 @@ public class MailService {
         }
     }
 
-    public void sendActiveMail(Mail mail, String name) {
-        sendEmail(mail, name, "confirm.html");
+    public void sendConfirmationMail(Mail mail, String name, String content) {
+        sendEmail(mail, name, content,"confirm.html");
     }
 }
 
