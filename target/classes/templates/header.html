@@ -9,22 +9,22 @@
      <div class="modal-dialog modal-dialog-centered">
        <div class="modal-content" style="border: none; border-radius: 10px;">
          <div th:class="'modal-header text-bg-' + ${theme}">
-           <h5 th:class="'modal-title text-bg-' + ${theme}" id="exampleModalLabel" style="margin: auto; font-size: 2rem;">Профиль</h5><div style="">
-           <div id="ok" onclick="saveChanges()" style="position: absolute;right: 15px;top: 27px;">
+           <h5 th:class="'modal-title text-bg-' + ${theme}" id="exampleModalLabel" style="margin: auto; font-size: 2rem;font-weight: bold;">Профиль</h5><div style="">
+           <div id="ok" onclick="saveChanges()" th:style="'position: absolute;right: 20px;top: 27px;color: ' + ${theme == 'dark'? '#fff' : '#000'}">
              <i class="fa fa-check fa-2x" style="top: 90px;left: 100px;"></i>
            </div>
-           <div onclick="dismissChanges()" data-bs-dismiss="modal" id="no" class="" style="position: absolute;top: 27px;right: 55px;">
+           <div onclick="dismissChanges()" data-bs-dismiss="modal" id="no" class="" th:style="'position: absolute;right: 60px;top: 27px;color: ' + ${theme == 'dark'? '#fff' : '#000'}">
              <i class="fa fa-times fa-2x"></i>
            </div>
          </div>
          </div>
-         <div th:class="'modal-body text-bg-' + ${theme}" style="text-align: center;">
+         <div th:class="'modal-body text-bg-' + ${theme}" style="text-align: center;border-bottom-right-radius: calc(0.5rem - 1px);border-bottom-left-radius: calc(0.5rem - 1px);">
            <div class="avatar-upload" style="margin-top: 0px;margin-bottom: 35px;">
              <div class="avatar-edit">
-               <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg">
+               <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg, .bmp, .ico, .tiff, .svg, .webp">
                <label for="imageUpload"></label>
              </div>
-             <img id="imagePreview" class="avatar-preview" th:src="@{/avatar}" style="box-shadow: 4px 4px 10px rgb(255 255 255 / 23%);">
+             <img id="imagePreview" class="avatar-preview" th:src="@{/avatar}" th:style="'box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'">
            </div>
            <input id="nickname" th:placeholder="${@userAuth.getNickname()}" th:style="'margin-bottom: 30px;box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'"/>
          </div>
