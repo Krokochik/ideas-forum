@@ -94,7 +94,7 @@ public class AuthController {
     }
 
     @GetMapping("/mail-confirm")
-    public String mailConfirmation(HttpSession session) {
+    public String mailConfirmation(HttpSession session, Model model) {
         String newEmail = null;
         try {
             newEmail = session.getAttribute("newEmail").toString();
@@ -124,6 +124,7 @@ public class AuthController {
                 mailSending.start();
                 userRepository.setConfirmMailSentById(true, user.getId());
             }
+            model.addAttribute("newEmail", newEmail);
             return "mail";
         }
 
