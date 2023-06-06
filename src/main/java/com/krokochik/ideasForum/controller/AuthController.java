@@ -142,7 +142,7 @@ public class AuthController {
 
     @PostMapping("/abortPass")
     public String abortPassPost(Model model,
-                                @ModelAttribute(name = "pass") String password, @ModelAttribute(name = "passConf") String passwordConfirm,
+                                @RequestParam(name = "pass") String password, @RequestParam(name = "passConf") String passwordConfirm,
                                 @RequestParam(name = "name") String name, @RequestParam(name = "token") String token) {
         if (userRepository.findByUsername(name) != null && userRepository.findByUsername(name).getPasswordAbortToken().equals(token)) {
             if (UserValidationService.validatePassword(password)) {
@@ -164,7 +164,7 @@ public class AuthController {
 
     @PostMapping("/password-abort")
     public String abortPassword(Model model,
-                                @ModelAttribute(name = "nick") String name) {
+                                @RequestParam(name = "nick") String name) {
         if (!name.isEmpty()) {
             if (userRepository.findByUsername(name) != null) {
                 Thread mailSending = new Thread(() -> {
@@ -202,8 +202,8 @@ public class AuthController {
 
     @PostMapping("/change-email")
     public String changeEmail(Model model,
-                              @ModelAttribute(name = "email") String email,
-                              @ModelAttribute(name = "password") String password,
+                              @RequestParam(name = "email") String email,
+                              @RequestParam(name = "password") String password,
                               HttpSession session) {
 
         if (email.isEmpty() || !UserValidationService.validateEmail(email) ||
