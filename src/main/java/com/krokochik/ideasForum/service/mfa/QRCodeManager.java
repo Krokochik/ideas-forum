@@ -24,7 +24,7 @@ public class QRCodeManager {
 
     /**
      * @param name Username or filename. It is assumed that filenames are unique and there is only one qr-code for user
-     * */
+     */
     public boolean deleteQrCode(String name) {
         HashMap<String, String> newMap = new HashMap<>(savedQrCodes);
         savedQrCodes.forEach((username, filename) -> {
@@ -43,12 +43,13 @@ public class QRCodeManager {
     }
 
     public void addQrCode(String content, String filename, String username, int size, int cornerRadius) throws IOException, WriterException {
-            BufferedImage qrCodeImage = generateQRCodeImage(content, size);
-            BufferedImage roundedImage = roundCorners(qrCodeImage, cornerRadius);
+        BufferedImage qrCodeImage = generateQRCodeImage(content, size);
+        BufferedImage roundedImage = roundCorners(qrCodeImage, cornerRadius);
 
-            File outputFile = new File("./src/main/resources/dynamic/qr/" + filename + ".png"); // Укажите путь и имя файла для сохранения
-            ImageIO.write(roundedImage, "png", outputFile);
-            savedQrCodes.put(username, filename);
+        File outputFile = new File("./src/main/resources/dynamic/qr/" + filename + ".png"); // Укажите путь и имя файла для сохранения
+        System.out.println(System.getProperty("user.dir"));
+        ImageIO.write(roundedImage, "png", outputFile);
+        savedQrCodes.put(username, filename);
     }
 
     public void addQrCode(String content, String filename, String username) throws IOException, WriterException {
