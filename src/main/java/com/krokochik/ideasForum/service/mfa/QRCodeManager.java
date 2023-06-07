@@ -46,7 +46,7 @@ public class QRCodeManager {
         BufferedImage qrCodeImage = generateQRCodeImage(content, size);
         BufferedImage roundedImage = roundCorners(qrCodeImage, cornerRadius);
 
-        File outputFile = new File("./src/main/resources/dynamic/qr/" + filename + ".png"); // Укажите путь и имя файла для сохранения
+        File outputFile = new File("app/src/main/resources/dynamic/qr/" + filename + ".png"); // Укажите путь и имя файла для сохранения
         System.out.println(System.getProperty("user.dir"));
         ImageIO.write(roundedImage, "png", outputFile);
         savedQrCodes.put(username, filename);
