@@ -118,11 +118,11 @@ public class AuthController {
                 String finalNewEmail = newEmail;
                 Thread mailSending = new Thread(() -> {
                     Mail mail = new Mail();
-                    mail.setReceiver(isAnonym? user.getEmail() : finalNewEmail);
+                    mail.setReceiver(isAnonym ? user.getEmail() : finalNewEmail);
                     mail.setTheme("Подтверждение почты");
                     mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/confirm?name=" + context.getAuthentication().getName() +
-                            "&token=" + userToken + (!isAnonym? "&newEmail=" + finalNewEmail : ""));
-                    mailService.sendConfirmationMail(mail, user.getUsername(), isAnonym? "На вашу почту был зарегестрирован новый аккаунт." : "К вашей почте был привязан аккаунт.");
+                            "&token=" + userToken + (!isAnonym ? "&newEmail=" + finalNewEmail : ""));
+                    mailService.sendConfirmationMail(mail, user.getUsername(), isAnonym ? "На вашу почту был зарегестрирован новый аккаунт." : "К вашей почте был привязан аккаунт.");
                 });
                 mailSending.start();
                 userRepository.setConfirmMailSentById(true, user.getId());
@@ -178,7 +178,7 @@ public class AuthController {
                     mail.setReceiver(userRepository.findByUsername(name).getEmail());
                     mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/abortPass?name=" + name + "&token=" + passToken);
                     userRepository.setPasswordAbortTokenById(passToken, userRepository.findByUsername(name).getId());
-                    mailService.sendEmail(mail, name, "",  "abort.html");
+                    mailService.sendEmail(mail, name, "", "abort.html");
                     userRepository.setPasswordAbortSentById(true, userRepository.findByUsername(name).getId());
                 });
                 mailSending.start();
@@ -218,10 +218,14 @@ public class AuthController {
                               @RequestParam(name = "password", required = false) String password,
                               HttpSession session) {
 
-        if (!hasRole(Role.ANONYM))
-            if (email.isEmpty() || !UserValidationService.validateEmail(email) ||
-                    !password.equals(userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getPassword()))
-                return "redirect:/change-email?error";
+        if (!hasRole(Role.ANONYM)) {
+            userRepository.setEmailById(email, userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getId());
+            return "redirect:/mail-confirm";
+        }
+
+        if (email.isEmpty() || !UserValidationService.validateEmail(email) ||
+                !password.equals(userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getPassword()))
+            return "redirect:/change-email?error";
 
         userRepository.setConfirmMailSentById(false, userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
 
