@@ -68,7 +68,7 @@ public class SettingsController {
                     e.printStackTrace();
                 }
             }
-            model.addAttribute("token", mfaService.getToken(user.getUsername()));
+            model.addAttribute("token", mfaService.getToken(user.getUsername()).orElse("Error"));
         }
 
         model.addAttribute("theme", theme);
