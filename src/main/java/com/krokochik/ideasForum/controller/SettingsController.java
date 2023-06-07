@@ -58,6 +58,7 @@ public class SettingsController {
                     e.printStackTrace();
                 }
             }
+            model.addAttribute("path", qrCodeManager.getQrCode(user.getUsername()).orElse(""));
         }
 
         model.addAttribute("theme", theme);
