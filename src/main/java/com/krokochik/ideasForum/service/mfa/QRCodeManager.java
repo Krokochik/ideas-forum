@@ -42,7 +42,7 @@ public class QRCodeManager {
         return Optional.ofNullable(savedQrCodes.get(username));
     }
 
-    public void saveQrCode(String content, String filename, String username, int size, int cornerRadius) throws IOException, WriterException {
+    public void addQrCode(String content, String filename, String username, int size, int cornerRadius) throws IOException, WriterException {
             BufferedImage qrCodeImage = generateQRCodeImage(content, size);
             BufferedImage roundedImage = roundCorners(qrCodeImage, cornerRadius);
 
@@ -51,12 +51,12 @@ public class QRCodeManager {
             savedQrCodes.put(username, filename);
     }
 
-    public void saveQrCode(String content, String filename, String username) throws IOException, WriterException {
-        saveQrCode(content, filename, username, 300, 15);
+    public void addQrCode(String content, String filename, String username) throws IOException, WriterException {
+        addQrCode(content, filename, username, 300, 15);
     }
 
-    public void saveQrCode(String content, String filename, String username, int size) throws IOException, WriterException {
-        saveQrCode(content, filename, username, size, 0);
+    public void addQrCode(String content, String filename, String username, int size) throws IOException, WriterException {
+        addQrCode(content, filename, username, size, 0);
     }
 
     private BufferedImage generateQRCodeImage(String text, int size) throws WriterException {

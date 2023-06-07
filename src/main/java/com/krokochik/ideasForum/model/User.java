@@ -33,6 +33,7 @@ public class User
     String passwordAbortToken;
     boolean confirmMailSent = false;
     boolean passwordAbortSent = false;
+    boolean mfaConnected = false;
 
     @Column(columnDefinition = "varchar(1000)")
     String verifier;

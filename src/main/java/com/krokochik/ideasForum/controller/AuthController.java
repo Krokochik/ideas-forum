@@ -95,14 +95,18 @@ public class AuthController {
 
     @GetMapping("/mail-confirm")
     public String mailConfirmation(@RequestParam(name = "newEmail", required = false) String mode, HttpSession session, Model model) {
-        String newEmail = null;
+        Object temp = null;
+        String newEmail = "";
         try {
-            newEmail = session.getAttribute("newEmail").toString();
+            temp = session.getAttribute("newEmail");
         } catch (NullPointerException exception) {
             exception.printStackTrace();
         }
-        if (hasRole(Role.USER) && (mode == null || newEmail == null))
+        if (hasRole(Role.USER) && (mode == null || temp == null))
             return "redirect:/main";
+
+        if (temp != null)
+            newEmail = temp.toString();
         SecurityContext context = getContext();
 
         User user = userRepository.findByUsername(context.getAuthentication().getName());
@@ -170,7 +174,7 @@ public class AuthController {
                 Thread mailSending = new Thread(() -> {
                     String passToken = new TokenService().generateToken();
                     Mail mail = new Mail();
-                    mail.setTheme("Password abort");
+                    mail.setTheme("Сброс пароля");
                     mail.setReceiver(userRepository.findByUsername(name).getEmail());
                     mail.setLink((host.contains("6606") ? "http://" : "https://") + host + "/abortPass?name=" + name + "&token=" + passToken);
                     userRepository.setPasswordAbortTokenById(passToken, userRepository.findByUsername(name).getId());
@@ -197,6 +201,11 @@ public class AuthController {
         if (session.getAttribute("newEmail") != null)
             return "redirect:/mail-confirm?newEmail";
 
+        if (AuthController.hasRole(Role.ANONYM))
+            model.addAttribute("isAnonym", true);
+        else
+            model.addAttribute("isAnonym", false);
+
         if (from != null)
             model.addAttribute("from", "/" + from);
 
@@ -206,12 +215,13 @@ public class AuthController {
     @PostMapping("/change-email")
     public String changeEmail(Model model,
                               @RequestParam(name = "email") String email,
-                              @RequestParam(name = "password") String password,
+                              @RequestParam(name = "password", required = false) String password,
                               HttpSession session) {
 
-        if (email.isEmpty() || !UserValidationService.validateEmail(email) ||
-                !password.equals(userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getPassword()))
-            return "redirect:/change-email?error";
+        if (!hasRole(Role.ANONYM))
+            if (email.isEmpty() || !UserValidationService.validateEmail(email) ||
+                    !password.equals(userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getPassword()))
+                return "redirect:/change-email?error";
 
         userRepository.setConfirmMailSentById(false, userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
 

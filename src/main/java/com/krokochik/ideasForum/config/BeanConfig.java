@@ -43,6 +43,10 @@ public class BeanConfig {
                 return new String(userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getAvatar(), StandardCharsets.UTF_8);
             }
 
+            public boolean isMfaConnected() {
+                return userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).isMfaConnected();
+            }
+
             public boolean isAuth() {
                 return AuthController.isAuthenticated();
             }

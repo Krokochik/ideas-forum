@@ -3,61 +3,93 @@
 <head>
 </head>
 <body>
- <header th:fragment="header (mainPage, theme)"  th:class="'p-3 mb-3 border-bottom select-none ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}">
-   <input type="hidden" id="name" th:value="${@userAuth.getCurrentName()}">
-   <div class="modal fade" id="exampleModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
-     <div class="modal-dialog modal-dialog-centered">
-       <div class="modal-content" style="border: none; border-radius: 10px;background-color: rgb(33, 37, 41);">
-         <div th:class="'modal-header text-bg-' + ${theme}">
-           <h5 th:class="'modal-title text-bg-' + ${theme}" id="exampleModalLabel" style="margin: auto; font-size: 2rem;font-weight: bold;">Профиль</h5><div style="">
-           <div id="ok" onclick="saveChanges()" th:style="'position: absolute;right: 20px;top: 27px;color: ' + ${theme == 'dark'? '#fff' : '#000'}">
-             <i class="fa fa-check fa-2x" style="top: 90px;left: 100px;"></i>
-           </div>
-           <div onclick="dismissChanges()" data-bs-dismiss="modal" id="no" class="" th:style="'position: absolute;right: 60px;top: 27px;color: ' + ${theme == 'dark'? '#fff' : '#000'}">
-             <i class="fa fa-times fa-2x"></i>
-           </div>
-         </div>
-         </div>
-         <div th:class="'modal-body text-bg-' + ${theme}" style="text-align: center;border-bottom-right-radius: calc(0.5rem - 1px);border-bottom-left-radius: calc(0.5rem - 1px);">
-           <div class="avatar-upload" style="margin-top: 0px;margin-bottom: 35px;">
-             <div class="avatar-edit">
-               <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg, .bmp, .ico, .tiff, .svg, .webp">
-               <label for="imageUpload"></label>
-             </div>
-             <img id="imagePreview" class="avatar-preview" th:src="@{/avatar}" th:style="'box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'">
-           </div>
-           <input id="nickname" th:placeholder="${@userAuth.getNickname()}" th:style="'font-family: Roboto;margin-bottom: 30px;box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'"/>
-         </div>
-       </div>
-     </div>
-   </div>
+<header th:fragment="header (mainPage, theme)"
+        th:class="'p-3 mb-3 border-bottom select-none ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}">
+    <input type="hidden" id="name" th:value="${@userAuth.getCurrentName()}">
 
-   <div class="d-flex flex-wrap align-items-center justify-content-center container">
+    <div class="modal fade" id="profileModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+         aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border: none; border-radius: 10px;background-color: rgb(33, 37, 41);">
+                <div th:class="'modal-header text-bg-' + ${theme}">
+                    <h5 th:class="'modal-title text-bg-' + ${theme}" id="profileModalLabel"
+                        style="margin: auto; font-size: 2rem;font-weight: bold;">Профиль</h5>
+                    <div style="">
+                        <div id="ok" onclick="saveChanges()"
+                             th:style="'position: absolute;right: 20px;top: 27px;color: ' + ${theme == 'dark'? '#fff' : '#000'}">
+                            <i class="fa fa-check fa-2x" style="top: 90px;left: 100px;"></i>
+                        </div>
+                        <div onclick="dismissChanges()" data-bs-dismiss="modal" id="no" class=""
+                             th:style="'position: absolute;right: 60px;top: 27px;color: ' + ${theme == 'dark'? '#fff' : '#000'}">
+                            <i class="fa fa-times fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div th:class="'modal-body text-bg-' + ${theme}"
+                     style="text-align: center;border-bottom-right-radius: calc(0.5rem - 1px);border-bottom-left-radius: calc(0.5rem - 1px);">
+                    <div class="avatar-upload" style="margin-top: 0px;margin-bottom: 35px;">
+                        <div class="avatar-edit">
+                            <input type="file" id="imageUpload"
+                                   accept=".png, .jpg, .jpeg, .bmp, .ico, .tiff, .svg, .webp">
+                            <label for="imageUpload"></label>
+                        </div>
+                        <img id="imagePreview" class="avatar-preview" th:src="@{/avatar}"
+                             th:style="'box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'">
+                    </div>
+                    <input id="nickname" th:placeholder="${@userAuth.getNickname()}"
+                           th:style="'font-family: Roboto;margin-bottom: 30px;box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap align-items-center justify-content-center container">
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <a href="/main" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none" style="margin-bottom: 0!important;">
-            <img th:src="@{/images/favicon.png}" alt="" width="23" height="24">
-          </a>
-          <li><a href="/main" th:class="'nav-link px-2 ' + ${mainPage == 'main' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}" th:style="'font-size: 20px; ' + ${theme == 'dark'? 'text-shadow: 0 .15rem .1rem rgb(8, 8, 8)!important;' : ''}">Главная</a></li>
-          <li><a href="/add-note" th:class="'nav-link px-2 ' + ${mainPage == 'add-note' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}" th:style="'font-size: 20px; ' + ${theme == 'dark'? 'text-shadow: 0 .15rem .1rem rgb(8, 8, 8)!important;' : ''}">Добавить запись</a></li>
+            <a href="/main" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none"
+               style="margin-bottom: 0!important;">
+                <img th:src="@{/images/favicon.png}" alt="" width="23" height="24">
+            </a>
+            <li><a href="/main"
+                   th:class="'nav-link px-2 ' + ${mainPage == 'main' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}"
+                   th:style="'font-size: 20px; ' + ${theme == 'dark'? 'text-shadow: 0 .15rem .1rem rgb(8, 8, 8)!important;' : ''}">Главная</a>
+            </li>
+            <li><a href="/add-note"
+                   th:class="'nav-link px-2 ' + ${mainPage == 'add-note' ? theme == 'dark'? 'link-primary-light' : 'link-primary-dark' : theme == 'dark'? 'link-light' : 'link-dark'}"
+                   th:style="'font-size: 20px; ' + ${theme == 'dark'? 'text-shadow: 0 .15rem .1rem rgb(8, 8, 8)!important;' : ''}">Добавить
+                запись</a></li>
         </ul>
 
         <div class="d-flex" role="search" data-np-checked="1">
-          <input th:class="'form-control me-2 ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}" th:style="${theme == 'dark'? 'box-shadow: 0 .2rem .5rem rgb(12, 12, 12)!important;' : ''}" placeholder="Поиск..." aria-label="Search" data-np-checked="1">
-          <button class="btn btn-outline-success me-2" th:style="${theme == 'dark'? 'box-shadow: 0 .2rem .5rem rgb(12, 12, 12)!important;' : ''}" type="button" th:text="Поиск"></button>
-          <div class="dropdown text-end">
-            <a href="#" th:class="'d-block text-decoration-none dropdown-toggle ' + ${theme == 'dark'? 'text-bg-dark link-light' : 'text-bg-light link-dark'}" data-bs-toggle="dropdown" aria-expanded="false">
-                <img id="avatar" th:src="@{/avatar}" th:style="'background-size: cover;background-repeat: no-repeat;background-position: center;margin-top: 0.3rem;width: 40px;height: 40px;display: inline-block; vertical-align: middle; ' + ${theme == 'dark'? 'box-shadow: 0 .2rem .5rem rgb(8, 8, 8)!important;' : ''}" th:class="'rounded-circle ' + ${theme == 'light'? 'shadow-sm' : ''}">
-            </a>
-            <ul th:class="'dropdown-menu light ' + ${theme == 'dark'? 'dropdown-menu-dark' : ''}">
-              <li th:if="${@userAuth.isAuth()}"><a class="dropdown-item" href="/add-note">Добавить запись</a></li>
-              <li th:if="${@userAuth.isAuth()}"><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Профиль</button></li>
-              <li><a class="dropdown-item" href="/settings">Настройки</a></li>
-              <li><hr th:class="'dropdown-divider ' + ${theme == 'dark'? 'bg-light' : 'bg-dark'}"></li>
-              <li><a class="dropdown-item" th:href="${@userAuth.isAuth()? '/logout' : '/login'}" th:text="${@userAuth.isAuth()? 'Выйти' : 'Войти'}"></a></li>
-            </ul>
-          </div>
+            <input th:class="'form-control me-2 ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}"
+                   th:style="${theme == 'dark'? 'box-shadow: 0 .2rem .5rem rgb(12, 12, 12)!important;' : ''}"
+                   placeholder="Поиск..." aria-label="Search" data-np-checked="1">
+            <button class="btn btn-outline-success me-2"
+                    th:style="${theme == 'dark'? 'box-shadow: 0 .2rem .5rem rgb(12, 12, 12)!important;' : ''}"
+                    type="button" th:text="Поиск"></button>
+            <div class="dropdown text-end">
+                <a href="#"
+                   th:class="'d-block text-decoration-none dropdown-toggle ' + ${theme == 'dark'? 'text-bg-dark link-light' : 'text-bg-light link-dark'}"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <img id="avatar" th:src="@{/avatar}"
+                         th:style="'background-size: cover;background-repeat: no-repeat;background-position: center;margin-top: 0.3rem;width: 40px;height: 40px;display: inline-block; vertical-align: middle; ' + ${theme == 'dark'? 'box-shadow: 0 .2rem .5rem rgb(8, 8, 8)!important;' : ''}"
+                         th:class="'rounded-circle ' + ${theme == 'light'? 'shadow-sm' : ''}">
+                </a>
+                <ul th:class="'dropdown-menu light ' + ${theme == 'dark'? 'dropdown-menu-dark' : ''}">
+                    <li th:if="${@userAuth.isAuth()}"><a class="dropdown-item" href="/add-note">Добавить запись</a></li>
+                    <li th:if="${@userAuth.isAuth()}">
+                        <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal">Профиль
+                        </button>
+                    </li>
+                    <li><a class="dropdown-item" href="/settings">Настройки</a></li>
+                    <li>
+                        <hr th:class="'dropdown-divider ' + ${theme == 'dark'? 'bg-light' : 'bg-dark'}">
+                    </li>
+                    <li><a class="dropdown-item" th:href="${@userAuth.isAuth()? '/logout' : '/login'}"
+                           th:text="${@userAuth.isAuth()? 'Выйти' : 'Войти'}"></a></li>
+                </ul>
+            </div>
         </div>
-      </div>
-  </header>
+    </div>
+</header>
 </body>
 </html>

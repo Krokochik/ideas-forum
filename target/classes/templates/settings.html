@@ -25,6 +25,43 @@
 <body style="min-height: 100vh;" th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
     <input type="hidden" id="theme" th:value="${theme}">
 
+    <div class="modal fade" id="mfaModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+         aria-labelledby="mfaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border: none; border-radius: 10px;background-color: rgb(33, 37, 41);">
+                <div th:class="'modal-header text-bg-' + ${theme}">
+                    <h5 th:class="'modal-title text-bg-' + ${theme}" id="mfaModalLabel"
+                        style="margin: auto; font-size: 2rem;font-weight: bold;">Профиль</h5>
+                    <div style="">
+                        <div id="ok" onclick="saveChanges()"
+                             th:style="'position: absolute;right: 20px;top: 27px;color: ' + ${theme == 'dark'? '#fff' : '#000'}">
+                            <i class="fa fa-check fa-2x" style="top: 90px;left: 100px;"></i>
+                        </div>
+                        <div onclick="dismissChanges()" data-bs-dismiss="modal" id="no" class=""
+                             th:style="'position: absolute;right: 60px;top: 27px;color: ' + ${theme == 'dark'? '#fff' : '#000'}">
+                            <i class="fa fa-times fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div th:class="'modal-body text-bg-' + ${theme}"
+                     style="text-align: center;border-bottom-right-radius: calc(0.5rem - 1px);border-bottom-left-radius: calc(0.5rem - 1px);">
+                    <div class="avatar-upload" style="margin-top: 0px;margin-bottom: 35px;">
+                        <div class="avatar-edit">
+                            <input type="file" id="imageUpload"
+                                   accept=".png, .jpg, .jpeg, .bmp, .ico, .tiff, .svg, .webp">
+                            <label for="imageUpload"></label>
+                        </div>
+                        <img id="imagePreview" class="avatar-preview" th:src="@{/avatar}"
+                             th:style="'box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'">
+                    </div>
+                    <input id="nickname" th:placeholder="${@userAuth.getNickname()}"
+                           th:style="'font-family: Roboto;margin-bottom: 30px;box-shadow: 4px 4px 10px rgb(' + ${theme == 'dark'? '255 255 255 / 23%' : '0 0 0 / 6%'} + ');'"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <header th:replace="header :: header ('settings', ${theme})"></header>
 
     <div class="main"><div class="select-none">
@@ -38,6 +75,10 @@
                 <button class="h-auto" style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;" th:class="'btn btn-' + ${theme == 'dark'? 'drk' : 'lgt'}" id="chng2" onclick="window.location.href = '/change-email?from=settings'" type="button">
                     Сменить почту
                     <span class="d-block small opacity-50" id="thSpan2" th:text="'Текущая: ' + ${@userAuth.getCurrentEmail()}"></span>
+                </button>
+                <button class="h-auto" style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;" th:class="'btn btn-' + ${theme == 'dark'? 'drk' : 'lgt'}" id="chng3" data-bs-toggle="modal" data-bs-target="#mfaModal" type="button">
+                    Добавить 2fa
+                    <span class="d-block small opacity-50" id="thSpan3">Скачать мобильное приложение</span>
                 </button>
             </div>
 
