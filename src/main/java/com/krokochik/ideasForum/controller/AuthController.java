@@ -218,16 +218,19 @@ public class AuthController {
                               @RequestParam(name = "password", required = false) String password,
                               HttpSession session) {
 
+        User user = userRepository.findByUsername(AuthController.getContext().getAuthentication().getName());
+
         if (!hasRole(Role.ANONYM)) {
-            userRepository.setEmailById(email, userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getId());
+            userRepository.setEmailById(email, user.getId());
+            userRepository.setConfirmMailSentById(false, user.getId());
             return "redirect:/mail-confirm";
         }
 
         if (email.isEmpty() || !UserValidationService.validateEmail(email) ||
-                !password.equals(userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getPassword()))
+                !password.equals(user.getPassword()))
             return "redirect:/change-email?error";
 
-        userRepository.setConfirmMailSentById(false, userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
+        userRepository.setConfirmMailSentById(false, user.getId());
 
         session.setAttribute("newEmail", email);
         return "redirect:/mail-confirm?newEmail";
