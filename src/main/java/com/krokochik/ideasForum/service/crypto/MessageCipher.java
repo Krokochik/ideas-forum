@@ -1,7 +1,6 @@
 package com.krokochik.ideasForum.service.crypto;
 
 import at.favre.lib.crypto.SingleStepKdf;
-import com.krokochik.ideasForum.model.Message;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.Base64;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +11,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class MessageCipher {
@@ -48,35 +46,4 @@ public class MessageCipher {
         return new String(cipher.doFinal(Base64.decodeBase64(str)));
     }
 
-    @SneakyThrows
-    public Message encrypt(Message message, String initVector, String secretKey) {
-        Message result = new Message(new HashMap<>());
-
-        for (String key : message.getContent().keySet()) {
-            if (!skipKeys.contains(key.toLowerCase())) {
-                result.put(
-                        encrypt(key, initVector, secretKey),
-                        encrypt(message.get(key), initVector, secretKey)
-                );
-            } else result.put(key, message.get(key));
-        }
-
-        return result;
-    }
-
-    @SneakyThrows
-    public Message decrypt(Message message, String initVector, String secretKey) {
-        Message result = new Message(new HashMap<>());
-
-        for (String key : message.getContent().keySet()) {
-            if (!skipKeys.contains(key.toLowerCase())) {
-                result.put(
-                        decrypt(key, initVector, secretKey),
-                        decrypt(message.get(key), initVector, secretKey)
-                );
-            } else result.put(key, message.get(key));
-        }
-
-        return result;
-    }
 }
