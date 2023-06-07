@@ -45,7 +45,7 @@
             </div>
             <div th:class="'modal-body text-bg-' + ${theme}"
                  style="text-align: center;border-bottom-right-radius: calc(0.5rem - 1px);border-bottom-left-radius: calc(0.5rem - 1px);">
-                    <img th:if="${@userAuth.isAuth()}" th:src="'/qr/' + ${path}">
+                    <img th:if="${@userAuth.isAuth()}" src="/mfa-qr">
             </div>
         </div>
     </div>

@@ -9,6 +9,11 @@ import com.krokochik.ideasForum.service.crypto.TokenService;
 import com.krokochik.ideasForum.service.mfa.MFAService;
 import com.krokochik.ideasForum.service.mfa.QRCodeManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +22,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
 import static com.krokochik.ideasForum.Main.HOST;
@@ -32,9 +36,6 @@ public class SettingsController {
     MailService mailService;
 
     @Autowired
-    TokenService tokenService;
-
-    @Autowired
     MFAService mfaService;
 
     @Autowired
@@ -42,23 +43,30 @@ public class SettingsController {
 
     String host = HOST;
 
+    @GetMapping(value = "/mfa-qr", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<Resource> qrCode() {
+        User user = userRepository.findByUsername(AuthController.getContext().getAuthentication().getName());
+        Resource resource = new ByteArrayResource(user.getQrcode());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=qrcode.png")
+                .body(resource);
+    }
+
     @GetMapping("/settings")
     public String settingsPage(Model model, HttpServletRequest request, HttpServletResponse response,
                                @CookieValue(name = "theme", required = false, defaultValue = "dark") String theme) {
 
         if (AuthController.isAuthenticated()) {
             User user = userRepository.findByUsername(AuthController.getContext().getAuthentication().getName());
-            if (qrCodeManager.getQrCode(user.getUsername()).isEmpty() || mfaService.getToken(user.getUsername()).isEmpty()) {
+            if (user.getQrcode() == null || mfaService.getToken(user.getUsername()).isEmpty()) {
                 try {
                     qrCodeManager.addQrCode(mfaService.addNewConnectionToken(user.getUsername()),
-                            tokenService.generateToken(10L),
                             user.getUsername());
-                    model.addAttribute("filename", qrCodeManager.getQrCode(user.getUsername()));
                 } catch (IOException | WriterException e) {
                     e.printStackTrace();
                 }
             }
-            model.addAttribute("path", qrCodeManager.getQrCode(user.getUsername()).orElse(""));
         }
 
         model.addAttribute("theme", theme);

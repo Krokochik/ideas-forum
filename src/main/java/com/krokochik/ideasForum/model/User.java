@@ -34,6 +34,7 @@ public class User
     boolean confirmMailSent = false;
     boolean passwordAbortSent = false;
     boolean mfaConnected = false;
+    byte[] qrcode = null;
 
     @Column(columnDefinition = "varchar(1000)")
     String verifier;

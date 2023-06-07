@@ -6,57 +6,38 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.krokochik.ideasForum.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class QRCodeManager {
-    private HashMap<String, String> savedQrCodes = new HashMap<>();
 
-    /**
-     * @param name Username or filename. It is assumed that filenames are unique and there is only one qr-code for user
-     */
-    public boolean deleteQrCode(String name) {
-        HashMap<String, String> newMap = new HashMap<>(savedQrCodes);
-        savedQrCodes.forEach((username, filename) -> {
-            if (username.equals(name) || filename.equals(name))
-                newMap.remove(username);
-        });
-        if (!savedQrCodes.equals(newMap)) {
-            savedQrCodes = newMap;
-            return true;
-        }
-        return false;
-    }
+    @Autowired
+    UserRepository userRepository;
 
-    public Optional<String> getQrCode(String username) {
-        return Optional.ofNullable(savedQrCodes.get(username));
-    }
-
-    public void addQrCode(String content, String filename, String username, int size, int cornerRadius) throws IOException, WriterException {
+    public void addQrCode(String content, String username, int size, int cornerRadius) throws IOException, WriterException {
         BufferedImage qrCodeImage = generateQRCodeImage(content, size);
         BufferedImage roundedImage = roundCorners(qrCodeImage, cornerRadius);
 
-        File outputFile = new File(System.getProperty("java.io.tmpdir") + filename + ".png");
-        ImageIO.write(roundedImage, "png", outputFile);
-        savedQrCodes.put(username, filename);
+        userRepository.setQRCodeById(roundedImage.toString().getBytes(StandardCharsets.UTF_8),
+                userRepository.findByUsername(username).getId());
     }
 
-    public void addQrCode(String content, String filename, String username) throws IOException, WriterException {
-        addQrCode(content, filename, username, 300, 15);
+    public void addQrCode(String content, String username) throws IOException, WriterException {
+        addQrCode(content, username, 300, 15);
     }
 
-    public void addQrCode(String content, String filename, String username, int size) throws IOException, WriterException {
-        addQrCode(content, filename, username, size, 0);
+    public void addQrCode(String content, String username, int size) throws IOException, WriterException {
+        addQrCode(content, username, size, 0);
     }
 
     private BufferedImage generateQRCodeImage(String text, int size) throws WriterException {

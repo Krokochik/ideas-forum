@@ -17,6 +17,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Transactional
+    @Query("update User usr set usr.qrcode=?1 where usr.id=?2")
+    void setQRCodeById(byte[] qrcode, Long id);
+
+
+    @Modifying
+    @Transactional
     @Query("update User usr set usr.avatar=?1 where usr.id=?2")
     void setAvatarById(byte[] avatar, Long id);
 
