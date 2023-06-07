@@ -220,7 +220,7 @@ public class AuthController {
 
         User user = userRepository.findByUsername(AuthController.getContext().getAuthentication().getName());
 
-        if (!hasRole(Role.ANONYM)) {
+        if (hasRole(Role.ANONYM)) {
             userRepository.setEmailById(email, user.getId());
             userRepository.setConfirmMailSentById(false, user.getId());
             return "redirect:/mail-confirm";
