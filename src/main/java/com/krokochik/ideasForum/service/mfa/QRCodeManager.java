@@ -10,11 +10,12 @@ import com.krokochik.ideasForum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +29,11 @@ public class QRCodeManager {
         BufferedImage qrCodeImage = generateQRCodeImage(content, size);
         BufferedImage roundedImage = roundCorners(qrCodeImage, cornerRadius);
 
-        userRepository.setQRCodeById(roundedImage.toString().getBytes(StandardCharsets.UTF_8),
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(roundedImage, "png", outputStream);
+        byte[] imageBytes = outputStream.toByteArray();
+
+        userRepository.setQRCodeById(imageBytes,
                 userRepository.findByUsername(username).getId());
     }
 
