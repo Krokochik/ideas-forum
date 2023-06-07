@@ -25,7 +25,7 @@
 <body style="min-height: 100vh;" th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
 <input type="hidden" id="theme" th:value="${theme}">
 
-<div class="modal fade" id="mfaModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+<div th:if="${@userAuth().isAuth()}" class="modal fade" id="mfaModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
      aria-labelledby="mfaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="border: none; border-radius: 10px;background-color: rgb(33, 37, 41);">
