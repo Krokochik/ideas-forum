@@ -20,15 +20,14 @@ public class MFAService {
     TokenService tokenService;
 
     private final static SRP6CryptoParams PARAMS = SRP6CryptoParams.getInstance(2048, "SHA-512");
-    private HashMap<String, String> tokens = new HashMap<>();
+    private final HashMap<String, String> tokens = new HashMap<>();
 
     /**
-     * @return Returns token, consisted of endpoint, crypto key and username.
+     * @return Returns token, consisted of endpoint and crypto key.
      */
     public String addNewConnectionToken(@NotNull @NonNull String username) {
-        String token =  tokenService.generateToken(10L) + '|' +
-                        tokenService.generateToken(15L) + '|' +
-                        username;
+        String token =  tokenService.generateToken(5L) + '|' +
+                        tokenService.generateToken(5L);
         tokens.put(username, token);
         return token;
     }

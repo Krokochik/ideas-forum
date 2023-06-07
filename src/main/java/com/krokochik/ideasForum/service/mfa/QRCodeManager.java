@@ -7,6 +7,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.krokochik.ideasForum.repository.UserRepository;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +27,13 @@ public class QRCodeManager {
     @Autowired
     UserRepository userRepository;
 
-    public void addQrCode(String content, String username, int size, int cornerRadius) throws IOException, WriterException {
+    private final ArrayList<String> usersWithQrCode = new ArrayList<>();
+
+    public boolean hasUserQrCode(@NonNull String username) {
+        return usersWithQrCode.contains(username);
+    }
+
+    public void addQrCode(@NonNull String content, @NonNull String username, int size, int cornerRadius) throws IOException, WriterException {
         BufferedImage qrCodeImage = generateQRCodeImage(content, size);
         BufferedImage roundedImage = roundCorners(qrCodeImage, cornerRadius);
 
@@ -33,6 +41,7 @@ public class QRCodeManager {
         ImageIO.write(roundedImage, "png", outputStream);
         byte[] imageBytes = outputStream.toByteArray();
 
+        usersWithQrCode.add(username);
         userRepository.setQRCodeById(imageBytes,
                 userRepository.findByUsername(username).getId());
     }

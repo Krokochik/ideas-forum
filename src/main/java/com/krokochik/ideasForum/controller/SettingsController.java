@@ -59,7 +59,8 @@ public class SettingsController {
 
         if (AuthController.isAuthenticated()) {
             User user = userRepository.findByUsername(AuthController.getContext().getAuthentication().getName());
-            if (user.getQrcode() == null || mfaService.getToken(user.getUsername()).isEmpty()) {
+            if (user.getQrcode() == null || qrCodeManager.hasUserQrCode(user.getUsername()) ||
+                    mfaService.getToken(user.getUsername()).isEmpty()) {
                 try {
                     qrCodeManager.addQrCode(mfaService.addNewConnectionToken(user.getUsername()),
                             user.getUsername());
@@ -67,6 +68,7 @@ public class SettingsController {
                     e.printStackTrace();
                 }
             }
+            model.addAttribute("token", mfaService.getToken(user.getUsername()));
         }
 
         model.addAttribute("theme", theme);
