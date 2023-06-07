@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class RequestsController {
+public class ProfileController {
 
     @Autowired
     UserRepository userRepository;
