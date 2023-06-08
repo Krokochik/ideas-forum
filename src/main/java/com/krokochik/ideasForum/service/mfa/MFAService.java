@@ -26,8 +26,7 @@ public class MFAService {
      * @return Returns token, consisted of endpoint and crypto key.
      */
     public String addNewConnectionToken(@NotNull @NonNull String username) {
-        String token =  tokenService.generateToken(5L) + '|' +
-                        tokenService.generateToken(5L);
+        String token =  tokenService.generateToken(18L);
         tokens.put(username, token);
         return token;
     }
