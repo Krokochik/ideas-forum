@@ -694,6 +694,19 @@ input {
                document.getElementById('fListGroupCheckableRadios1').setAttribute('checked', '');
            else
                document.getElementById('fListGroupCheckableRadios2').setAttribute('checked', '');
+
+           var isIdConfirmed = document.querySelector('#chng3').getAttribute('data-th-bool');
+           if (isIdConfirmed)
+                document.querySelector('#chng3').
+
+            var btn = document.getElementById('chng3');
+            myButton.addEventListener('click', function() { // Добавляем обработчик события на клик кнопки
+            if (isIdConfirmed !== 'true' || isIdConfirmed !== true) {
+                               window.location.href = '/id-confirmation'; //
+
+            }
+});
+
         }
         onLoad();
 
