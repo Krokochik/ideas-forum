@@ -86,7 +86,7 @@
                 <button class="h-auto"
                         style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;"
                         th:class="'btn btn-' + ${theme == 'dark'? 'drk' : 'lgt'}" id="chng3" data-bs-toggle="modal"
-                        data-bs-target="#mfaModal" th:onclick="${isIdConfirmed? '' : ''}" type="button">
+                        data-bs-target="#mfaModal" th:onclick="${isIdConfirmed == true? '' : 'window.location.href=\'/\''}" type="button">
                     Добавить 2fa
                     <span class="d-block small opacity-50" id="thSpan3">Скачать мобильное приложение</span>
                 </button>
