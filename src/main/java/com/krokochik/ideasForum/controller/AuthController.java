@@ -268,6 +268,11 @@ public class AuthController {
     }
 
     @GetMapping("/id-confirmation")
+    public String idConfirmPage() {
+        return "passPicker";
+    }
+
+    @PostMapping("/id-confirmation")
     public String idConfirm(HttpSession session, @RequestParam(name = "password", defaultValue = "") String password) {
         User user = userRepository.findByUsername(getContext().getAuthentication().getName());
         boolean isIdConfirmed = password.equals(user.getPassword());
