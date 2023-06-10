@@ -2,6 +2,7 @@ package com.krokochik.ideasForum.config;
 
 import com.krokochik.ideasForum.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
@@ -57,6 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .rememberMe()
                         .useSecureCookie(true)
                         .tokenValiditySeconds(5 * 24 * 60 * 60)
+                        .tokenRepository(tokenRepository())
                 .and()
                     .csrf()
                         .ignoringAntMatchers("/profile", "/sign-up", "/avatar");
@@ -72,6 +76,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                                             "from usr inner join user_role user_roles " +
                                             "on usr.id = user_roles.user_id " +
                                             "where usr.username=?");
+    }
+
+    @Bean
+    public PersistentTokenRepository tokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        tokenRepository.setCreateTableOnStartup(false);
+
+        return tokenRepository;
     }
 
 }
