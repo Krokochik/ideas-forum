@@ -20,8 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.krokochik.ideasForum.Main.HOST;
@@ -54,7 +53,7 @@ public class SettingsController {
     }
 
     @GetMapping("/settings")
-    public String settingsPage(Model model, HttpServletRequest request, HttpServletResponse response,
+    public String settingsPage(Model model, HttpSession session,
                                @CookieValue(name = "theme", required = false, defaultValue = "dark") String theme) {
 
         if (AuthController.isAuthenticated()) {
@@ -71,6 +70,8 @@ public class SettingsController {
             model.addAttribute("token", mfaService.getToken(user.getUsername()).orElse("Error"));
         }
 
+        model.addAttribute("isIdConfirmed", session.getAttribute("isIdConfirmed") != null);
+        session.removeAttribute("isIdConfirmed");
         model.addAttribute("theme", theme);
         return "settings";
     }

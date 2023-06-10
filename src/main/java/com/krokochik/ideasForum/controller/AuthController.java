@@ -266,4 +266,16 @@ public class AuthController {
 
         return "login";
     }
+
+    @GetMapping("/id-confirmation")
+    public String idConfirm(HttpSession session, @RequestParam(name = "password", defaultValue = "") String password) {
+        User user = userRepository.findByUsername(getContext().getAuthentication().getName());
+        boolean isIdConfirmed = password.equals(user.getPassword());
+        if (!isIdConfirmed)
+            return "redirect:/id-confirmation?error";
+        else {
+            session.setAttribute("isIdConfirmed", true);
+            return "redirect:/settings";
+        }
+    }
 }
