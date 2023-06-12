@@ -8,6 +8,7 @@ import com.krokochik.ideasForum.repository.UserRepository;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +32,8 @@ public class ProfileController {
     }
 
     @PostMapping(value = "/profile", produces = "application/json")
-    public Map<String, String> profile(@RequestBody String requestBodyStr, HttpServletResponse response) {
+    public Map<String, String> profile(@RequestBody String requestBodyStr, HttpServletResponse response, Authentication authentication) {
+        System.out.println(authentication.getName());
         JsonObject requestBody;
         JsonParser jsonParser = new JsonParser();
 
