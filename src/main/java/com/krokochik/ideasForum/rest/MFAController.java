@@ -1,5 +1,6 @@
 package com.krokochik.ideasForum.rest;
 
+import com.google.gson.Gson;
 import com.krokochik.ideasForum.model.Token;
 import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
@@ -66,7 +67,9 @@ public class MFAController {
 
     @PostMapping("/confirm")
     public HashMap<String, Object> confirmMfaConnecting(HttpServletResponse response,
-                                                        @RequestBody HashMap<String, String> requestBody) {
+                                                        @RequestBody String requestBodyString) {
+
+        HashMap<String, String> requestBody = new Gson().fromJson(requestBodyString, HashMap.class);
         User user = userRepository.findByUsername(requestBody.get("username"));
 
         String mfaStatus = requestBody.get("mfaStatus");
