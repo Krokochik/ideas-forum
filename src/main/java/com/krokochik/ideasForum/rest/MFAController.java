@@ -8,6 +8,7 @@ import com.krokochik.ideasForum.service.crypto.Cryptographer;
 import com.krokochik.ideasForum.service.crypto.TokenService;
 import com.krokochik.ideasForum.service.mfa.MFAService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +35,12 @@ public class MFAController {
         return new HashMap<>(){{
             put("response", "pong");
         }};
+    }
+
+    @PostMapping(value = "/codes", produces = "application/json")
+    public HashMap<String, Object> produceMfaCodesToHtml(HttpServletResponse response, Authentication authentication) {
+        System.out.println(authentication.getName());
+        return new HashMap<>();
     }
 
     @GetMapping("/{publicToken}")

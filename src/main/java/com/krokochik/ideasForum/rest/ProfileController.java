@@ -1,30 +1,26 @@
-package com.krokochik.ideasForum.controller;
+package com.krokochik.ideasForum.rest;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.krokochik.ideasForum.controller.AuthController;
 import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@RestController
 public class ProfileController {
 
     @Autowired
     UserRepository userRepository;
 
-    @ResponseBody
     @GetMapping(value = "/avatar", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] avatar(HttpServletResponse response) throws IOException {
         return Base64.decodeBase64(
@@ -34,7 +30,6 @@ public class ProfileController {
         );
     }
 
-    @ResponseBody
     @PostMapping(value = "/profile", produces = "application/json")
     public Map<String, String> profile(@RequestBody String requestBodyStr, HttpServletResponse response) {
         JsonObject requestBody;
