@@ -38,8 +38,8 @@ $("#imageUpload").change(function() {
           const csrfToken = getCsrfToken();
 
           if (csrfToken) {
-            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-            body._csrf = csrfToken;
+            //xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+            //body._csrf = csrfToken;
           }
         }
 
