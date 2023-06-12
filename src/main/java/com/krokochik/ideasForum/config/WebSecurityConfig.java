@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
@@ -63,7 +64,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .tokenRepository(tokenRepository())
                 .and()
                     .csrf()
-                        .ignoringAntMatchers("/profile", "/sign-up", "/avatar", "/mfa/**");
+                        .ignoringAntMatchers("/profile", "/sign-up", "/avatar", "/mfa/**")
+                            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
 
     @Override
