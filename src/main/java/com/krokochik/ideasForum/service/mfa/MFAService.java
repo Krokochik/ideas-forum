@@ -2,7 +2,6 @@ package com.krokochik.ideasForum.service.mfa;
 
 import com.krokochik.ideasForum.model.Token;
 import com.krokochik.ideasForum.service.crypto.TokenService;
-import com.nimbusds.srp6.SRP6CryptoParams;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ public class MFAService {
     @Autowired
     TokenService tokenService;
 
-    private final static SRP6CryptoParams PARAMS = SRP6CryptoParams.getInstance(2048, "SHA-512");
     private final HashMap<String, Token> tokens = new HashMap<>();
 
     private static final long TOKEN_PART_LENGTH = 9;
@@ -36,6 +34,7 @@ public class MFAService {
     public Optional<String> getUsernameByPublicTokenPart(String publicPart) {
         AtomicReference<String> result = new AtomicReference<>("");
         tokens.forEach((username, token) -> {
+            System.out.println(token.getPublicPart());
             if (publicPart.equals(token.getPublicPart()))
                 result.set(username);
         });
