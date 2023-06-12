@@ -61,7 +61,7 @@
 
 <header th:replace="header :: header ('settings', ${theme})"></header>
 
-<div class="main">
+<div class="main" onload="onLoad();">
     <div class="select-none">
         <form th:if="${@userAuth.isAuth()}">
             <div style="margin: 4rem auto; margin-top: 2rem;"
