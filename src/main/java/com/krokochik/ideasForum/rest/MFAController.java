@@ -69,6 +69,7 @@ public class MFAController {
     public HashMap<String, Object> confirmMfaConnecting(HttpServletResponse response,
                                                         @RequestBody String requestBodyString) {
 
+        System.out.println(requestBodyString);
         HashMap<String, String> requestBody = new Gson().fromJson(requestBodyString, HashMap.class);
         User user = userRepository.findByUsername(requestBody.get("username"));
 
