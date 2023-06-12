@@ -4,6 +4,7 @@ import com.krokochik.ideasForum.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -36,6 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/images/**", "/avatar",
                         "/mfa/**",
                         "/googleb8fcdd64aa45ba54.html", "/yandex_f4f03a518326d43b.html", "/bootstrap.min.css.map")
+                    .permitAll()
+                .antMatchers(HttpMethod.POST, "/profile", "/sign-up")
                     .permitAll()
                 .antMatchers("/login", "/sign-up", "/password-abort")
                     .not().hasAnyAuthority(Role.USER.name(), Role.ADMIN.name(), Role.ANONYM.name())
