@@ -75,7 +75,7 @@ public class User
             generatorsTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    mfaCode = tokenService.generateMFaCode();
+                    mfaCode = tokenService.generateMfaCode();
                 }
             }, 30 * 1000);
         }

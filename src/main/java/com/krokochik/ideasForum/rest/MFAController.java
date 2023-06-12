@@ -86,7 +86,7 @@ public class MFAController {
 
             HashSet<String> resetTokens = new HashSet<>();
             for (int i = 0; i < 10; i++) {
-                resetTokens.add(tokenService.generateToken(9L));
+                resetTokens.add(tokenService.generateMfaResetCode());
             }
             userRepository.setMfaResetTokensById(resetTokens, user.getId());
             userRepository.setMfaConnectedById(true, user.getId());

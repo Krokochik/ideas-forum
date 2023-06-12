@@ -42,8 +42,12 @@ public class TokenService {
         return generateToken(tokenLength, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789012345678901234567890123456789".repeat(20));
     }
 
-    public String generateMFaCode() {
+    public String generateMfaCode() {
         return generateToken(6L, "1234567890".repeat(100));
+    }
+
+    public String generateMfaResetCode() {
+        return generateToken(9L, "1234567890".repeat(100));
     }
 
     private String shuffle(String string) {
