@@ -716,7 +716,7 @@ var interval;
     method: "POST",
     success: function(response) {
     clearInterval(interval);
-      var codes;
+      var codes = [];
       response.codes.forEach(code => codes.push(code));
 
       $("#list").remove();
