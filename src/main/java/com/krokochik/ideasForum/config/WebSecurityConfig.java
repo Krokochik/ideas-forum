@@ -13,7 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
@@ -40,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .antMatchers(HttpMethod.POST, "/profile", "/sign-up")
                     .permitAll()
-                .antMatchers("/login", "/sign-up", "/password-abort")
+                .antMatchers(HttpMethod.GET ,"/login", "/sign-up", "/password-abort")
                     .not().hasAnyAuthority(Role.USER.name(), Role.ADMIN.name(), Role.ANONYM.name())
                 .antMatchers("/add-note")
                     .hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
@@ -65,10 +64,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .useSecureCookie(true)
                         .tokenValiditySeconds(5 * 24 * 60 * 60)
                         .tokenRepository(tokenRepository())
-                .and()
-                    .csrf()
-                        .ignoringAntMatchers("/mfa/**")
-                            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+                .and();
+                    //.csrf()
+                        //.ignoringAntMatchers("/mfa/**")
+                            //.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
 
     @Override
