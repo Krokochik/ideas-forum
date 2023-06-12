@@ -716,33 +716,30 @@ var interval;
     method: "POST",
     success: function(response) {
     clearInterval(interval);
-      var codes = JSON.stringify(response.codes).split(",");
-      var group1 = codes.slice(0, 4);
-      var group2 = codes.slice(4, 8);
-      var group3 = codes.slice(8, 12);
-      var group4 = codes.slice(12, 16);
+      var codes;
+      response.codes.forEach(code => codes.push(code));
 
       $("#list").remove();
       $("#qrcode").remove();
 
       $("#column1").empty();
-      for (var i = 0; i < group1.length; i++) {
-        $("#column1").append("<p>" + group1[i] + "</p>");
+      for (var i = 0; i < 4; i++) {
+        $("#column1").append("<p>" + codes[i] + "</p>");
       }
 
       $("#column2").empty();
-      for (var j = 0; j < group2.length; j++) {
-        $("#column2").append("<p>" + group2[j] + "</p>");
+      for (var j = 4; j < 8; j++) {
+        $("#column2").append("<p>" + codes[j] + "</p>");
       }
 
             $("#column2").empty();
-      for (var k = 0; k < group3.length; k++) {
-        $("#column3").append("<p>" + group3[j] + "</p>");
+      for (var k = 8; k < 12; k++) {
+        $("#column3").append("<p>" + codes[j] + "</p>");
       }
 
             $("#column2").empty();
-      for (var l = 0; l < group2.length; l++) {
-        $("#column4").append("<p>" + group4[j] + "</p>");
+      for (var l = 12; l < 16; l++) {
+        $("#column4").append("<p>" + codes[j] + "</p>");
       }
     },
     error: function() {}
