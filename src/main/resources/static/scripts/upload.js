@@ -39,7 +39,7 @@ $("#imageUpload").change(function() {
 
           if (csrfToken) {
             xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-            body.append('_csrf', csrfToken);
+            body._csrf = csrfToken;
           }
         }
 

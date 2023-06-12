@@ -712,7 +712,7 @@ input {
 var interval;
         function updateMfaCodes() {
   $.ajax({
-    url: "/mfa-codes",
+    url: "/mfa/codes",
     method: "GET",
     success: function(response) {
     clearInterval(interval);
