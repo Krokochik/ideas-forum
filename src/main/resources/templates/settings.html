@@ -61,7 +61,7 @@
 
 <header th:replace="header :: header ('settings', ${theme})"></header>
 
-<div class="main" onload="onLoad();">
+<div class="main">
     <div class="select-none">
         <form th:if="${@userAuth.isAuth()}">
             <div style="margin: 4rem auto; margin-top: 2rem;"
@@ -125,12 +125,6 @@
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
         integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
-        crossorigin="anonymous"></script>
-<script async src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
-        integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
-        crossorigin="anonymous"></script>
-<script async src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
-        integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
         crossorigin="anonymous"></script>
 <script async src="/upload.js" th:src="@{/scripts/upload.js}"></script>
 <script th:replace="resources :: settings-script"></script>
