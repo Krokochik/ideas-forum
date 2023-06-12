@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class MFAService {
@@ -30,6 +31,19 @@ public class MFAService {
                 tokenService.generateToken(TOKEN_PART_LENGTH));
         tokens.put(username, (token));
         return token;
+    }
+
+    public Optional<String> getUsernameByPublicTokenPart(String publicPart) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        tokens.forEach((username, token) -> {
+            if (publicPart.equals(token.getPublicPart()))
+                result.set(username);
+        });
+
+        if (result.get().equals(""))
+            result.set(null);
+
+        return Optional.ofNullable(result.get());
     }
 
     public Optional<Token> getToken(@NonNull String username) {

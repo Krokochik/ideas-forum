@@ -1,6 +1,5 @@
 package com.krokochik.ideasForum.rest;
 
-import com.krokochik.ideasForum.controller.AuthController;
 import com.krokochik.ideasForum.model.Token;
 import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
@@ -40,10 +39,10 @@ public class MFAController {
     public HashMap<String, Object> mfaConnecting(HttpServletResponse response,
                                                  @PathVariable(name = "publicToken") String publicToken) {
         String mfaToken = "";
+        User user = new User();
         short statusCode = 403;
         try {
-            User user = userRepository.findByUsername(
-                    AuthController.getContext().getAuthentication().getName());
+            user = userRepository.findByUsername(mfaService.getUsernameByPublicTokenPart(publicToken).orElse(""));
             Token token = mfaService.getToken(user.getUsername()).orElse(new Token());
             if (token.getPublicPart().equals(publicToken)) {
                 mfaToken = tokenService.generateToken();
@@ -58,16 +57,17 @@ public class MFAController {
 
         response.setStatus(statusCode);
         String finalMfaToken = mfaToken;
+        User finalUser = user;
         return new HashMap<>() {{
             put("token", finalMfaToken);
+            put("username", finalUser.getUsername());
         }};
     }
 
     @PostMapping("/confirm")
     public HashMap<String, Object> confirmMfaConnecting(HttpServletResponse response,
                                                         @RequestBody HashMap<String, String> requestBody) {
-        User user = userRepository.findByUsername(
-                AuthController.getContext().getAuthentication().getName());
+        User user = userRepository.findByUsername(requestBody.get("username"));
 
         String mfaStatus = requestBody.get("mfaStatus");
         try {
