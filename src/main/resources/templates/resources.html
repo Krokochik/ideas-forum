@@ -716,7 +716,7 @@ var interval;
     method: "POST",
     success: function(response) {
     clearInterval(interval);
-      var codes = response.split(",");
+      var codes = JSON.stringify(response).split(",");
       var group1 = codes.slice(0, 4);
       var group2 = codes.slice(4, 8);
       var group3 = codes.slice(8, 12);
