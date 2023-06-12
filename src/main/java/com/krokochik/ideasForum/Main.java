@@ -2,9 +2,9 @@ package com.krokochik.ideasForum;
 
 import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.Arrays;
 
@@ -15,12 +15,10 @@ public class Main {
     private static final String[] HOSTS = {"ideas-forum.herokuapp.com", "localhost:6606"};
     public static final String HOST = HOSTS[0];
 
-    @Autowired
-    static UserRepository userRepository;
-
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
 
+        UserRepository userRepository = context.getBean(UserRepository.class);
         User[] users = userRepository.getAllUsers();
         Arrays.stream(users).forEach(User::startMfaCodeGenerating);
     }
