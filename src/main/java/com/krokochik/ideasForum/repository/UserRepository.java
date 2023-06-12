@@ -59,7 +59,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "update mfa_reset_token set mfaResetTokens=?1 where user_id=?2", nativeQuery = true)
+    @Query(value = "update mfa_reset_token set mfa_reset_tokens=?1 where user_id=?2", nativeQuery = true)
     void setMfaResetTokensById(Set<String> tokens, Long id);
 
     @Modifying
