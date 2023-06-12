@@ -2,6 +2,7 @@ package com.krokochik.ideasForum.controller;
 
 import com.google.zxing.WriterException;
 import com.krokochik.ideasForum.model.Mail;
+import com.krokochik.ideasForum.model.Token;
 import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MailService;
@@ -61,13 +62,13 @@ public class SettingsController {
             if (user.getQrcode() == null || !qrCodeManager.hasUserQrCode(user.getUsername()) ||
                     mfaService.getToken(user.getUsername()).isEmpty()) {
                 try {
-                    qrCodeManager.addQrCode(mfaService.addNewConnectionToken(user.getUsername()),
-                            user.getUsername());
+                    Token token = mfaService.addNewConnectionToken(user.getUsername());
+                    qrCodeManager.addQrCode(token.toString(), user.getUsername());
                 } catch (IOException | WriterException e) {
                     e.printStackTrace();
                 }
             }
-            model.addAttribute("token", mfaService.getToken(user.getUsername()).orElse("Error"));
+            model.addAttribute("token", mfaService.getToken(user.getUsername()).orElse(new Token()));
         }
 
         model.addAttribute("isIdConfirmed", session.getAttribute("isIdConfirmed") != null);

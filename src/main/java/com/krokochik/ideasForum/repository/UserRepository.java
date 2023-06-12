@@ -1,5 +1,6 @@
 package com.krokochik.ideasForum.repository;
 
+import com.krokochik.ideasForum.model.Role;
 import com.krokochik.ideasForum.model.User;
 import com.sun.istack.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     @Override
@@ -15,11 +17,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByUsername(String username);
 
+    @Transactional
+    @Query(value = "select * from usr order by id ASC", nativeQuery = true)
+    User[] getAllUsers();
+
     @Modifying
     @Transactional
     @Query("update User usr set usr.qrcode=?1 where usr.id=?2")
     void setQRCodeById(byte[] qrcode, Long id);
-
 
     @Modifying
     @Transactional
@@ -50,7 +55,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Transactional
     @Query(value = "update user_role set roles=?1 where user_id=?2", nativeQuery = true)
-    void setRoleById(String role, Long id);
+    void setRolesById(Set<Role> roles, Long id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update mfa_reset_token set mfaResetTokens=?1 where user_id=?2", nativeQuery = true)
+    void setMfaResetTokensById(Set<String> tokens, Long id);
 
     @Modifying
     @Transactional
@@ -73,6 +83,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("update User usr set usr.passwordAbortToken=?1 where usr.id=?2")
     void setPasswordAbortTokenById(String token, Long id);
 
+    @Modifying
+    @Transactional
+    @Query("update User usr set usr.mfaToken=?1 where usr.id=?2")
+    void setMfaTokenById(String token, Long id);
+
+    @Modifying
+    @Transactional
+    @Query("update User usr set usr.mfaConnected=?1 where usr.id=?2")
+    void setMfaConnectedById(boolean connected, Long id);
 
     @Override
     Optional<User> findById(Long aLong);

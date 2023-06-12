@@ -7,7 +7,6 @@ import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MailService;
 import com.krokochik.ideasForum.service.UserValidationService;
 import com.krokochik.ideasForum.service.crypto.TokenService;
-import com.krokochik.ideasForum.service.mfa.MFAService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -82,7 +81,7 @@ public class AuthController {
                 return "redirect:/settings";
             }
 
-            userRepository.setRoleById(Role.USER.name(), userRepository.findByUsername(name).getId());
+            userRepository.setRolesById(Collections.singleton(Role.USER), userRepository.findByUsername(name).getId());
             SecurityContextHolder.clearContext();
             model.addAttribute("name", name);
             model.addAttribute("pass", userRepository.findByUsername(name).getPassword());
@@ -247,7 +246,7 @@ public class AuthController {
             if (UserValidationService.validate(user)) {
                 if (userRepository.findByUsername(user.getUsername()) == null) {
                     user.setRoles(Collections.singleton(Role.ANONYM));
-                    userRepository.save(MFAService.writeSaltAndVerifier(user));
+                    userRepository.save(user);
                 } else return "redirect:/sign-up?regErr&nameTakenErr";
             }
         } catch (UserValidationService.UsernameLengthException exception) {

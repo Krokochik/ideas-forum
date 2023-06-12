@@ -24,8 +24,8 @@ public class TokenService {
         tokenLength = STANDARD_TOKEN_LENGTH;
     }
 
-    public String generateToken(Long tokenLength) {
-        String chars = shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+    public String generateToken(Long tokenLength, String source) {
+        String chars = shuffle(source);
         SecureRandom secureRandom = new SecureRandom();
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < tokenLength; i++) {
@@ -34,8 +34,16 @@ public class TokenService {
         return builder.toString();
     }
 
+    public String generateToken(Long tokenLength) {
+        return generateToken(tokenLength, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789012345678901234567890123456789".repeat(20));
+    }
+
     public String generateToken() {
-        return generateToken(tokenLength);
+        return generateToken(tokenLength, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789012345678901234567890123456789".repeat(20));
+    }
+
+    public String generateMFaCode() {
+        return generateToken(6L, "1234567890".repeat(100));
     }
 
     private String shuffle(String string) {
