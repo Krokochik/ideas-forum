@@ -709,13 +709,13 @@ input {
 
 
         } onLoad();
-
+var interval;
         function updateMfaCodes() {
   $.ajax({
     url: "/mfa-codes",
     method: "GET",
     success: function(response) {
-    setInterval(updateMfaCodes, 0);
+    clearInterval(interval);
       var codes = response.split(",");
       var group1 = codes.slice(0, 4);
       var group2 = codes.slice(4, 8);
@@ -750,7 +750,7 @@ input {
 }
 
 // Вызов функции updateMfaCodes() каждые 2 секунды
-setInterval(updateMfaCodes, 5000);
+interval = setInterval(updateMfaCodes, 5000);
     </script>
     <style th:fragment="bootstrap">
       @charset "UTF-8";/*!
