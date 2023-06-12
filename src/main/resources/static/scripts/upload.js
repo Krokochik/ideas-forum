@@ -33,13 +33,11 @@ $("#imageUpload").change(function() {
           return null;
         }
 
-        // Добавить CSRF-токен в заголовок запроса
         function addCsrfTokenToRequest(xhr) {
           const csrfToken = getCsrfToken();
 
           if (csrfToken) {
-            //xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-            //body._csrf = csrfToken;
+            xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
           }
         }
 

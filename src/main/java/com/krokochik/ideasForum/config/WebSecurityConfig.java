@@ -67,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .tokenRepository(tokenRepository())
                 .and()
                     .csrf()
-                        .ignoringAntMatchers("/profile", "/sign-up", "/mfa/**")
+                        .ignoringAntMatchers("/mfa/**")
                             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
 
