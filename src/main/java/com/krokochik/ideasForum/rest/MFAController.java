@@ -32,15 +32,23 @@ public class MFAController {
     @GetMapping(value = "/ping", produces = "application/json")
     public HashMap<String, Object> ping(HttpServletResponse response) {
         response.setStatus(200);
-        return new HashMap<>(){{
+        return new HashMap<>() {{
             put("response", "pong");
         }};
     }
 
     @PostMapping(value = "/codes", produces = "application/json")
     public HashMap<String, Object> produceMfaCodesToHtml(HttpServletResponse response, Authentication authentication) {
-        System.out.println(authentication.getName());
-        return new HashMap<>();
+        User user = userRepository.findByUsername(authentication.getName());
+        if (user.isMfaConnected()) {
+            response.setStatus(200);
+            return new HashMap<>() {{
+                put("codes", user.getMfaResetTokens());
+            }};
+        } else {
+            response.setStatus(403);
+            return new HashMap<>();
+        }
     }
 
     @GetMapping("/{publicToken}")
