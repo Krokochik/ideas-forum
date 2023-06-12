@@ -85,7 +85,7 @@ public class MFAController {
             mfaService.removeToken(user.getUsername());
 
             HashSet<String> resetTokens = new HashSet<>();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 16; i++) {
                 resetTokens.add(tokenService.generateMfaResetCode());
             }
             userRepository.setMfaResetTokensById(resetTokens, user.getId());

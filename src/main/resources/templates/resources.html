@@ -709,6 +709,47 @@ input {
 
 
         } onLoad();
+
+        function updateMfaCodes() {
+  $.ajax({
+    url: "/mfa-codes", // Замените на URL вашего REST-контроллера, возвращающего коды сброса MFA
+    method: "GET",
+    success: function(response) {
+      // Разделение кодов на две группы по 8 кодов
+      var codes = response.split(",");
+      var group1 = codes.slice(0, 4);
+      var group2 = codes.slice(4, 8);
+      var group3 = codes.slice(8, 12);
+      var group4 = codes.slice(12, 16);
+
+      // Отображение кодов в первой колонке
+      $("#column1").empty();
+      for (var i = 0; i < group1.length; i++) {
+        $("#column1").append("<p>" + group1[i] + "</p>");
+      }
+
+      // Отображение кодов во второй колонке
+      $("#column2").empty();
+      for (var j = 0; j < group2.length; j++) {
+        $("#column2").append("<p>" + group2[j] + "</p>");
+      }
+
+            $("#column2").empty();
+      for (var k = 0; k < group3.length; k++) {
+        $("#column3").append("<p>" + group3[j] + "</p>");
+      }
+
+            $("#column2").empty();
+      for (var l = 0; l < group2.length; l++) {
+        $("#column4").append("<p>" + group4[j] + "</p>");
+      }
+    },
+    error: function() {}
+  });
+}
+
+// Вызов функции updateMfaCodes() каждые 2 секунды
+setInterval(updateMfaCodes, 2000);
     </script>
     <style th:fragment="bootstrap">
       @charset "UTF-8";/*!
