@@ -699,11 +699,14 @@ input {
 
             var btn = document.getElementById('chng3');
             btn.addEventListener('click', function() { // Добавляем обработчик события на клик кнопки
-            if (isIdConfirmed !== 'true') {
-                               window.location.href = '/id-confirmation'; //
+                if (isIdConfirmed !== 'true') {
+                    window.location.href = '/id-confirmation'; //
+                }
+            });
+            if (isIdConfirmed === 'true') {
+                btn.click();
             }
-            else btn.click();
-});
+
 
         }
         onLoad();
