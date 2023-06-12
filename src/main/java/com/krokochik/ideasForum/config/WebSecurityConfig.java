@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .tokenRepository(tokenRepository())
                 .and()
                     .csrf()
-                        .ignoringAntMatchers("/profile", "/sign-up", "/avatar");
+                        .ignoringAntMatchers("/profile", "/sign-up", "/avatar", "/mfa/**");
     }
 
     @Override
