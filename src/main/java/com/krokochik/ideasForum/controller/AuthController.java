@@ -234,7 +234,7 @@ public class AuthController {
         return "redirect:/mail-confirm?newEmail";
     }
 
-    @PostMapping("/ sign-up")
+    @PostMapping("/sign-up")
     public String loginPage(Model model, @RequestParam(name = "username1") String name,
                             @RequestParam(name = "email1") String email,
                             @RequestParam(name = "password1") String pass) {
