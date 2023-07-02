@@ -26,6 +26,9 @@
 	 opacity: 0;
 	 transform: rotate(-45deg);
 }
+.checkbox-yellow label:hover::after {
+    opacity: 0.5;
+}
 .checkbox-yellow input[type=checkbox], .checkbox-yellow-captcha input[type=checkbox] {
     visibility: hidden;
 }
