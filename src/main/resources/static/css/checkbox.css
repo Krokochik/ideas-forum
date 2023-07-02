@@ -38,12 +38,6 @@
 .checkbox-yellow-captcha input[type=checkbox]:checked + label:after {
     opacity: 0.5;
 }
-.checkbox-yellow-captcha input[type=checkbox]:checked + label:after + #captchaPassed:checked {
-    opacity: 1;
-}
-.checkbox-yellow-captcha input[type=checkbox]:checked + label + #captchaPassed:checked {
-    background: #ffeba7;
-}
 .checkbox-yellow input[type=checkbox]:checked + label {
     background: #ffeba7;
 }

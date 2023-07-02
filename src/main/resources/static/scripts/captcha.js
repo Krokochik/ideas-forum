@@ -8,9 +8,11 @@ $(document).ready(function() {
 });
 function onSubmit(token) {
     $('#captchaPassed').prop('checked', '');
+    $('#captchaLbl').css("background-color": "#ffeba7")
+    $('#captchaLbl:after').css("opacity": "1")
 }
 function onError() {
-    $('#captchaPassed').prop('checked', '');
     $('#squaredFour1').prop('disabled', false);
-    $('#squaredFour1').click();
+    $('#captchaLbl').css("background-color": "#ccc)
+    $('#captchaLbl:after').css("opacity": "1")
 }
