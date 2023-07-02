@@ -7,6 +7,12 @@ $(document).ready(function() {
             $('#prnt').removeClass('visible-after');
             $('#prnt').removeClass('hidden-after');
         }
+    }, function(){
+        if (captchaPassed == false) {
+            $('#prnt').addClass('hidden-after');
+            $('#prnt').removeClass('translucent-after');
+            $('#prnt').removeClass('visible-after');
+        }
     });
     $('#squaredFour1').change(function() {
         if ($(this).is(':checked')) {
