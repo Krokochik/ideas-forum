@@ -2,7 +2,7 @@ var captchaPassed = false;
 
 $(document).ready(function() {
     $('captchaLbl').hover(function(){
-        if (!captchaPassed) {
+        if (captchaPassed == false) {
             $('#prnt').addClass('translucent-after');
             $('#prnt').removeClass('visible-after');
             $('#prnt').removeClass('hidden-after');
