@@ -4,6 +4,7 @@ $(document).ready(function() {
             $(this).prop('disabled', true);
             hcaptcha.execute();
             $('#submit').prop('disable', true);
+            $('#captchaLbl:after').css("opacity", "0.5");
         }
     });
 });
