@@ -247,7 +247,9 @@
                                                         <input type="checkbox" id="captchaPassed">
                                                         <div id="hcaptcha" class="h-captcha"
                                                              data-sitekey="871073a5-efc4-49f9-87e4-266fc72aae96"
-                                                             data-callback="onSubmit" data-size="invisible"></div>
+                                                             data-callback="onSubmit"
+                                                             data-error-callback="onError" data-chalexpired-callback="onError"
+                                                             data-close-callback="onError" data-expired-callback="onError" data-size="invisible"></div>
                                                         <div class="checkbox-yellow-captcha captcha-box">
                                                             <input type="checkbox" id="squaredFour1">
                                                             <label for="squaredFour1" style="margin-top: 2px"></label>
@@ -365,12 +367,7 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <button th:unless="${param.passInsecureErr}" type="submit"
-                                                        class="btn mt-4">Подтвердить
-                                                </button>
-                                                <button th:if="${param.passInsecureErr}" type="submit" class="btn mt-2">
-                                                    Подтвердить
-                                                </button>
+                                                <button type="submit" class="btn mt-4">Подтвердить</button>
                                             </form>
                                         </div>
                                     </div>
@@ -384,19 +381,7 @@
     </div>
     <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#squaredFour1').change(function() {
-                if ($(this).is(':checked')) {
-                    $(this).prop("disabled", true);
-                    hcaptcha.execute();
-                }
-            });
-        });
-        function onSubmit(token) {
-            alert(token);
-        }
-    </script>
+    <script th:src="@{/scripts/captcha.js}"></script>
     <script>
         if (window.location.pathname === "/sign-up")
             document.getElementById('username1').focus();
