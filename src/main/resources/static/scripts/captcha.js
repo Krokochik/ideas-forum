@@ -19,6 +19,7 @@ $(document).ready(function() {
             $(this).prop('disabled', true);
             hcaptcha.execute();
             $('#submit').prop('disabled', true);
+            captchaPassed = true;
             $('#prnt').addClass('translucent-after');
             $('#prnt').removeClass('visible-after');
             $('#prnt').removeClass('hidden-after');
