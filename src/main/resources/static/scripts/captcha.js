@@ -1,7 +1,7 @@
 var captchaPassed = false;
 
 $(document).ready(function() {
-    $('captchaLbl').hover(function(){
+    $('#captchaLbl').hover(function(){
         if (captchaPassed == false) {
             $('#prnt').addClass('translucent-after');
             $('#prnt').removeClass('visible-after');
