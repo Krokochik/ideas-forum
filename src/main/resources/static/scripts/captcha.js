@@ -2,7 +2,7 @@ var captchaPassed = false;
 
 $(document).ready(function() {
     $('captchaLbl').hover(function(){
-        if (captchaPassed) {
+        if (!captchaPassed) {
             $('#prnt').addClass('translucent-after');
             $('#prnt').removeClass('visible-after');
             $('#prnt').removeClass('hidden-after');
@@ -20,12 +20,14 @@ $(document).ready(function() {
     });
 });
 function onSubmit(token) {
+    captchaPassed = true
     $('#captchaLbl').css('background-color', '#ffeba7');
     $('#prnt').addClass('visible-after');
     $('#prnt').removeClass('translucent-after');
     $('#prnt').removeClass('hidden-after');
 }
 function onError() {
+    captchaPassed = false
     $('#squaredFour1').prop('disabled', false);
     $('#squaredFour1').prop('checked', false);
     $('#captchaLbl').css('background-color', '#ccc');
