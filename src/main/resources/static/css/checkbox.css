@@ -1,0 +1,49 @@
+ .checkbox-yellow, checkbox-yellow-captcha {
+	 width: 24px;
+	 position: relative;
+	 margin: 20px auto;
+}
+ .checkbox-yellow label, checkbox-yellow-captcha label {
+	 width: 20px;
+	 height: 20px;
+	 cursor: pointer;
+	 position: absolute;
+	 top: 0;
+	 background: #ccc;
+	 border-radius: 4px;
+}
+ .checkbox-yellow label:after, checkbox-yellow-captcha label:after {
+	 content: '';
+	 width: 12px;
+	 height: 9px;
+	 position: absolute;
+	 top: 4px;
+	 left: 4px;
+	 border: 3px solid #333;
+	 border-top: none;
+	 border-right: none;
+	 background: transparent;
+	 opacity: 0;
+	 transform: rotate(-45deg);
+}
+.checkbox-yellow label:hover::after, checkbox-yellow-captcha label:hover::after {
+    opacity: 0.5;
+}
+.checkbox-yellow input[type=checkbox], checkbox-yellow-captcha input[type=checkbox] {
+    visibility: hidden;
+}
+.checkbox-yellow input[type=checkbox]:checked + label:after {
+    opacity: 1;
+}
+.checkbox-yellow-captcha input[type=checkbox]:checked + label:after {
+    opacity: 0.5;
+}
+.checkbox-yellow-captcha input[type=checkbox]:checked + label:after + #captchaPassed:checked {
+    opacity: 1;
+}
+.checkbox-yellow-captcha input[type=checkbox]:checked + label + #captchaPassed:checked {
+    background: #ffeba7;
+}
+.checkbox-yellow input[type=checkbox]:checked + label {
+    background: #ffeba7;
+}
