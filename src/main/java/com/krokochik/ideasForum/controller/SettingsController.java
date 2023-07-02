@@ -57,10 +57,13 @@ public class SettingsController {
     public String settingsPage(Model model, HttpSession session,
                                @CookieValue(name = "theme", required = false, defaultValue = "dark") String theme) {
 
-        if (AuthController.isAuthenticated()) {
+        if (AuthController.isAuthenticated() ) {
             User user = userRepository.findByUsername(AuthController.getContext().getAuthentication().getName());
-            if (user.getQrcode() == null || !qrCodeManager.hasUserQrCode(user.getUsername()) ||
-                    mfaService.getToken(user.getUsername()).isEmpty()) {
+            if ((user.getQrcode() == null ||
+                    !qrCodeManager.hasUserQrCode(user.getUsername()) ||
+                    mfaService.getToken(user.getUsername()).isEmpty()) &&
+                    !user.isMfaConnected())
+            {
                 try {
                     Token token = mfaService.addNewConnectionToken(user.getUsername());
                     qrCodeManager.addQrCode(token.toString(), user.getUsername());

@@ -103,10 +103,12 @@ public class MFAController {
             for (int i = 0; i < 16; i++) {
                 resetTokens.add(tokenService.generateMfaResetCode());
             }
+
             User newUser = userRepository.findByUsername(user.getUsername());
             newUser.setMfaResetTokens(resetTokens);
+            newUser.setMfaConnected(true);
+            newUser.setQrcode(null);
             userRepository.save(newUser);
-            userRepository.setMfaConnectedById(true, user.getId());
 
             User[] users = userRepository.getAllUsers();
             Arrays.stream(users).forEach(User::startMfaCodeGenerating);

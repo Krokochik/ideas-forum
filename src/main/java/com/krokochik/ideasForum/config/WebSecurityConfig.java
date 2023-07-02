@@ -33,8 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/", "/main", "/main/**",
                         "/settings",
                         "/mail-confirm", "/password-abort", "/abortPass", "/pass-abort-notify",
-                        "/scripts/**",
-                        "/images/**", "/avatar",
+                        "/scripts/**", "/images/**", "/css/**",
+                        "/avatar",
                         "/mfa/**",
                         "/googleb8fcdd64aa45ba54.html", "/yandex_f4f03a518326d43b.html", "/bootstrap.min.css.map")
                     .permitAll()

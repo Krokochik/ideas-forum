@@ -1,0 +1,13 @@
+.captcha {
+    background-color: #1F2029;
+    border-radius: 6px;
+    height: 5rem;
+    width: 75%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#logo {
+    padding-left: 10%;
+}

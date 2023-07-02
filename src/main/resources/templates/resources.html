@@ -151,11 +151,6 @@
 
     </style>
     <style th:fragment="login">
-
-
-/* Please ❤ this if you like it! */
-
-
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
 
@@ -662,18 +657,21 @@ input {
 	 opacity: 0;
 	 transform: rotate(-45deg);
 }
- .checkbox-yellow label:hover::after {
-	 opacity: 0.5;
-}
- .checkbox-yellow input[type=checkbox] {
-	 visibility: hidden;
-}
- .checkbox-yellow input[type=checkbox]:checked + label:after {
-	 opacity: 1;
-}
- .checkbox-yellow input[type=checkbox]:checked + label {
-	 background: #ffeba7;
-}
+                .checkbox-yellow label:hover::after {
+                    opacity: 0.5;
+                }
+                .checkbox-yellow input[type=checkbox] {
+                    visibility: hidden;
+                }
+                .checkbox-yellow input[type=checkbox]:checked + label:after {
+                    opacity: 0.5;
+                }
+                .checkbox-yellow input[type=checkbox]:checked + label:after + #captchaPassed:checked {
+                    opacity: 1;
+                }
+                .checkbox-yellow input[type=checkbox]:checked + label + #captchaPassed:checked {
+                    background: #ffeba7;
+                }
 
     </style>
     <script th:fragment="settings-script">
@@ -732,12 +730,12 @@ var interval;
         $("#column2").append("<p>" + codes[j] + "</p>");
       }
 
-            $("#column2").empty();
+            $("#column3").empty();
       for (var k = 8; k < 12; k++) {
         $("#column3").append("<p>" + codes[j] + "</p>");
       }
 
-            $("#column2").empty();
+            $("#column4").empty();
       for (var l = 12; l < 16; l++) {
         $("#column4").append("<p>" + codes[j] + "</p>");
       }
@@ -746,7 +744,7 @@ var interval;
   });
 }
 
-// Вызов функции updateMfaCodes() каждые 2 секунды
+updateMfaCodes();
 interval = setInterval(updateMfaCodes, 5000);
     </script>
     <style th:fragment="bootstrap">

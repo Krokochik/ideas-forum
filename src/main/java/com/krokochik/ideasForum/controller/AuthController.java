@@ -14,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -235,10 +234,10 @@ public class AuthController {
         return "redirect:/mail-confirm?newEmail";
     }
 
-    @PostMapping("/sign-up")
-    public String loginPage(Model model, @ModelAttribute(name = "username1") String name,
-                            @ModelAttribute(name = "email1") String email,
-                            @ModelAttribute(name = "password1") String pass) {
+    @PostMapping("/ sign-up")
+    public String loginPage(Model model, @RequestParam(name = "username1") String name,
+                            @RequestParam(name = "email1") String email,
+                            @RequestParam(name = "password1") String pass) {
 
         User user = new User(name, email, pass);
 

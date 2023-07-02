@@ -21,7 +21,28 @@ $("#imageUpload").change(function() {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
 
+        function getCsrfToken() {
+          const cookieValue = document.cookie
+            .split('; ')
+            .find(cookie => cookie.startsWith('XSRF-TOKEN='));
+
+          if (cookieValue) {
+            return cookieValue.split('=')[1];
+          }
+
+          return null;
+        }
+
+        function addCsrfTokenToRequest(xhr) {
+          const csrfToken = getCsrfToken();
+
+          if (csrfToken) {
+            xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
+          }
+        }
+
       xhr.open(method, url)
+      addCsrfTokenToRequest(xhr)
 
       xhr.responseType = 'json'
       xhr.setRequestHeader('Content-Type', 'application/json')
