@@ -32,6 +32,15 @@
 .checkbox-yellow input[type=checkbox], .checkbox-yellow-captcha input[type=checkbox] {
     visibility: hidden;
 }
+.hidden-after + label:after {
+    opacity: 0;
+}
+.translucent-after + label:after {
+    opacity: 0.5;
+}
+.visible-after + label:after {
+    opacity: 1;
+}
 .checkbox-yellow input[type=checkbox]:checked + label:after {
     opacity: 1;
 }
