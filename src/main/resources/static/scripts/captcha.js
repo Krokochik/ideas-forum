@@ -1,4 +1,13 @@
+var captchaPassed = false;
+
 $(document).ready(function() {
+    $('captchaLbl').hover(function(){
+        if (captchaPassed) {
+            $('#prnt').addClass('translucent-after');
+            $('#prnt').removeClass('visible-after');
+            $('#prnt').removeClass('hidden-after');
+        }
+    });
     $('#squaredFour1').change(function() {
         if ($(this).is(':checked')) {
             $(this).prop('disabled', true);
