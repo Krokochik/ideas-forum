@@ -8,11 +8,11 @@ $(document).ready(function() {
 });
 function onSubmit(token) {
     $('#captchaPassed').prop('checked', '');
-    $('#captchaLbl').css("background-color": "#ffeba7")
-    $('#captchaLbl:after').css("opacity": "1")
+    $('#captchaLbl').css("background-color", "#ffeba7");
+    $('#captchaLbl:after').css("opacity", "1");
 }
 function onError() {
     $('#squaredFour1').prop('disabled', false);
-    $('#captchaLbl').css("background-color": "#ccc)
-    $('#captchaLbl:after').css("opacity": "1")
+    $('#captchaLbl').css("background-color", "#ccc");
+    $('#captchaLbl:after').css("opacity", "1");
 }
