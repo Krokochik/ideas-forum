@@ -10,6 +10,7 @@ function onSubmit(token) {
     $('#captchaPassed').prop('checked', '');
 }
 function onError() {
-    $('#squaredFour1').prop('disabled', false);
     $('#captchaPassed').prop('checked', '');
+    $('#squaredFour1').prop('disabled', false);
+    $('#squaredFour1').click();
 }
