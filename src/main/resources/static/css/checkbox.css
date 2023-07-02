@@ -35,9 +35,6 @@
 .checkbox-yellow input[type=checkbox]:checked + label:after {
     opacity: 1;
 }
-.checkbox-yellow-captcha input[type=checkbox]:checked + label:after {
-    opacity: 0.5;
-}
 .checkbox-yellow input[type=checkbox]:checked + label {
     background: #ffeba7;
 }

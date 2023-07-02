@@ -3,6 +3,7 @@ $(document).ready(function() {
         if ($(this).is(':checked')) {
             $(this).prop('disabled', true);
             hcaptcha.execute();
+            $('#submit').prop('disable', true);
         }
     });
 });
@@ -14,5 +15,6 @@ function onSubmit(token) {
 function onError() {
     $('#squaredFour1').prop('disabled', false);
     $('#captchaLbl').css("background-color", "#ccc");
-    $('#captchaLbl:after').css("opacity", "1");
+    $('#captchaLbl:after').css("opacity", "0");
+    $('#submit').prop('disable', false);
 }
