@@ -10,7 +10,6 @@ import com.krokochik.ideasForum.service.MailService;
 import com.krokochik.ideasForum.service.UserValidationService;
 import com.krokochik.ideasForum.service.crypto.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -239,12 +238,6 @@ public class AuthController {
         return "redirect:/mail-confirm?newEmail";
     }
 
-    @Value("hcaptcha.secret")
-    String secret;
-
-    @Value("hcaptcha.sitekey")
-    String sitekey;
-
     @PostMapping("/sign-up")
     public String loginPage(Model model, HttpServletResponse httpResponse,
                             @RequestParam(name = "username1") String name,
@@ -255,11 +248,9 @@ public class AuthController {
         User user = new User(name, email, pass);
 
         System.out.println(captchaToken);
-        System.out.println(secret);
-        System.out.println(sitekey);
         HCaptchaResponse response = null;
         try {
-             response = HCaptchaClient.verify(secret, captchaToken, sitekey);
+             response = HCaptchaClient.verify("0xDBc916311b57975069F4Fb0bDe8e1e837bEb58B7", captchaToken, "871073a5-efc4-49f9-87e4-266fc72aae96");
         } catch (IOException | InterruptedException ioException) {
             ioException.printStackTrace();
         }
