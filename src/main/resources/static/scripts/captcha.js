@@ -30,7 +30,7 @@ $(document).ready(function() {
 });
 function onSubmit(token) {
     captchaPassed = true;
-    $('#captchaLbl').css({'background-color': '#ffeba7', 'pointer-events: none'});
+    $('#captchaLbl').css({'background-color': '#ffeba7', 'pointer-events' : 'none'});
     $('#submit').prop('disabled', false);
     $('#prnt').addClass('visible-after');
     $('#prnt').removeClass('translucent-after');
@@ -38,9 +38,9 @@ function onSubmit(token) {
 }
 function onError() {
     captchaPassed = false;
+    $('#captchaLbl').css({'background-color': '#ccc', 'pointer-events' : 'all'});
     $('#squaredFour1').prop('disabled', false);
     $('#squaredFour1').prop('checked', false);
-    $('#captchaLbl').css('background-color', '#ccc');
     $('#prnt').addClass('hidden-after');
     $('#prnt').removeClass('translucent-after');
     $('#prnt').removeClass('visible-after');
