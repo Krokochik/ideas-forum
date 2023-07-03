@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .antMatchers(HttpMethod.POST, "/profile", "/sign-up")
                     .permitAll()
-                .antMatchers(HttpMethod.GET ,"/login", "/sign-up", "/password-abort", "/oauth2/authorization/**")
+                .antMatchers(HttpMethod.GET ,"/login", "/sign-up", "/password-abort", "/login/oauth2/**")
                     .not().hasAnyAuthority(Role.USER.name(), Role.ADMIN.name(), Role.ANONYM.name())
                 .antMatchers("/add-note")
                     .hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
