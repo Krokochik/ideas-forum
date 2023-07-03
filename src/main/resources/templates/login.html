@@ -124,6 +124,15 @@
         <link rel="stylesheet" th:href="@{/css/checkbox.css}">
         <link rel="stylesheet" th:href="@{/css/login.css}">
 
+        <style>
+            .btn.disabled, .btn:disabled, fieldset:disabled .btn {
+                color: #102770;
+                pointer-events: none;
+                background-color: #ffeba7;
+                border-color: var(--bs-btn-disabled-border-color);
+                opacity: var(--bs-btn-disabled-opacity);
+            }
+        </style>
     </head>
 
     <body translate="no">
