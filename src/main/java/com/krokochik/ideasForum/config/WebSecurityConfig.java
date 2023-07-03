@@ -57,7 +57,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .defaultSuccessUrl("/login/oauth2/success")
                         .failureUrl("/login/oauth2/failure")
                         .authorizationEndpoint(conf -> conf.baseUri("/login/oauth2"))
-                        .redirectionEndpoint(conf -> conf.baseUri("/login"))
                 .and()
                     .logout()
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
