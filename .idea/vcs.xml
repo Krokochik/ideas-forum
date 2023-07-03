@@ -2,7 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/main/hcaptcha-java" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/main/java/hcaptcha-java" vcs="Git" />
   </component>
 </project>

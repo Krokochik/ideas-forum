@@ -20,18 +20,14 @@
 
         <meta charset="UTF-8">
 
-        <title>Login</title>
+        <title>Вход</title>
 
-        <style th:replace="resources :: bootstrap"></style>
-        <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
-        <link rel="icon" href="https://raw.githubusercontent.com/Krokochik/resources/main/signage.png">
-
-        <style th:replace="resources :: login"></style>
+        <link rel="icon" th:href="@{/images/favicon.png}">
+        <th:block th:include="imports :: auth-styles"></th:block>
     </head>
 
     <body translate="no">
 
-    <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content"

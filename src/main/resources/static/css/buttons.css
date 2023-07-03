@@ -1,0 +1,22 @@
+      .btn-drk {
+         text-align: left!important;
+         font-size: 1rem!important;
+         border-radius: 0.5rem!important;
+         border: none!important;
+         background-color: #343a40!important;
+         color: #fff!important;
+      }
+      .btn-drk:hover {
+        background-color: var(--bs-gray-900)!important;
+      }
+      .btn-lgt {
+         text-align: left!important;
+         font-size: 1rem!important;
+         border-radius: 0.5rem!important;
+         border: none!important;
+         background-color: #0d6efd!important;
+         color: #fff!important;
+      }
+      .btn-lgt:hover {
+        background-color: #0b5ed7!important;
+      }
