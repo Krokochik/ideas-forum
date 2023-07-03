@@ -116,23 +116,7 @@
 
         <link rel="icon" th:href="@{/images/favicon.png}">
 
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
-              crossorigin="anonymous">
-        <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
-        <link rel="stylesheet" th:href="@{/css/captcha.css}">
-        <link rel="stylesheet" th:href="@{/css/checkbox.css}">
-        <link rel="stylesheet" th:href="@{/css/login.css}">
-
-        <style>
-            .btn.disabled, .btn:disabled, fieldset:disabled .btn {
-                color: #102770;
-                pointer-events: none;
-                background-color: #ffeba7;
-                border-color: var(--bs-btn-disabled-border-color);
-                opacity: var(--bs-btn-disabled-opacity);
-            }
-        </style>
+        <th:block th:include="imports :: auth-styles"></th:block>
     </head>
 
     <body translate="no">
@@ -145,9 +129,9 @@
                         <h6 class="mb-0 pb-3"><span>Авторизация</span><span>Регистрация</span></h6>
                         <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" th:checked="${mode}"/>
                         <label for="reg-log"></label>
-                        <div class="card-3d-wrap mx-auto h-auto" th:style="'min-height: ' + ${param.containsKey('nameErr')? '540':
-                                                                                              param.containsKey('emailFormErr')? '560':
-                                                                                              param.containsKey('passInsecureErr')? '580':
+                        <div class="card-3d-wrap mx-auto h-auto" th:style="'min-height: ' + ${param.keySet().contains('nameErr')? '540':
+                                                                                              param.keySet().contains('emailFormErr')? '560':
+                                                                                              param.keySet().contains('passInsecureErr')? '580':
                                                                                               '520'} + 'px;'">
                             <div class="card-3d-wrapper">
                                 <div class="card-front">
@@ -256,7 +240,6 @@
                                                 </div>
                                                 <div class="form-group mt-4" style="display: grid;place-items: center">
                                                     <div class="captcha">
-                                                        <input id="captchaToken" name="captchaToken" type="hidden">
                                                         <div id="hcaptcha" class="h-captcha"
                                                              data-sitekey="871073a5-efc4-49f9-87e4-266fc72aae96"
                                                              data-callback="onSubmit"
