@@ -21,6 +21,7 @@ $(document).ready(function() {
             $(this).prop('disabled', true);
             hcaptcha.execute();
             captchaPassed = true;
+            $('#submit').css({'color': '#102770!important', 'background-color' : '#ffeba7!important'})
             $('#submit').prop('disabled', true);
             $('#prnt').addClass('translucent-after');
             $('#prnt').removeClass('visible-after');
@@ -30,6 +31,7 @@ $(document).ready(function() {
 });
 function onSubmit(token) {
     captchaPassed = true;
+    $('#submit').css({'color': '', 'background-color' : ''})
     $('#captchaLbl').css({'background-color': '#ffeba7', 'pointer-events' : 'none'});
     $('#submit').prop('disabled', false);
     $('#prnt').addClass('visible-after');
@@ -38,6 +40,7 @@ function onSubmit(token) {
 }
 function onError() {
     captchaPassed = false;
+    $('#submit').css({'color': '#102770!important', 'background-color' : '#ffeba7!important'})
     $('#captchaLbl').css({'background-color': '#ccc', 'pointer-events' : 'all'});
     $('#squaredFour1').prop('disabled', false);
     $('#squaredFour1').prop('checked', false);
