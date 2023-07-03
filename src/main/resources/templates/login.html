@@ -145,9 +145,9 @@
                         <h6 class="mb-0 pb-3"><span>Авторизация</span><span>Регистрация</span></h6>
                         <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" th:checked="${mode}"/>
                         <label for="reg-log"></label>
-                        <div class="card-3d-wrap mx-auto h-auto" th:style="'min-height: ' + ${param.containsKey('nameErr')? '540':
-                                                                                              param.containsKey('emailFormErr')? '560':
-                                                                                              param.containsKey('passInsecureErr')? '580':
+                        <div class="card-3d-wrap mx-auto h-auto" th:style="'min-height: ' + ${param.keySet().contains('nameErr')? '540':
+                                                                                              param.keySet().contains('emailFormErr')? '560':
+                                                                                              param.keySet().contains('passInsecureErr')? '580':
                                                                                               '520'} + 'px;'">
                             <div class="card-3d-wrapper">
                                 <div class="card-front">
