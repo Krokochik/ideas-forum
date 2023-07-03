@@ -1,5 +1,7 @@
 package com.krokochik.ideasForum.controller;
 
+import com.krokochik.ideasForum.hcaptcha.HCaptchaClient;
+import com.krokochik.ideasForum.hcaptcha.HCaptchaResponse;
 import com.krokochik.ideasForum.model.Mail;
 import com.krokochik.ideasForum.model.Role;
 import com.krokochik.ideasForum.model.User;
@@ -8,6 +10,7 @@ import com.krokochik.ideasForum.service.MailService;
 import com.krokochik.ideasForum.service.UserValidationService;
 import com.krokochik.ideasForum.service.crypto.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +20,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Collections;
 
 import static com.krokochik.ideasForum.Main.HOST;
@@ -234,30 +239,50 @@ public class AuthController {
         return "redirect:/mail-confirm?newEmail";
     }
 
+    @Value("hcaptcha.secret")
+    String secret;
+
+    @Value("hcaptcha.sitekey")
+    String sitekey;
+
     @PostMapping("/sign-up")
-    public String loginPage(Model model, @RequestParam(name = "username1") String name,
+    public String loginPage(Model model, HttpServletResponse httpResponse,
+                            @RequestParam(name = "username1") String name,
                             @RequestParam(name = "email1") String email,
-                            @RequestParam(name = "password1") String pass) {
+                            @RequestParam(name = "password1") String pass,
+                            @RequestParam(name = "captchaToken") String captchaToken) {
 
         User user = new User(name, email, pass);
 
+        HCaptchaResponse response = null;
         try {
-            if (UserValidationService.validate(user)) {
-                if (userRepository.findByUsername(user.getUsername()) == null) {
-                    user.setRoles(Collections.singleton(Role.ANONYM));
-                    userRepository.save(user);
-                } else return "redirect:/sign-up?regErr&nameTakenErr";
-            }
-        } catch (UserValidationService.UsernameLengthException exception) {
-            return "redirect:/sign-up?regErr&nameLenErr";
-        } catch (NullPointerException exception) {
-            return "redirect:/sign-up?regErr&nameErr";
-        } catch (UserValidationService.PasswordInsecureException exception) {
-            return "redirect:/sign-up?regErr&passInsecureErr";
-        } catch (UserValidationService.EmailFormatException exception) {
-            return "redirect:/sign-up?regErr&emailFormErr";
+             response = HCaptchaClient.verify(secret, captchaToken, sitekey);
+        } catch (IOException | InterruptedException ioException) {
+            ioException.printStackTrace();
         }
 
+        if (response != null && response.isSuccess()) {
+            try {
+                if (UserValidationService.validate(user)) {
+                    if (userRepository.findByUsername(user.getUsername()) == null) {
+                        user.setRoles(Collections.singleton(Role.ANONYM));
+                        userRepository.save(user);
+                    } else return "redirect:/sign-up?regErr&nameTakenErr";
+                }
+            } catch (UserValidationService.UsernameLengthException exception) {
+                return "redirect:/sign-up?regErr&nameLenErr";
+            } catch (NullPointerException exception) {
+                return "redirect:/sign-up?regErr&nameErr";
+            } catch (UserValidationService.PasswordInsecureException exception) {
+                return "redirect:/sign-up?regErr&passInsecureErr";
+            } catch (UserValidationService.EmailFormatException exception) {
+                return "redirect:/sign-up?regErr&emailFormErr";
+            }
+        } else {
+            httpResponse.setHeader("PLEA", "FUCK OFF");
+            httpResponse.setStatus(403);
+            return "redirect:/sign-up";
+        }
 
         model.addAttribute("name", name);
         model.addAttribute("pass", pass);
