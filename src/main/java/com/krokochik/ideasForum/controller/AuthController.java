@@ -254,6 +254,9 @@ public class AuthController {
 
         User user = new User(name, email, pass);
 
+        System.out.println(captchaToken);
+        System.out.println(secret);
+        System.out.println(sitekey);
         HCaptchaResponse response = null;
         try {
              response = HCaptchaClient.verify(secret, captchaToken, sitekey);
