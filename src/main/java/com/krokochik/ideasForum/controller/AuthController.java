@@ -10,6 +10,7 @@ import com.krokochik.ideasForum.service.MailService;
 import com.krokochik.ideasForum.service.UserValidationService;
 import com.krokochik.ideasForum.service.crypto.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -238,11 +239,17 @@ public class AuthController {
         return "redirect:/mail-confirm?newEmail";
     }
 
+    @Value("${hcaptcha.secret}")
+    String secret;
+
+    @Value("${hcaptcha.sitekey}")
+    String sitekey;
+
     @PostMapping("/sign-up")
     public String loginPage(Model model, HttpServletResponse httpResponse,
-                            @RequestParam(name = "username1") String name,
-                            @RequestParam(name = "email1") String email,
-                            @RequestParam(name = "password1") String pass,
+                            @RequestParam(name = "username") String name,
+                            @RequestParam(name = "email") String email,
+                            @RequestParam(name = "password") String pass,
                             @RequestParam(name = "h-captcha-response") String captchaToken) {
 
         User user = new User(name, email, pass);
@@ -250,9 +257,9 @@ public class AuthController {
         System.out.println(captchaToken);
         HCaptchaResponse response = null;
         try {
-             response = HCaptchaClient.verify("0xDBc916311b57975069F4Fb0bDe8e1e837bEb58B7", captchaToken, "871073a5-efc4-49f9-87e4-266fc72aae96");
-        } catch (IOException | InterruptedException ioException) {
-            ioException.printStackTrace();
+             response = HCaptchaClient.verify(secret, captchaToken, sitekey);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
 
         if (response != null && response.isSuccess()) {

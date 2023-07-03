@@ -190,7 +190,7 @@
                                             <h4 th:if="${param.regErr}" class="mb-1 pb-3">Регистрация</h4>
                                             <form th:action="@{/sign-up}" method="post">
                                                 <div class="form-group">
-                                                    <input type="text" name="username1" class="form-style"
+                                                    <input type="text" name="username" class="form-style"
                                                            placeholder="Ваш логин" id="username1" autocomplete="off">
                                                     <i class="input-icon uil uil-user"></i>
                                                 </div>
@@ -212,7 +212,7 @@
                                                     <p style="padding: 8px;">Пожалуйста, введите логин.</p>
                                                 </div>
                                                 <div class="form-group mt-2">
-                                                    <input type="email" name="email1" class="form-style"
+                                                    <input type="email" name="email" class="form-style"
                                                            placeholder="Ваша почта" id="logemail" autocomplete="off">
                                                     <i class="input-icon uil uil-at"></i>
                                                 </div>
@@ -223,7 +223,7 @@
                                                         стандарту RFC.</p>
                                                 </div>
                                                 <div class="form-group mt-2">
-                                                    <input type="password" name="password1" class="form-style"
+                                                    <input type="password" name="password" class="form-style"
                                                            placeholder="Ваш пароль" id="logpass" autocomplete="off">
                                                     <i class="input-icon uil uil-lock-alt"></i>
                                                     <i class="uil uil-eye-slash" id="eye1"
