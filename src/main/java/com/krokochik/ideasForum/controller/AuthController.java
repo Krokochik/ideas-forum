@@ -243,7 +243,7 @@ public class AuthController {
                             @RequestParam(name = "username1") String name,
                             @RequestParam(name = "email1") String email,
                             @RequestParam(name = "password1") String pass,
-                            @RequestParam(name = "g-recaptcha-response") String captchaToken) {
+                            @RequestParam(name = "h-captcha-response") String captchaToken) {
 
         User user = new User(name, email, pass);
 
