@@ -28,7 +28,6 @@ $(document).ready(function() {
     });
 });
 function onSubmit(token) {
-    $('#captchaToken').val(token);
     captchaPassed = true;
     $('#captchaLbl').css({'background-color': '#ffeba7', 'pointer-events' : 'none'});
     $('#submit').prop('disabled', false);
