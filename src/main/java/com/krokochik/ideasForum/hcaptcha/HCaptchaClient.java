@@ -25,6 +25,7 @@ public class HCaptchaClient {
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .method("POST", HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
+        System.out.println(request.bodyPublisher().get());
         HttpResponse<String> httpResponse = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println(httpResponse.body());
         return gson.fromJson(httpResponse.body(), HCaptchaResponse.class);
