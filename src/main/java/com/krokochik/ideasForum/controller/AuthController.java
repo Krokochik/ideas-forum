@@ -11,9 +11,12 @@ import com.krokochik.ideasForum.service.UserValidationService;
 import com.krokochik.ideasForum.service.crypto.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 
 import static com.krokochik.ideasForum.Main.HOST;
@@ -85,12 +89,47 @@ public class AuthController {
                 return "redirect:/settings";
             }
 
-            userRepository.setRolesById(Collections.singleton(Role.USER), userRepository.findByUsername(name).getId());
-            SecurityContextHolder.clearContext();
-            model.addAttribute("name", name);
-            model.addAttribute("pass", userRepository.findByUsername(name).getPassword());
+            user.setRoles(Collections.singleton(Role.USER));
+            userRepository.save(user);
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
+                    new UserDetails() {
+                        @Override
+                        public Collection<? extends GrantedAuthority> getAuthorities() {
+                            return Collections.singleton(new SimpleGrantedAuthority(Role.USER.name()));
+                        }
 
-            return "login";
+                        @Override
+                        public String getPassword() {
+                            return user.getPassword();
+                        }
+
+                        @Override
+                        public String getUsername() {
+                            return user.getUsername();
+                        }
+
+                        @Override
+                        public boolean isAccountNonExpired() {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean isAccountNonLocked() {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean isCredentialsNonExpired() {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean isEnabled() {
+                            return true;
+                        }
+                    }, user, Collections.singleton(new SimpleGrantedAuthority(Role.USER.name()))));
+
+            return "redirect:/main";
 
         }
         return "redirect:/main";

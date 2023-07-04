@@ -1,6 +1,5 @@
 package com.krokochik.ideasForum.repository;
 
-import com.krokochik.ideasForum.model.Role;
 import com.krokochik.ideasForum.model.User;
 import com.sun.istack.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -55,11 +54,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     @Query("update User usr set usr.password=?1 where usr.id=?2")
     void setPasswordById(String password, Long id);
-
-    @Modifying
-    @Transactional
-    @Query(value = "update user_role set roles=?1 where user_id=?2", nativeQuery = true)
-    void setRolesById(Set<Role> roles, Long id);
 
     @Modifying
     @Transactional
