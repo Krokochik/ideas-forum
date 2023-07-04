@@ -17,6 +17,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.krokochik.ideasForum.Main.HOST;
@@ -289,12 +292,48 @@ public class AuthController {
             return "redirect:/sign-up";
         }
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user, user,
-                user.getRoles().stream().map(role ->
-                        new SimpleGrantedAuthority(role.name())).collect(Collectors.toSet()));
+        System.out.println(user.toString());
+        Set<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
+                new SimpleGrantedAuthority(role.name())).collect(Collectors.toSet());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(new UserDetails() {
+            @Override
+            public Collection<? extends GrantedAuthority> getAuthorities() {
+                return authorities;
+            }
+
+            @Override
+            public String getPassword() {
+                return user.getPassword();
+            }
+
+            @Override
+            public String getUsername() {
+                return user.getUsername();
+            }
+
+            @Override
+            public boolean isAccountNonExpired() {
+                return true;
+            }
+
+            @Override
+            public boolean isAccountNonLocked() {
+                return true;
+            }
+
+            @Override
+            public boolean isCredentialsNonExpired() {
+                return true;
+            }
+
+            @Override
+            public boolean isEnabled() {
+                return true;
+            }
+        }, user, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return "login";
+        return "redirect:/mail-confirm";
     }
 
     @GetMapping("/id-confirmation")
