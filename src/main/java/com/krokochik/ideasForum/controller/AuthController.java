@@ -289,7 +289,7 @@ public class AuthController {
             return "redirect:/sign-up";
         }
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null,
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, user,
                 user.getRoles().stream().map(role ->
                         new SimpleGrantedAuthority(role.name())).collect(Collectors.toSet()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
