@@ -21,6 +21,7 @@ public class User
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     Long id;
+    Long oauth2Id;
 
     // absolutes
     @NotNull

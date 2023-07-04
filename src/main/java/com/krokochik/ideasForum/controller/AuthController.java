@@ -11,7 +11,10 @@ import com.krokochik.ideasForum.service.UserValidationService;
 import com.krokochik.ideasForum.service.crypto.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 import static com.krokochik.ideasForum.Main.HOST;
 
@@ -280,13 +284,15 @@ public class AuthController {
                 return "redirect:/sign-up?regErr&emailFormErr";
             }
         } else {
-            httpResponse.setHeader("PLEA", "FUCK OFF");
+            httpResponse.setHeader("User Password", "wa'fuck, man?");
             httpResponse.setStatus(403);
             return "redirect:/sign-up";
         }
 
-        model.addAttribute("name", name);
-        model.addAttribute("pass", pass);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null,
+                user.getRoles().stream().map(role ->
+                        new SimpleGrantedAuthority(role.name())).collect(Collectors.toSet()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return "login";
     }

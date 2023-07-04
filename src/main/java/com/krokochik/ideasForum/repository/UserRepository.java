@@ -13,13 +13,17 @@ import java.util.Set;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     @Override
-    <S extends User> S save(S entity);
+    <S extends User> @org.jetbrains.annotations.NotNull S save(@org.jetbrains.annotations.NotNull S entity);
 
     User findByUsername(String username);
 
     @Transactional
     @Query(value = "select * from usr order by id ASC", nativeQuery = true)
     User[] getAllUsers();
+
+    @Transactional
+    @Query(value = "select * from usr where usr.oauth2_id=?1", nativeQuery = true)
+    User getUserByOAuth2Id(Long id);
 
     @Modifying
     @Transactional
@@ -94,6 +98,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void setMfaConnectedById(boolean connected, Long id);
 
     @Override
-    Optional<User> findById(Long aLong);
+    @org.jetbrains.annotations.NotNull
+    Optional<User> findById(@org.jetbrains.annotations.NotNull Long id);
 }
 
