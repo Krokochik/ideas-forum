@@ -90,6 +90,7 @@ public class AuthController {
             }
 
             user.setRoles(Collections.singleton(Role.USER));
+            System.out.println(user.toString());
             userRepository.save(user);
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
                     new UserDetails() {
