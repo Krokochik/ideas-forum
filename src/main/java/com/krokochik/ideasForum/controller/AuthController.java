@@ -313,6 +313,9 @@ public class AuthController {
             e.printStackTrace();
         }
 
+        record AuthInfo(String login, String email) {}
+        model.addAttribute("authInfo", new AuthInfo(name, email));
+
         if (response != null && response.isSuccess()) {
             try {
                 if (UserValidationService.validate(user)) {
