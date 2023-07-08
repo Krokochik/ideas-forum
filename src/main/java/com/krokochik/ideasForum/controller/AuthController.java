@@ -7,6 +7,7 @@ import com.krokochik.ideasForum.model.Role;
 import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MailService;
+import com.krokochik.ideasForum.service.UserService;
 import com.krokochik.ideasForum.service.UserValidationService;
 import com.krokochik.ideasForum.service.crypto.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class AuthController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     MailService mailService;
@@ -89,9 +93,8 @@ public class AuthController {
                 return "redirect:/settings";
             }
 
-            user.setRoles(Collections.singleton(Role.USER));
+            userService.setRolesById(user.getId(), Collections.singleton(Role.USER));
             System.out.println(user.toString());
-            userRepository.save(user);
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
                     new UserDetails() {
                         @Override

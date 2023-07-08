@@ -3,6 +3,7 @@ package com.krokochik.ideasForum.controller;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MailService;
 import com.krokochik.ideasForum.service.PostService;
+import com.krokochik.ideasForum.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,9 @@ public class MainController {
 
     @Autowired
     PostService postService;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping({"/main", "/", "", "/main/{index}"})
     public String mainPage(Model model, HttpServletRequest request, HttpServletResponse response,
