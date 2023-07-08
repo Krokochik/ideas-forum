@@ -76,6 +76,49 @@ public class AuthController {
         return false;
     }
 
+    private void authorizeUser(SecurityContext securityContext, User user) {
+        Set<SimpleGrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.name()))
+                .collect(Collectors.toSet());
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken(
+                new UserDetails() {
+                    @Override
+                    public Collection<? extends GrantedAuthority> getAuthorities() {
+                        return authorities;
+                    }
+
+                    @Override
+                    public String getPassword() {
+                        return user.getPassword();
+                    }
+
+                    @Override
+                    public String getUsername() {
+                        return user.getUsername();
+                    }
+
+                    @Override
+                    public boolean isAccountNonExpired() {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean isAccountNonLocked() {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean isCredentialsNonExpired() {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean isEnabled() {
+                        return true;
+                    }
+                }, user, authorities));
+    }
+
     @GetMapping("/sign-up")
     public String loginPageGet(Model model) {
         model.addAttribute("mode", true);
@@ -96,47 +139,7 @@ public class AuthController {
             }
 
             userService.setRolesById(user.getId(), Collections.singleton(Role.USER));
-
-            Set<SimpleGrantedAuthority> authorities = user.getRoles().stream()
-                    .map(role -> new SimpleGrantedAuthority(role.name()))
-                    .collect(Collectors.toSet());
-            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
-                    new UserDetails() {
-                        @Override
-                        public Collection<? extends GrantedAuthority> getAuthorities() {
-                            return authorities;
-                        }
-
-                        @Override
-                        public String getPassword() {
-                            return user.getPassword();
-                        }
-
-                        @Override
-                        public String getUsername() {
-                            return user.getUsername();
-                        }
-
-                        @Override
-                        public boolean isAccountNonExpired() {
-                            return true;
-                        }
-
-                        @Override
-                        public boolean isAccountNonLocked() {
-                            return true;
-                        }
-
-                        @Override
-                        public boolean isCredentialsNonExpired() {
-                            return true;
-                        }
-
-                        @Override
-                        public boolean isEnabled() {
-                            return true;
-                        }
-                    }, user, authorities));
+            authorizeUser(SecurityContextHolder.getContext(), user);
 
             return "redirect:/main";
 
@@ -316,6 +319,7 @@ public class AuthController {
                     if (userRepository.findByUsername(user.getUsername()) == null) {
                         user.setRoles(Collections.singleton(Role.ANONYM));
                         userRepository.save(user);
+                        authorizeUser(SecurityContextHolder.getContext(), user);
                     } else return "redirect:/sign-up?regErr&nameTakenErr";
                 }
             } catch (UserValidationService.UsernameLengthException exception) {
