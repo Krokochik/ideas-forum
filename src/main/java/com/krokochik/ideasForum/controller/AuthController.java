@@ -29,6 +29,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.krokochik.ideasForum.Main.HOST;
 
@@ -94,12 +96,15 @@ public class AuthController {
             }
 
             userService.setRolesById(user.getId(), Collections.singleton(Role.USER));
-            System.out.println(user.toString());
+
+            Set<SimpleGrantedAuthority> authorities = user.getRoles().stream()
+                    .map(role -> new SimpleGrantedAuthority(role.name()))
+                    .collect(Collectors.toSet());
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
                     new UserDetails() {
                         @Override
                         public Collection<? extends GrantedAuthority> getAuthorities() {
-                            return Collections.singleton(new SimpleGrantedAuthority(Role.USER.name()));
+                            return authorities;
                         }
 
                         @Override
@@ -131,7 +136,7 @@ public class AuthController {
                         public boolean isEnabled() {
                             return true;
                         }
-                    }, user, Collections.singleton(new SimpleGrantedAuthority(Role.USER.name()))));
+                    }, user, authorities));
 
             return "redirect:/main";
 
