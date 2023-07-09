@@ -318,7 +318,6 @@ public class AuthController {
 
         session.setAttribute("authInfo", new AuthInfo(name, email));
 
-
         if (response != null && response.isSuccess()) {
             try {
                 if (UserValidationService.validate(user)) {

@@ -22,7 +22,7 @@ public class OAuth2Controller {
         switch (status) {
             case "success":
                 if (user.getAttribute("id") != null) {
-                    if (userRepository.getUserByOAuth2Id(user.getAttribute("id")) != null)
+                    if (userRepository.getUserByOAuth2Id(((Integer) user.getAttribute("id")).longValue()) != null)
 
                     break;
                 }
