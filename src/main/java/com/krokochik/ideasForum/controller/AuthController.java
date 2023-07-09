@@ -77,7 +77,7 @@ public class AuthController {
         return false;
     }
 
-    private void authorizeUser(SecurityContext securityContext, User user) {
+    static void authorizeUser(SecurityContext securityContext, User user) {
         Set<SimpleGrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.name()))
                 .collect(Collectors.toSet());
