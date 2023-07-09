@@ -336,8 +336,7 @@ public class AuthController {
             }
         } else {
             httpResponse.setHeader("User Password", "wa'fuck, man?");
-            httpResponse.setStatus(403);
-            return "redirect:/sign-up";
+            return "redirect:/sign-up?areYouRobot";
         }
 
         return "redirect:/login";

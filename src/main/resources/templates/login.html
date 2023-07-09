@@ -191,7 +191,8 @@
                                             <form th:action="@{/sign-up}" method="post">
                                                 <div class="form-group">
                                                     <input type="text" name="username" class="form-style"
-                                                           placeholder="Ваш логин" id="username1" autocomplete="off">
+                                                           placeholder="Ваш логин" id="username1" autocomplete="off"
+                                                           th:value="${authInfo != null? authInfo.login():''}">
                                                     <i class="input-icon uil uil-user"></i>
                                                 </div>
                                                 <div th:if="${param.nameTakenErr}"
@@ -213,7 +214,8 @@
                                                 </div>
                                                 <div class="form-group mt-2">
                                                     <input type="email" name="email" class="form-style"
-                                                           placeholder="Ваша почта" id="logemail" autocomplete="off">
+                                                           placeholder="Ваша почта" id="logemail" autocomplete="off"
+                                                           th:value="${authInfo != null? authInfo.email():''}">
                                                     <i class="input-icon uil uil-at"></i>
                                                 </div>
                                                 <div th:if="${param.emailFormErr}"
@@ -273,9 +275,6 @@
             document.getElementById('username1').focus();
         else
             document.getElementById('username').focus();
-
-        if (document.getElementById('username').value !== "" && document.getElementById('password').value !== "")
-            document.getElementById('sbmLogin').click();
     </script>
     </body>
 
