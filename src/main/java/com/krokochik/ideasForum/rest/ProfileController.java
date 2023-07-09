@@ -24,17 +24,22 @@ public class ProfileController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping(value = "/avatar", produces = MediaType.IMAGE_PNG_VALUE)
-    public byte[] avatar(HttpServletResponse response) throws IOException {
+    @GetMapping(value = "/avatar")
+    public void avatar(HttpServletResponse response) throws IOException {
+        byte[] decodedAvatar = null;
         if (SecurityController.isAuthenticated()) {
             User user = userRepository.findByUsername(SecurityController.getContext().getAuthentication().getName());
-            if (new String(user.getAvatar()).endsWith("=="))
-                return Base64.decodeBase64(user.getAvatar());
+            if (new String(user.getAvatar()).endsWith("==")) {
+                decodedAvatar = Base64.decodeBase64(user.getAvatar());
+            }
             else {
                 response.sendRedirect(new String(user.getAvatar()));
-                return null;
             }
-        } else return new User().getAvatar();
+        } else decodedAvatar = Base64.decodeBase64(new User().getAvatar());
+        if (decodedAvatar != null) {
+            response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+            response.getOutputStream().write(decodedAvatar);
+        }
     }
 
     @PostMapping(value = "/profile", produces = "application/json")
