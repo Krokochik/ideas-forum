@@ -289,6 +289,7 @@ public class AuthController {
     public String loginPageGet(Model model, HttpSession session) {
         model.addAttribute("authInfo", session.getAttribute("authInfo"));
         model.addAttribute("mode", true);
+        session.setAttribute("authInfo", null);
         return "login";
     }
 
