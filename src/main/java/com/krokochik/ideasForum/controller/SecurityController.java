@@ -319,7 +319,7 @@ public class SecurityController {
                             @RequestParam(name = "username") String name,
                             @RequestParam(name = "email") String email,
                             @RequestParam(name = "password") String pass,
-                            @RequestParam(name = "h-captcha-response") String captchaToken,
+                            @RequestParam(name = "h-captcha-response", required = false) String captchaToken,
                             @PathVariable(name = "oauth2", required = false) String oauth2) {
 
         User user = new User(name, email, pass);
