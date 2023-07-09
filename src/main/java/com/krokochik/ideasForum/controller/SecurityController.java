@@ -48,7 +48,9 @@ public class SecurityController {
     @Autowired
     MailService mailService;
 
-    record AuthData(String login, String email) {}
+    record AuthData(String login, String email) {
+    }
+
     String host = HOST;
 
     public static boolean isAuthenticated() {
@@ -325,14 +327,17 @@ public class SecurityController {
         System.out.println(captchaToken);
         HCaptchaResponse response = null;
         try {
-             response = HCaptchaClient.verify(secret, captchaToken, sitekey);
+            response = HCaptchaClient.verify(secret, captchaToken, sitekey);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
         session.setAttribute("authData", new AuthData(name, email));
 
-        if (response != null && response.isSuccess()) {
+        if ((response != null && response.isSuccess()) ||
+                ((session.getAttribute("oauth2Login") != null) &&
+                        (session.getAttribute("oauth2Avatar") != null) &&
+                        oauth2.equals("oauth2"))) {
             try {
                 if (UserValidationService.validate(user)) {
                     if (userRepository.findByUsername(user.getUsername()) == null) {

@@ -224,7 +224,7 @@
                                                 </div>
                                                 <div class="form-group mt-2">
                                                     <input type="email" name="email" class="form-style"
-                                                           placeholder="Ваша почта" id="logemail" autocomplete="off"
+                                                           placeholder="Ваша почта" id="email" autocomplete="off"
                                                            th:value="${authData != null? authData.email():''}">
                                                     <i class="input-icon uil uil-at"></i>
                                                 </div>
@@ -236,7 +236,7 @@
                                                 </div>
                                                 <div class="form-group mt-2">
                                                     <input type="password" name="password" class="form-style"
-                                                           placeholder="Ваш пароль" id="logpass" autocomplete="off">
+                                                           placeholder="Ваш пароль" id="pass" autocomplete="off">
                                                     <i class="input-icon uil uil-lock-alt"></i>
                                                     <i class="uil uil-eye-slash" id="eye1"
                                                        style="cursor: pointer;right: 5px;position: absolute;top: 5px;text-align: right;font-size: 21px;color: #ffeba7;"
@@ -282,9 +282,12 @@
     <script th:src="@{/scripts/captcha.js}"></script>
     <script>
         if (window.location.pathname === "/sign-up")
-            document.getElementById('username1').focus();
-        else
-            document.getElementById('username').focus();
+            if (document.getElementById('username1').value != '')
+                if (document.getElementById('email').value != '')
+                    document.getElementById('pass').focus();
+                else document.getElementById('email').focus();
+            else document.getElementById('username1').focus();
+        else document.getElementById('username').focus();
     </script>
     </body>
 
