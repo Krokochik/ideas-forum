@@ -337,15 +337,22 @@ public class SecurityController {
         if ((response != null && response.isSuccess()) ||
                 ((session.getAttribute("oauth2Login") != null) &&
                         (session.getAttribute("oauth2Avatar") != null) &&
+                        (session.getAttribute("oauth2Id") != null) &&
                         oauth2.equals("oauth2"))) {
             try {
                 if (UserValidationService.validate(user)) {
                     if (userRepository.findByUsername(user.getUsername()) == null) {
                         user.setRoles(Collections.singleton(Role.ANONYM));
-                        String oauth2Avatar;
-                        if (oauth2.equals("oauth2") && (oauth2Avatar = (String) session.getAttribute("oauth2Avatar")) != null) {
-                            user.setAvatar(oauth2Avatar.getBytes(StandardCharsets.UTF_8));
-                            session.setAttribute("oauth2Avatar", null);
+                        if (oauth2.equals("oauth2") && (session.getAttribute("oauth2Id") != null)) {
+                            long oauth2Id = (long) session.getAttribute("oauth2Id");
+                            user.setOauth2Id(oauth2Id);
+                            session.setAttribute("oauth2Id", null);
+
+                            String oauth2Avatar;
+                            if ((oauth2Avatar = (String) session.getAttribute("oauth2Avatar")) != null) {
+                                user.setAvatar(oauth2Avatar.getBytes(StandardCharsets.UTF_8));
+                                session.setAttribute("oauth2Avatar", null);
+                            }
                         }
                         userRepository.save(user);
                         authorizeUser(SecurityContextHolder.getContext(), user);

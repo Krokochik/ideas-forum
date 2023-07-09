@@ -43,6 +43,7 @@ public class OAuth2Controller {
                 // attributes to autofill at sign up
                 session.setAttribute("oauth2Login", oauth2User.getAttribute("login"));
                 session.setAttribute("oauth2Avatar", oauth2User.getAttribute("avatar_url"));
+                session.setAttribute("oauth2Id", id);
                 oauth2User.getAttributes().forEach((s, o) -> System.out.println(s + ": " + o));
 
                 //  to clear able previous autofill data
