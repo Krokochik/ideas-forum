@@ -1,31 +1,42 @@
 var captchaPassed = false;
 
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+    function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+
 $(document).ready(function() {
-    $('#submit').prop('disabled', true);
-    $('#captchaLbl').hover(function(){
-        if (captchaPassed == false) {
-            $('#prnt').addClass('translucent-after');
-            $('#prnt').removeClass('visible-after');
-            $('#prnt').removeClass('hidden-after');
-        }
-    }, function(){
-        if (captchaPassed == false) {
-            $('#prnt').addClass('hidden-after');
-            $('#prnt').removeClass('translucent-after');
-            $('#prnt').removeClass('visible-after');
-        }
-    });
-    $('#squaredFour1').change(function() {
-        if ($(this).is(':checked')) {
-            $(this).prop('disabled', true);
-            hcaptcha.execute();
-            captchaPassed = true;
-            $('#submit').prop('disabled', true);
-            $('#prnt').addClass('translucent-after');
-            $('#prnt').removeClass('visible-after');
-            $('#prnt').removeClass('hidden-after');
-        }
-    });
+    if (getUrlVars()["oauth2"] === undefined) {
+        $('#submit').prop('disabled', true);
+        $('#captchaLbl').hover(function(){
+            if (captchaPassed == false) {
+                $('#prnt').addClass('translucent-after');
+                $('#prnt').removeClass('visible-after');
+                $('#prnt').removeClass('hidden-after');
+            }
+        }, function(){
+            if (captchaPassed == false) {
+                $('#prnt').addClass('hidden-after');
+                $('#prnt').removeClass('translucent-after');
+                $('#prnt').removeClass('visible-after');
+            }
+        });
+        $('#squaredFour1').change(function() {
+            if ($(this).is(':checked')) {
+                $(this).prop('disabled', true);
+                hcaptcha.execute();
+                captchaPassed = true;
+                $('#submit').prop('disabled', true);
+                $('#prnt').addClass('translucent-after');
+                $('#prnt').removeClass('visible-after');
+                $('#prnt').removeClass('hidden-after');
+            }
+        });
+    }
 });
 function onSubmit(token) {
     captchaPassed = true;

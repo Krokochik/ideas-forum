@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/mfa/**",
                         "/googleb8fcdd64aa45ba54.html", "/yandex_f4f03a518326d43b.html", "/bootstrap.min.css.map")
                     .permitAll()
-                .antMatchers(HttpMethod.POST, "/profile", "/sign-up")
+                .antMatchers(HttpMethod.POST, "/profile", "/sign-up", "/sign-up/oauth2")
                     .permitAll()
                 .antMatchers(HttpMethod.GET ,"/login", "/sign-up", "/password-abort", "/oauth2/**")
                     .not().hasAnyAuthority(Role.USER.name(), Role.ANONYM.name())
