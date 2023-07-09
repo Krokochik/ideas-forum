@@ -46,6 +46,7 @@ public class AuthController {
     @Autowired
     MailService mailService;
 
+    record AuthInfo(String login, String email) {}
     String host = HOST;
 
     public static boolean isAuthenticated() {
@@ -117,12 +118,6 @@ public class AuthController {
                         return true;
                     }
                 }, user, authorities));
-    }
-
-    @GetMapping("/sign-up")
-    public String loginPageGet(Model model) {
-        model.addAttribute("mode", true);
-        return "login";
     }
 
     @GetMapping("/confirm")
@@ -290,6 +285,13 @@ public class AuthController {
         return "redirect:/mail-confirm?newEmail";
     }
 
+    @GetMapping("/sign-up")
+    public String loginPageGet(Model model, HttpSession session) {
+        model.addAttribute("authInfo", session.getAttribute("authInfo"));
+        model.addAttribute("mode", true);
+        return "login";
+    }
+
     @Value("${hcaptcha.secret}")
     String secret;
 
@@ -297,7 +299,7 @@ public class AuthController {
     String sitekey;
 
     @PostMapping("/sign-up")
-    public String loginPage(Model model, HttpServletResponse httpResponse,
+    public String loginPage(HttpSession session, HttpServletResponse httpResponse,
                             @RequestParam(name = "username") String name,
                             @RequestParam(name = "email") String email,
                             @RequestParam(name = "password") String pass,
@@ -313,8 +315,8 @@ public class AuthController {
             e.printStackTrace();
         }
 
-        record AuthInfo(String login, String email) {}
-        model.addAttribute("authInfo", new AuthInfo(name, email));
+        session.setAttribute("authInfo", new AuthInfo(name, email));
+
 
         if (response != null && response.isSuccess()) {
             try {
