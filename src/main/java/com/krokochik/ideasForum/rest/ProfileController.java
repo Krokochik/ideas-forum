@@ -31,7 +31,8 @@ public class ProfileController {
             if (new String(user.getAvatar()).endsWith("=="))
                 return Base64.decodeBase64(user.getAvatar());
             else {
-                return user.getAvatar();
+                response.sendRedirect(new String(user.getAvatar()));
+                return null;
             }
         } else return new User().getAvatar();
     }
