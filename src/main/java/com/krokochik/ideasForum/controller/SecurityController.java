@@ -21,12 +21,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
 import static com.krokochik.ideasForum.Main.HOST;
 
 @Controller
-public class AuthController {
+public class SecurityController {
 
     @Autowired
     UserRepository userRepository;
@@ -46,7 +48,7 @@ public class AuthController {
     @Autowired
     MailService mailService;
 
-    record AuthInfo(String login, String email) {}
+    record AuthData(String login, String email) {}
     String host = HOST;
 
     public static boolean isAuthenticated() {
@@ -250,7 +252,7 @@ public class AuthController {
         if (session.getAttribute("newEmail") != null)
             return "redirect:/mail-confirm?newEmail";
 
-        if (AuthController.hasRole(Role.ANONYM))
+        if (SecurityController.hasRole(Role.ANONYM))
             model.addAttribute("isAnonym", true);
         else
             model.addAttribute("isAnonym", false);
@@ -267,7 +269,7 @@ public class AuthController {
                               @RequestParam(name = "password", required = false) String password,
                               HttpSession session) {
 
-        User user = userRepository.findByUsername(AuthController.getContext().getAuthentication().getName());
+        User user = userRepository.findByUsername(SecurityController.getContext().getAuthentication().getName());
 
         if (hasRole(Role.ANONYM)) {
             userRepository.setEmailById(email, user.getId());
@@ -286,10 +288,21 @@ public class AuthController {
     }
 
     @GetMapping("/sign-up")
-    public String loginPageGet(Model model, HttpSession session) {
-        model.addAttribute("authInfo", session.getAttribute("authInfo"));
+    public String loginPageGet(Model model, HttpSession session,
+                               @RequestParam(value = "oauth2", required = false) String oauth2Redirect) {
+        // autofill data
+        AuthData authData = (AuthData) session.getAttribute("authData");
+        if (oauth2Redirect.equals("true") && authData == null) {
+            String login;
+            if ((login = session.getAttribute("oauth2Login").toString()) != null)
+                authData = new AuthData(login, "");
+        }
+        model.addAttribute("authData", authData);
+        session.setAttribute("authData", null);
+
+        // mode ? sign up : login
         model.addAttribute("mode", true);
-        session.setAttribute("authInfo", null);
+
         return "login";
     }
 
@@ -299,12 +312,13 @@ public class AuthController {
     @Value("${hcaptcha.sitekey}")
     String sitekey;
 
-    @PostMapping("/sign-up")
+    @PostMapping("/sign-up/{oauth2}")
     public String loginPage(HttpSession session, HttpServletResponse httpResponse,
                             @RequestParam(name = "username") String name,
                             @RequestParam(name = "email") String email,
                             @RequestParam(name = "password") String pass,
-                            @RequestParam(name = "h-captcha-response") String captchaToken) {
+                            @RequestParam(name = "h-captcha-response") String captchaToken,
+                            @PathVariable(name = "oauth2", required = false) String oauth2) {
 
         User user = new User(name, email, pass);
 
@@ -316,13 +330,18 @@ public class AuthController {
             e.printStackTrace();
         }
 
-        session.setAttribute("authInfo", new AuthInfo(name, email));
+        session.setAttribute("authData", new AuthData(name, email));
 
         if (response != null && response.isSuccess()) {
             try {
                 if (UserValidationService.validate(user)) {
                     if (userRepository.findByUsername(user.getUsername()) == null) {
                         user.setRoles(Collections.singleton(Role.ANONYM));
+                        String oauth2Avatar;
+                        if (oauth2.equals("oauth2") && (oauth2Avatar = (String) session.getAttribute("oauth2Avatar")) != null) {
+                            user.setAvatar(oauth2Avatar.getBytes(StandardCharsets.UTF_8));
+                            session.setAttribute("oauth2Avatar", null);
+                        }
                         userRepository.save(user);
                         authorizeUser(SecurityContextHolder.getContext(), user);
                     } else return "redirect:/sign-up?regErr&nameTakenErr";

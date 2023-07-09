@@ -1,6 +1,6 @@
 package com.krokochik.ideasForum.config;
 
-import com.krokochik.ideasForum.controller.AuthController;
+import com.krokochik.ideasForum.controller.SecurityController;
 import com.krokochik.ideasForum.model.UserAuth;
 import com.krokochik.ideasForum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,36 +19,36 @@ public class BeanConfig {
         return new UserAuth() {
             @Override
             public String getCurrentEmail() {
-                return userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getEmail();
+                return userRepository.findByUsername(SecurityController.getContext().getAuthentication().getName()).getEmail();
             }
 
             @Override
             public String getCurrentName() {
-                return AuthController.getContext().getAuthentication().getName();
+                return SecurityController.getContext().getAuthentication().getName();
             }
 
             @Override
             public Long getCurrentId() {
-                return userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getId();
+                return userRepository.findByUsername(SecurityController.getContext().getAuthentication().getName()).getId();
             }
 
             public String getNickname() {
-                if (AuthController.isAuthenticated()) {
-                    return userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getNickname();
+                if (SecurityController.isAuthenticated()) {
+                    return userRepository.findByUsername(SecurityController.getContext().getAuthentication().getName()).getNickname();
                 }
                 else return "guest";
             }
 
             public String getAvatar() {
-                return new String(userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getAvatar(), StandardCharsets.UTF_8);
+                return new String(userRepository.findByUsername(SecurityController.getContext().getAuthentication().getName()).getAvatar(), StandardCharsets.UTF_8);
             }
 
             public boolean isMfaConnected() {
-                return userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).isMfaConnected();
+                return userRepository.findByUsername(SecurityController.getContext().getAuthentication().getName()).isMfaConnected();
             }
 
             public boolean isAuth() {
-                return AuthController.isAuthenticated();
+                return SecurityController.isAuthenticated();
             }
         };
     }

@@ -2,7 +2,7 @@ package com.krokochik.ideasForum.rest;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.krokochik.ideasForum.controller.AuthController;
+import com.krokochik.ideasForum.controller.SecurityController;
 import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
 import org.apache.commons.codec.binary.Base64;
@@ -26,11 +26,15 @@ public class ProfileController {
 
     @GetMapping(value = "/avatar", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] avatar(HttpServletResponse response) throws IOException {
-        return Base64.decodeBase64(
-                AuthController.isAuthenticated() ?
-                        userRepository.findByUsername(AuthController.getContext().getAuthentication().getName()).getAvatar() :
-                        new User().getAvatar()
-        );
+        if (SecurityController.isAuthenticated()) {
+            User user = userRepository.findByUsername(SecurityController.getContext().getAuthentication().getName());
+            if (new String(user.getAvatar()).endsWith("=="))
+                return Base64.decodeBase64(user.getAvatar());
+            else {
+                response.sendRedirect(new String(user.getAvatar()));
+                return new byte[]{};
+            }
+        } else return new User().getAvatar();
     }
 
     @PostMapping(value = "/profile", produces = "application/json")
@@ -55,7 +59,7 @@ public class ProfileController {
             exception.printStackTrace();
         }
 
-        if (username.equalsIgnoreCase(AuthController.getContext().getAuthentication().getName())) {
+        if (username.equalsIgnoreCase(SecurityController.getContext().getAuthentication().getName())) {
             if (!avatar.equals("")) {
 
                 final double BYTES_IN_MEGABYTE = 1e+6;

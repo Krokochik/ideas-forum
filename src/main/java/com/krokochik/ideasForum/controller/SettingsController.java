@@ -45,7 +45,7 @@ public class SettingsController {
 
     @GetMapping(value = "/mfa-qr", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<Resource> qrCode() {
-        User user = userRepository.findByUsername(AuthController.getContext().getAuthentication().getName());
+        User user = userRepository.findByUsername(SecurityController.getContext().getAuthentication().getName());
         Resource resource = new ByteArrayResource(user.getQrcode());
 
         return ResponseEntity.ok()
@@ -57,8 +57,8 @@ public class SettingsController {
     public String settingsPage(Model model, HttpSession session,
                                @CookieValue(name = "theme", required = false, defaultValue = "dark") String theme) {
 
-        if (AuthController.isAuthenticated() ) {
-            User user = userRepository.findByUsername(AuthController.getContext().getAuthentication().getName());
+        if (SecurityController.isAuthenticated() ) {
+            User user = userRepository.findByUsername(SecurityController.getContext().getAuthentication().getName());
             if ((user.getQrcode() == null ||
                     !qrCodeManager.hasUserQrCode(user.getUsername()) ||
                     mfaService.getToken(user.getUsername()).isEmpty()) &&
@@ -82,7 +82,7 @@ public class SettingsController {
 
     @GetMapping("/password-change")
     public String changePassword(Model model) {
-        SecurityContext context = AuthController.getContext();
+        SecurityContext context = SecurityController.getContext();
         Thread mailSending = new Thread(() -> {
             String passToken = new TokenService().generateToken();
             Mail mail = new Mail();
