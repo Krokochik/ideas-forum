@@ -300,12 +300,11 @@ public class SecurityController {
         // autofill data
         AuthData authData = (AuthData) session.getAttribute("authData");
         if (oauth2Redirect.equals("true") && authData == null) {
-            String username;
-            String email;
-            if ((username = session.getAttribute("oauth2Username").toString()) != null)
-                if ((email = session.getAttribute("oauth2Email").toString()) != null)
-                    authData = new AuthData(username, email);
-                else authData = new AuthData(username, "");
+            if (session.getAttribute("oauth2Username") != null)
+                if (session.getAttribute("oauth2Email") != null)
+                    authData = new AuthData(session.getAttribute("oauth2Username").toString(),
+                            session.getAttribute("oauth2Email").toString());
+                else authData = new AuthData(session.getAttribute("oauth2Username").toString(), "");
         }
         model.addAttribute("authData", authData);
         session.setAttribute("authData", null);
