@@ -353,8 +353,9 @@ public class SecurityController {
                             String oauth2Id = (String) session.getAttribute("oauth2Id");
                             user.setOauth2Id(oauth2Id);
 
-                            if (session.getAttribute("oauth2Email").equals(email))
-                                userRoles = Collections.singleton(Role.USER);
+                            if (session.getAttribute("oauth2Email") != null)
+                                if (session.getAttribute("oauth2Email").equals(email))
+                                    userRoles = Collections.singleton(Role.USER);
 
                             URL avatarUrl;
                             if ((avatarUrl = (URL) session.getAttribute("oauth2AvatarUrl")) != null) {
