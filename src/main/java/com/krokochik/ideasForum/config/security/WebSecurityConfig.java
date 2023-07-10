@@ -1,4 +1,4 @@
-package com.krokochik.ideasForum.config;
+package com.krokochik.ideasForum.config.security;
 
 import com.krokochik.ideasForum.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;

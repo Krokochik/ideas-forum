@@ -10,6 +10,7 @@ import com.krokochik.ideasForum.service.MailService;
 import com.krokochik.ideasForum.service.UserService;
 import com.krokochik.ideasForum.service.UserValidationService;
 import com.krokochik.ideasForum.service.crypto.TokenService;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,10 +26,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -138,6 +142,7 @@ public class SecurityController {
             }
 
             userService.setRolesById(user.getId(), Collections.singleton(Role.USER));
+            user.setRoles(Collections.singleton(Role.USER));
             authorizeUser(SecurityContextHolder.getContext(), user);
 
             return "redirect:/main";
@@ -291,13 +296,16 @@ public class SecurityController {
 
     @GetMapping("/sign-up")
     public String loginPageGet(Model model, HttpSession session,
-                               @RequestParam(value = "oauth2", required = false) String oauth2Redirect) {
+                               @RequestParam(value = "oauth2", defaultValue = "", required = false) String oauth2Redirect) {
         // autofill data
         AuthData authData = (AuthData) session.getAttribute("authData");
         if (oauth2Redirect.equals("true") && authData == null) {
-            String login;
-            if ((login = session.getAttribute("oauth2Login").toString()) != null)
-                authData = new AuthData(login, "");
+            String username;
+            String email;
+            if ((username = session.getAttribute("oauth2Username").toString()) != null)
+                if ((email = session.getAttribute("oauth2Email").toString()) != null)
+                    authData = new AuthData(username, email);
+                else authData = new AuthData(username, "");
         }
         model.addAttribute("authData", authData);
         session.setAttribute("authData", null);
@@ -335,32 +343,48 @@ public class SecurityController {
         session.setAttribute("authData", new AuthData(name, email));
 
         if ((response != null && response.isSuccess()) ||
-                ((session.getAttribute("oauth2Login") != null) &&
-                        (session.getAttribute("oauth2Avatar") != null) &&
+                ((session.getAttribute("oauth2Username") != null) &&
                         (session.getAttribute("oauth2Id") != null) &&
                         oauth2.equals("oauth2"))) {
             try {
                 if (UserValidationService.validate(user)) {
                     if (userRepository.findByUsername(user.getUsername()) == null) {
-                        user.setRoles(Collections.singleton(Role.ANONYM));
+                        Set<Role> userRoles = Collections.singleton(Role.ANONYM);
                         if (oauth2.equals("oauth2") && (session.getAttribute("oauth2Id") != null)) {
-                            long oauth2Id = (long) session.getAttribute("oauth2Id");
+                            String oauth2Id = (String) session.getAttribute("oauth2Id");
                             user.setOauth2Id(oauth2Id);
-                            session.setAttribute("oauth2Id", null);
 
-                            String oauth2Avatar;
-                            if ((oauth2Avatar = (String) session.getAttribute("oauth2Avatar")) != null) {
-                                user.setAvatar(oauth2Avatar.getBytes(StandardCharsets.UTF_8));
-                                session.setAttribute("oauth2Avatar", null);
+                            if (session.getAttribute("oauth2Email").equals(email))
+                                userRoles = Collections.singleton(Role.USER);
+
+                            URL avatarUrl;
+                            if ((avatarUrl = (URL) session.getAttribute("oauth2AvatarUrl")) != null) {
+                                byte[] avatar = new User().getAvatar();
+                                try {
+                                    BufferedImage image = ImageIO.read(avatarUrl);
+                                    ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
+                                    ImageIO.write(image, "png", byteArrayOutStream);
+                                    avatar = Base64.encodeBase64(byteArrayOutStream.toByteArray());
+                                } catch (IOException ignored) { }
+                                user.setAvatar(avatar);
                             }
                         }
+
+                        user.setRoles(userRoles);
                         userRepository.save(user);
                         authorizeUser(SecurityContextHolder.getContext(), user);
+
+                        session.setAttribute("oauth2Id", null);
+                        session.setAttribute("oauth2Username", null);
+                        session.setAttribute("oauth2Email", null);
+                        session.setAttribute("oauth2AvatarUrl", null);
+                        session.setAttribute("authData", null);
                     } else return "redirect:/sign-up?regErr&nameTakenErr";
                 }
             } catch (UserValidationService.UsernameLengthException exception) {
                 return "redirect:/sign-up?regErr&nameLenErr";
             } catch (NullPointerException exception) {
+                exception.printStackTrace();
                 return "redirect:/sign-up?regErr&nameErr";
             } catch (UserValidationService.PasswordInsecureException exception) {
                 return "redirect:/sign-up?regErr&passInsecureErr";

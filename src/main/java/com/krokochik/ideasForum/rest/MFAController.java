@@ -39,6 +39,10 @@ public class MFAController {
 
     @PostMapping(value = "/codes", produces = "application/json")
     public HashMap<String, Object> produceMfaCodesToHtml(HttpServletResponse response, Authentication authentication) {
+        if (authentication == null) {
+            response.setStatus(403);
+            return new HashMap<>();
+        }
         User user = userRepository.findByUsername(authentication.getName());
         if (user.isMfaConnected()) {
             response.setStatus(200);

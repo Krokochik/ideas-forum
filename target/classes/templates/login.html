@@ -129,11 +129,19 @@
                         <h6 class="mb-0 pb-3"><span>Авторизация</span><span>Регистрация</span></h6>
                         <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" th:checked="${mode}"/>
                         <label for="reg-log"></label>
-                        <div class="card-3d-wrap mx-auto h-auto" th:style="'min-height: ' + ${param.keySet().contains('nameErr')? '540':
-                                                                                              param.keySet().contains('nameTakenErr')? '540':
-                                                                                              param.keySet().contains('emailFormErr')? '560':
-                                                                                              param.keySet().contains('nameLenErr')? '570':
-                                                                                              param.keySet().contains('passInsecureErr')? '580':
+                        <div class="card-3d-wrap mx-auto h-auto" th:style="'min-height: ' + ${param.keySet().contains('oauth2')?
+                                                                                              param.keySet().contains('nameErr')? '450':
+                                                                                              param.keySet().contains('loginError')? '450':
+                                                                                              param.keySet().contains('nameTakenErr')? '450':
+                                                                                              param.keySet().contains('emailFormErr')? '480':
+                                                                                              param.keySet().contains('nameLenErr')? '480':
+                                                                                              param.keySet().contains('passInsecureErr')? '520':
+                                                                                              '440':
+                                                                                              param.keySet().contains('nameErr')? '560':
+                                                                                              param.keySet().contains('nameTakenErr')? '560':
+                                                                                              param.keySet().contains('emailFormErr')? '585':
+                                                                                              param.keySet().contains('nameLenErr')? '585':
+                                                                                              param.keySet().contains('passInsecureErr')? '610':
                                                                                               '520'} + 'px;'">
                             <div class="card-3d-wrapper">
                                 <div class="card-front">
@@ -190,11 +198,11 @@
                                         <div class="section text-center">
                                             <h4 th:unless="${param.regErr}" class="mb-4 pb-3">Регистрация</h4>
                                             <h4 th:if="${param.regErr}" class="mb-1 pb-3">Регистрация</h4>
-                                            <form th:action="@{/sign-up}" method="post">
+                                            <form th:action="${param.keySet().contains('oauth2')? '/sign-up/oauth2' : '/sign-up'}" method="post">
                                                 <div class="form-group">
                                                     <input type="text" name="username" class="form-style"
                                                            placeholder="Ваш логин" id="username1" autocomplete="off"
-                                                           th:value="${authInfo != null? authInfo.login():''}">
+                                                           th:value="${authData != null? authData.login():''}">
                                                     <i class="input-icon uil uil-user"></i>
                                                 </div>
                                                 <div th:if="${param.nameTakenErr}"
@@ -216,8 +224,8 @@
                                                 </div>
                                                 <div class="form-group mt-2">
                                                     <input type="email" name="email" class="form-style"
-                                                           placeholder="Ваша почта" id="logemail" autocomplete="off"
-                                                           th:value="${authInfo != null? authInfo.email():''}">
+                                                           placeholder="Ваша почта" id="email" autocomplete="off"
+                                                           th:value="${authData != null? authData.email():''}">
                                                     <i class="input-icon uil uil-at"></i>
                                                 </div>
                                                 <div th:if="${param.emailFormErr}"
@@ -228,11 +236,11 @@
                                                 </div>
                                                 <div class="form-group mt-2">
                                                     <input type="password" name="password" class="form-style"
-                                                           placeholder="Ваш пароль" id="logpass" autocomplete="off">
+                                                           placeholder="Ваш пароль" id="pass" autocomplete="off">
                                                     <i class="input-icon uil uil-lock-alt"></i>
                                                     <i class="uil uil-eye-slash" id="eye1"
                                                        style="cursor: pointer;right: 5px;position: absolute;top: 5px;text-align: right;font-size: 21px;color: #ffeba7;"
-                                                       onclick="document.getElementById('eye1').className=document.getElementById('eye1').className==='uil uil-eye-slash'? 'uil uil-eye' : 'uil uil-eye-slash'; document.getElementById('logpass').type=document.getElementById('logpass').type==='text'?'password':'text';"></i>
+                                                       onclick="document.getElementById('eye1').className=document.getElementById('eye1').className==='uil uil-eye-slash'? 'uil uil-eye' : 'uil uil-eye-slash'; document.getElementById('pass').type=document.getElementById('pass').type==='text'?'password':'text';"></i>
                                                 </div>
                                                 <div th:if="${param.passInsecureErr}"
                                                      class="text-bg-danger rounded mb-0 mt-2 h-auto"
@@ -242,7 +250,7 @@
                                                         символов.
                                                     </p>
                                                 </div>
-                                                <div class="form-group mt-4" style="display: grid;place-items: center">
+                                                <div th:unless="${param.keySet().contains('oauth2')}" class="form-group mt-4" style="display: grid;place-items: center">
                                                     <div class="captcha">
                                                         <div id="hcaptcha" class="h-captcha"
                                                              data-sitekey="871073a5-efc4-49f9-87e4-266fc72aae96"
@@ -269,14 +277,17 @@
             </div>
         </div>
     </div>
-    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+    <script th:unless="${param.keySet().contains('oauth2')}" src="https://js.hcaptcha.com/1/api.js" async defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script th:src="@{/scripts/captcha.js}"></script>
     <script>
         if (window.location.pathname === "/sign-up")
-            document.getElementById('username1').focus();
-        else
-            document.getElementById('username').focus();
+            if (document.getElementById('username1').value != '')
+                if (document.getElementById('email').value != '')
+                    document.getElementById('pass').focus();
+                else document.getElementById('email').focus();
+            else document.getElementById('username1').focus();
+        else document.getElementById('username').focus();
     </script>
     </body>
 

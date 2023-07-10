@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,22 +23,16 @@ public class ProfileController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping(value = "/avatar")
-    public void avatar(HttpServletResponse response) throws IOException {
-        byte[] decodedAvatar = null;
+    @GetMapping(value = "/avatar", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] avatar(HttpServletResponse response) {
+        byte[] decodedAvatar;
         if (SecurityController.isAuthenticated()) {
             User user = userRepository.findByUsername(SecurityController.getContext().getAuthentication().getName());
-            if (new String(user.getAvatar()).endsWith("==")) {
-                decodedAvatar = Base64.decodeBase64(user.getAvatar());
-            }
-            else {
-                response.sendRedirect(new String(user.getAvatar()));
-            }
-        } else decodedAvatar = Base64.decodeBase64(new User().getAvatar());
-        if (decodedAvatar != null) {
-            response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-            response.getOutputStream().write(decodedAvatar);
+            decodedAvatar = Base64.decodeBase64(user.getAvatar());
+        } else {
+            decodedAvatar = Base64.decodeBase64(new User().getAvatar());
         }
+        return decodedAvatar;
     }
 
     @PostMapping(value = "/profile", produces = "application/json")
