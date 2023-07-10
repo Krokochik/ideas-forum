@@ -306,8 +306,8 @@
             var isGithubProvider = element.dataset.github;
             var isOauth2Redirect = element.dataset.oauth2;
 
-            if (isGithubProvider === true)
-                if (isOauth2Redirect === true)
+            if (isGithubProvider === "true")
+                if (isOauth2Redirect === "true")
                     window.location.href = window.location.href.substring(0, window.location.href.indexOf('?'));
                 else
                     window.location.href = window.location.href.substring(0, window.location.href.indexOf('?')) + '?oauth2=true'
@@ -317,11 +317,8 @@
             var isDiscordProvider = element.dataset.discord;
             var isOauth2Redirect = element.dataset.oauth2;
 
-            alert(isDiscordProvider);
-            alert(isOauth2Redirect);
-
-            if (isDiscordProvider === true)
-                if (isOauth2Redirect === true)
+            if (isDiscordProvider === "true")
+                if (isOauth2Redirect === "true")
                     window.location.href = window.location.href.substring(0, window.location.href.indexOf('?'));
                 else
                     window.location.href = window.location.href.substring(0, window.location.href.indexOf('?')) + '?oauth2=true';
