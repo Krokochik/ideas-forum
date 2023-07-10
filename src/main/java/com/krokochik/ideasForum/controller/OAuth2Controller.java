@@ -38,8 +38,10 @@ public class OAuth2Controller {
             String id;
             try {
                 id = oauth2User.getAttribute("id");
-            } catch (NullPointerException exception) {
+            } catch (NullPointerException e) {
                 return "redirect:/login";
+            }  catch (ClassCastException e) {
+                id = ((Integer) oauth2User.getAttribute("id")) + "";
             }
 
             User user;
