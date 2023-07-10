@@ -63,11 +63,14 @@ public class OAuth2Controller {
 
                 String email = oauth2User.getAttribute("email");
 
+                String provider = oauth2User.getAttribute("global_name") != null ? "discord" : "github";
+
                 // attributes to signing up
                 session.setAttribute("oauth2Id", id);
                 session.setAttribute("oauth2Username", username);
                 session.setAttribute("oauth2Email", email);
                 session.setAttribute("oauth2AvatarUrl", avatarUrl);
+                session.setAttribute("oauth2Provider", provider);
 
                 //  to clear able previous autofill data
                 session.setAttribute("authData", null);

@@ -294,8 +294,15 @@ public class SecurityController {
         return "redirect:/mail-confirm?newEmail";
     }
 
+    @GetMapping("/login")
+    public String loginPage(Model model) {
+        model.addAttribute("discord", false);
+        model.addAttribute("github", false);
+        return "login";
+    }
+
     @GetMapping("/sign-up")
-    public String loginPageGet(Model model, HttpSession session,
+    public String signUpGet(Model model, HttpSession session,
                                @RequestParam(value = "oauth2", defaultValue = "", required = false) String oauth2Redirect) {
         // autofill data
         AuthData authData = (AuthData) session.getAttribute("authData");
@@ -308,6 +315,14 @@ public class SecurityController {
         }
         model.addAttribute("authData", authData);
         session.setAttribute("authData", null);
+
+        String oauth2Provider;
+        if (session.getAttribute("oauth2Provider") != null)
+            oauth2Provider = (String) session.getAttribute("oauth2Provider");
+        else oauth2Provider = "Unknown";
+
+        model.addAttribute("discord", oauth2Provider.equals("discord"));
+        model.addAttribute("github", oauth2Provider.equals("github"));
 
         // mode ? sign up : login
         model.addAttribute("mode", true);
@@ -322,7 +337,7 @@ public class SecurityController {
     String sitekey;
 
     @PostMapping("/sign-up/{oauth2}")
-    public String loginPage(HttpSession session, HttpServletResponse httpResponse,
+    public String signUpPage(HttpSession session, HttpServletResponse httpResponse,
                             @RequestParam(name = "username") String name,
                             @RequestParam(name = "email") String email,
                             @RequestParam(name = "password") String pass,

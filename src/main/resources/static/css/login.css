@@ -4,6 +4,11 @@
    overflow-x: hidden;
 }
 
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}
+
 ::-webkit-scrollbar { /* chrome based */
     width: 0px;  /* ширина scrollbar'a */
     background: transparent;  /* опционально */
@@ -303,6 +308,7 @@ h6 span{
 
 .closeModal {
 	position: absolute;
+	z-index: 999;
 	top: 30px;
 	right: 20px;
 	width: 24px;

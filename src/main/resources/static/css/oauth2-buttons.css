@@ -1,0 +1,23 @@
+.oauth2-button {
+    cursor: pointer;
+    background-color: #1F2029;
+    width: 60px;
+    height: 60px;
+    position: relative;
+    top: 15px;
+    display: inline-block;
+    border-radius: 14px;
+    box-shadow: 2px 2px 4px 2px rgba(21,21,21,.2);
+}
+.oauth2-button > #svg {
+    width: 65%;
+    position: relative;
+    top: 10px;
+    fill: #353149;
+    transition-property: fill;
+    transition-duration: .3s;
+}
+
+.oauth2-button:hover > #svg {
+    fill: #ffeba7;
+}
