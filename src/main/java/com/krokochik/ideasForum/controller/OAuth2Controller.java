@@ -64,6 +64,7 @@ public class OAuth2Controller {
                 String email = oauth2User.getAttribute("email");
 
                 String provider = oauth2User.getAttribute("global_name") != null ? "discord" : "github";
+                oauth2User.getAttributes().forEach((s, o) -> System.out.println("s" + ": " + "o"));
 
                 // attributes to signing up
                 session.setAttribute("oauth2Id", id);
