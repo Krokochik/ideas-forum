@@ -35,13 +35,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/mail-confirm", "/password-abort", "/abortPass", "/pass-abort-notify",
                         "/scripts/**", "/images/**", "/css/**",
                         "/avatar",
-                        "/mfa/**",
+                        "/mfa/**", "/terminal",
                         "/googleb8fcdd64aa45ba54.html", "/yandex_f4f03a518326d43b.html", "/bootstrap.min.css.map")
                     .permitAll()
-                .antMatchers(HttpMethod.POST, "/profile", "/sign-up", "/sign-up/**")
+                .antMatchers(HttpMethod.POST, "/sign-up", "/sign-up/**", "/terminal")
                     .permitAll()
-                .antMatchers(HttpMethod.GET ,"/login", "/sign-up", "/password-abort", "/oauth2/**")
-                    .not().hasAnyAuthority(Role.USER.name(), Role.ANONYM.name())
+                .antMatchers(HttpMethod.GET,"/login", "/sign-up", "/password-abort", "/oauth2/**")
+                    .anonymous()
+                .antMatchers(HttpMethod.POST, "/profile")
+                    .hasAnyAuthority(Role.USER.name())
                 .antMatchers("/add-note")
                     .hasAnyAuthority(Role.USER.name())
                 .anyRequest()

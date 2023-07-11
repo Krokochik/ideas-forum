@@ -199,7 +199,7 @@
                                         <div class="section text-center">
                                             <h4 th:unless="${param.regErr}" class="mb-4 pb-3">Регистрация</h4>
                                             <h4 th:if="${param.regErr}" class="mb-1 pb-3">Регистрация</h4>
-                                            <form th:action="${param.keySet().contains('oauth2')? '/sign-up/oauth2' : '/sign-up'}" method="post">
+                                            <form th:action="${param.keySet().contains('oauth2')? '/sign-up/oauth2' : '/sign-up/manual'}" method="post">
                                                 <div class="form-group">
                                                     <input type="text" name="username" class="form-style"
                                                            placeholder="Ваш логин" id="username1" autocomplete="off"
