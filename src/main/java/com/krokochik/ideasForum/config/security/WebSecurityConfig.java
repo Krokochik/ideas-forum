@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/sign-up", "/sign-up/**", "/terminal")
                     .permitAll()
                 .antMatchers(HttpMethod.GET,"/login", "/sign-up", "/password-abort", "/oauth2/**")
-                    .anonymous()
+                    .not().hasAnyAuthority(Role.USER.name(), Role.ANONYM.name())
                 .antMatchers(HttpMethod.POST, "/profile")
                     .hasAnyAuthority(Role.USER.name())
                 .antMatchers("/add-note")
