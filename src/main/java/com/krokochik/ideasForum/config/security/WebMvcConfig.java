@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/terminal").setViewName("terminal");
+        registry.addViewController("/privacy").setViewName("privacy");
         registry.addViewController("/googleb8fcdd64aa45ba54.html").setViewName("googleb8fcdd64aa45ba54");
         registry.addViewController("/yandex_f4f03a518326d43b.html").setViewName("yandex_f4f03a518326d43b.html");
     }

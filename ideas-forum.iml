@@ -73,6 +73,9 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.21" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:5.3.21" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.9.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.postgresql:postgresql:42.3.6" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.checkerframework:checker-qual:3.5.0" level="project" />
+    <orderEntry type="library" name="Maven: com.github.trystan:AsciiPanel:0d515cd58b" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.10.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.10.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.13.3" level="project" />
@@ -161,8 +164,6 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-mail:2.7.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context-support:5.3.21" level="project" />
     <orderEntry type="library" name="Maven: com.sun.mail:jakarta.mail:1.6.7" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: org.postgresql:postgresql:42.3.6" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: org.checkerframework:checker-qual:3.5.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-analysis-common:9.4.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-core:9.4.2" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:23.0.0" level="project" />

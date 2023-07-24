@@ -22,5 +22,4 @@ public class Main {
         User[] users = userRepository.getAllUsers();
         Arrays.stream(users).forEach(User::startMfaCodeGenerating);
     }
-
 }

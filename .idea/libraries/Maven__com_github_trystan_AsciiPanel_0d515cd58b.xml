@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.trystan:AsciiPanel:0d515cd58b">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/trystan/AsciiPanel/0d515cd58b/AsciiPanel-0d515cd58b.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/trystan/AsciiPanel/0d515cd58b/AsciiPanel-0d515cd58b-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/trystan/AsciiPanel/0d515cd58b/AsciiPanel-0d515cd58b-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
