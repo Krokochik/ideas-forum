@@ -29,6 +29,12 @@ public class MFAController {
     @Autowired
     UserRepository userRepository;
 
+    /*
+    * to connect mfa client must confirm the addition sending
+    * encrypted with the private token's part a message
+    * to a path that is the public token's part
+    * */
+
     @GetMapping(value = "/ping", produces = "application/json")
     public HashMap<String, Object> ping(HttpServletResponse response) {
         response.setStatus(200);

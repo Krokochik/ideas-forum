@@ -46,11 +46,13 @@ public class SettingsController {
     @GetMapping(value = "/mfa-qr", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<Resource> qrCode() {
         User user = userRepository.findByUsername(SecurityController.getContext().getAuthentication().getName());
-        Resource resource = new ByteArrayResource(user.getQrcode());
+        if (user.getQrcode() != null) {
+            Resource resource = new ByteArrayResource(user.getQrcode());
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=qrcode.png")
-                .body(resource);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=qrcode.png")
+                    .body(resource);
+        } else return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/settings")
