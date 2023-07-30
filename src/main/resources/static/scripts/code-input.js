@@ -50,6 +50,8 @@ class TwoFactorCode {
 
     this.container.addEventListener("keydown", this.onKeydown);
 
+    this.container.addEventListener("focus", this.onFocus);
+
     this.inputs.forEach((input) => {
       input.addEventListener("invalid", this.onInvalid);
     });
@@ -122,6 +124,9 @@ class TwoFactorCode {
     }
   }
 
+  onFocus(event) {
+    event.target.setSelectionRange(0, 0);
+  }
   // add this event handler on each the inputs to add a class that will handle highlighting the
   // input borders that are empty
   onInvalid(event) {
