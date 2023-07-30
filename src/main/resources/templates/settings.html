@@ -158,7 +158,7 @@
 
                 <input class="list-group-item-check pe-none" type="radio" onclick="toLight();"
                        name="listGroupCheckableRadios" id="fListGroupCheckableRadios2" value="" data-np-checked="1">
-                <label id="fLabel2" th:class="${(theme == 'light' ? 'light-theme' : 'dark-theme') + ' rounded-3 py-3'}"
+                <label id="fLabel2" th:class="${(theme == 'light' ? 'light-theme shadow-sm' : 'dark-theme shadow-hd') + ' rounded-3 py-3'}"
                        th:style="'cursor:' + ${theme == 'light' ? 'default;' : 'pointer;'}" for="fListGroupCheckableRadios2">
                     Светлая тема
                     <span class="d-block small opacity-50" style="" id="fSpan2">Включить светлую тему</span></label>

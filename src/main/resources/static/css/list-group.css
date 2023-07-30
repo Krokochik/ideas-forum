@@ -20,9 +20,10 @@
       .list-group-item-check {
         position: absolute;
         clip: rect(0, 0, 0, 0);
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out
       }
       .list-group-item-check:hover + .dark-theme {
-        background-color: #292e31;
+        background-color: #212529;
       }
       .list-group-item-check:hover + .light-theme {
         background-color: var(--bs-gray-300);
