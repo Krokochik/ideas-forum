@@ -23,6 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUsername(username);
         if (user == null)
             throw new UsernameNotFoundException("Couldn't find a user with username '" + username + "'");
+        System.out.println("User details");
         return srp.convertUserToUserDetails(user);
     }
 }

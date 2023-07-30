@@ -28,6 +28,7 @@ public class CustomPersistentTokenRepository implements PersistentTokenRepositor
         LocalDateTime lastUsed = getLocal(token.getDate());
 
         repository.save(new PersistentRememberMe(series, username, tokenValue, lastUsed));
+        System.out.println("create");
     }
 
     @Override
@@ -35,11 +36,13 @@ public class CustomPersistentTokenRepository implements PersistentTokenRepositor
         PersistentRememberMeToken token = getTokenForSeries(series);
         repository.save(new PersistentRememberMe(
                 series, token.getUsername(), tokenValue, getLocal(lastUsed)));
+        System.out.println("update");
     }
 
     @Override
     public PersistentRememberMeToken getTokenForSeries(String seriesId) {
         PersistentRememberMe rememberMe = repository.findById(seriesId).orElse(new PersistentRememberMe());
+        System.out.println("get");
         return new PersistentRememberMeToken(
                 rememberMe.getUsername(),
                 rememberMe.getSeries(),

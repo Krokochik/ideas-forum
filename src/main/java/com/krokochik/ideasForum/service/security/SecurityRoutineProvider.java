@@ -69,8 +69,9 @@ public class SecurityRoutineProvider {
 
         if (remember) {
             String rememberMeCookieName = "remember-me";
-            int tokenValiditySeconds = 30 * 24 * 60 * 60;
+            int tokenValiditySeconds = 15 * 24 * 60 * 60;
 
+            System.out.println("remember-me");
             PersistentTokenBasedRememberMeServices rememberMeServices = new PersistentTokenBasedRememberMeServices(
                     rememberMeCookieName, userDetailsService, tokenRepository);
             rememberMeServices.setTokenValiditySeconds(tokenValiditySeconds);
