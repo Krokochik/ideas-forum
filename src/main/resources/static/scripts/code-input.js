@@ -69,7 +69,7 @@ class TwoFactorCode {
 
     var regex = undefined;
     if ("filter" in this.root.dataset && this.root.dataset.filter.includes("+")) {
-        const filter = root.dataset.filter.split("+");
+        const filter = this.root.dataset.filter.split("+");
         if (filter.includes("num"))
             if (filter.includes("ltr"))
                 regex = lettersAndDigitsRegex;
