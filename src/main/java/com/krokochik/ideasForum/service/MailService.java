@@ -34,7 +34,7 @@ public class MailService {
             helper.setTo(mail.getReceiver());
             helper.setSubject(mail.getTheme());
 
-            Scanner scanner = new Scanner(new ClassPathResource("templates/mails" + htmlName).getInputStream());
+            Scanner scanner = new Scanner(new ClassPathResource("templates/mails/" + htmlName).getInputStream());
             StringBuilder html = new StringBuilder();
 
             while (scanner.hasNextLine())
