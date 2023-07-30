@@ -60,7 +60,7 @@ class TwoFactorCode {
   }
 
   onInput(event) {
-    let value = event.target.value.replace(/\s+/g, "");
+    let value = event.target.value.replace(/\s+/g, "").toUpperCase();
     let currentIndex = Number(event.target.dataset.index);
 
     const digitsRegex = /^\d*$/;

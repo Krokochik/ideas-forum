@@ -4,10 +4,20 @@
 
 .two-factor-code-inputs input {
   width: 2rem;
+  padding: 0;
+  border-radius: 8px;
   height: 3rem;
-  margin-right: 7px;
+  margin-right: 9px;
   font-size: 2rem;
   text-align: center;
+  color: white;
+  background: none;
+  border: 4px solid #55579f;
+  border-radius: 9px;
+}
+
+.two-factor-code-inputs input::selection {
+  background-color: transparent;
 }
 
 .two-factor-code-inputs input::-webkit-outer-spin-button,
@@ -21,5 +31,9 @@
 }
 
 .two-factor-code-inputs.submitted input:invalid {
-  border: 2px solid red;
+  border: 4px solid #a55353;
+}
+
+.two-factor-code-inputs.submitted input:invalid:focus {
+  border: 4px solid #c93c3c;
 }
