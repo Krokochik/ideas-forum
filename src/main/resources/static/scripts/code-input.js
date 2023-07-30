@@ -146,6 +146,8 @@ class TwoFactorCode {
   }
 }
 
-const root = document.getElementById("code-input");
-const code = new TwoFactorCode(root, parseInt(root.dataset.fields));
-code.render();
+function render() {
+    const root = document.getElementById("code-input");
+    const code = new TwoFactorCode(root, parseInt(root.dataset.fields));
+    code.render();
+}

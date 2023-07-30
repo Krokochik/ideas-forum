@@ -80,6 +80,7 @@ var interval;
       }
 
       $("#modal-body").append('<div data-fields=4 id="main"></div>')
+      render()
     },
     error: function() {}
   });
