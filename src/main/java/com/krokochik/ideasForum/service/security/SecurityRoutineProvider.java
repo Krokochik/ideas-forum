@@ -71,11 +71,14 @@ public class SecurityRoutineProvider {
             String rememberMeCookieName = "remember-me";
             int tokenValiditySeconds = 15 * 24 * 60 * 60;
 
-            System.out.println("remember-me");
+            System.out.println("remember-me0");
             PersistentTokenBasedRememberMeServices rememberMeServices = new PersistentTokenBasedRememberMeServices(
                     rememberMeCookieName, userDetailsService, tokenRepository);
+            System.out.println("remember-me1");
             rememberMeServices.setTokenValiditySeconds(tokenValiditySeconds);
+            System.out.println("remember-me2");
             rememberMeServices.loginSuccess(request, response, authentication);
+            System.out.println("remember-me3");
         }
     }
 
