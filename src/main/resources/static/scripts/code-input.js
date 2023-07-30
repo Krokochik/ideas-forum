@@ -50,7 +50,7 @@ class TwoFactorCode {
 
     this.inputs.forEach((input) => {
       input.addEventListener("invalid", this.onInvalid);
-      input.style.color = dataset.color;
+      input.style.color = this.root.dataset.color;
     });
   }
 
