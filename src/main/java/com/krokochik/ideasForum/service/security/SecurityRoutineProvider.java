@@ -16,9 +16,9 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -70,20 +70,46 @@ public class SecurityRoutineProvider {
         if (remember) {
             String rememberMeCookieName = "remember-me";
             int tokenValiditySeconds = 15 * 24 * 60 * 60;
-
-            System.out.println("remember-me0");
+            request = addParameterToRequest(request, rememberMeCookieName, "on");
             PersistentTokenBasedRememberMeServices rememberMeServices = new PersistentTokenBasedRememberMeServices(
                     rememberMeCookieName, userDetailsService, tokenRepository);
-            System.out.println("remember-me1");
             rememberMeServices.setTokenValiditySeconds(tokenValiditySeconds);
-            System.out.println("remember-me2");
             rememberMeServices.loginSuccess(request, response, authentication);
-            System.out.println("remember-me3");
         }
     }
 
     public void authorizeUser(SecurityContext securityContext, User user) {
         authorizeUser(securityContext, user, false, null, null);
+    }
+
+    private HttpServletRequest addParameterToRequest(HttpServletRequest request, String newName, String newValue) {
+        return new HttpServletRequestWrapper(request) {
+            @Override
+            public String getParameter(String name) {
+                // Возвращаем новое значение параметра, если это необходимо
+                if (name.equals(newName)) {
+                    return newValue;
+                }
+                // В противном случае, используем оригинальное значение параметра
+                return super.getParameter(name);
+            }
+
+            @Override
+            public Map<String, String[]> getParameterMap() {
+                // Создаем новую мапу параметров и добавляем в нее новый параметр
+                Map<String, String[]> parameterMap = new HashMap<>(super.getParameterMap());
+                parameterMap.put(newName, new String[] { newValue });
+                return parameterMap;
+            }
+
+            @Override
+            public Enumeration<String> getParameterNames() {
+                // Создаем новый список и добавляем в него новое имя параметра
+                List<String> parameterNames = Collections.list(super.getParameterNames());
+                parameterNames.add(newName);
+                return Collections.enumeration(parameterNames);
+            }
+        };
     }
 
     public UserDetails convertUserToUserDetails(User user) {
