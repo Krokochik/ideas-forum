@@ -1,7 +1,3 @@
-.two-factor-code-inputs {
-  display: flex;
-}
-
 .two-factor-code-inputs input {
   width: 2rem;
   padding: 0;
@@ -14,6 +10,10 @@
   background: none;
   border: 4px solid #55579f;
   border-radius: 9px;
+}
+
+.two-factor-code-inputs input:focus {
+  border: 4px solid #282ca7;
 }
 
 .two-factor-code-inputs input::selection {

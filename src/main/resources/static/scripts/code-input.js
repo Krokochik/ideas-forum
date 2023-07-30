@@ -92,8 +92,9 @@ class TwoFactorCode {
 
       const nextIndex = ++currentIndex;
 
-      if (nextIndex < this.numberOfInputs) {
+      if (nextIndex < this.numberOfInputs && value.slice(1) !== '') {
         const nextDigit = value.slice(1);
+        console.log(nextDigit)
         this.code[nextIndex] = nextDigit;
 
         const nextInput = this.inputs[nextIndex];
@@ -101,7 +102,7 @@ class TwoFactorCode {
         nextInput.value = nextDigit;
 
         value = value.slice(1);
-      }
+      } else value = '';
     }
 
     // console.log(this.code);
@@ -109,6 +110,7 @@ class TwoFactorCode {
 
   onKeydown(event) {
     if (event.code === "Backspace") {
+      event.preventDefault();
       const currentIndex = Number(event.target.dataset.index);
       var prevIndex = 0;
       if (currentIndex > 0)
