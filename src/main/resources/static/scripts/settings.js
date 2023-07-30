@@ -79,7 +79,10 @@ var interval;
         $("#column4").append("<p>" + codes[j] + "</p>");
       }
 
-      $("#modal-body").append('<div data-filter="num" data-fields="4" id="code-input"></div>')
+      var color = "#fff";
+      if (getCookieValue("theme") === 'light')
+        color = "#000";
+      $("#modal-body").append('<div data-color="' + color + '" data-filter="num" data-fields="4" id="code-input"></div>')
       render()
     },
     error: function() {}

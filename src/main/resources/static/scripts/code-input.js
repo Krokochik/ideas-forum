@@ -8,7 +8,6 @@ class TwoFactorCode {
 
     this.onInput = this.onInput.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
-    this.submitCode = this.submitCode.bind(this);
     this.onInvalid = this.onInvalid.bind(this);
   }
 
@@ -27,7 +26,6 @@ class TwoFactorCode {
     return `
       <form>
         <div class="two-factor-code-inputs">${inputs.join("").trim()}</div>
-        <button class="submit-btn">Отправить</button>
       </form>
     `;
   }
@@ -50,16 +48,37 @@ class TwoFactorCode {
 
     this.container.addEventListener("keydown", this.onKeydown);
 
-    this.container.addEventListener("focus", this.onFocus);
-
     this.inputs.forEach((input) => {
       input.addEventListener("invalid", this.onInvalid);
+      input.style.color = dataset.color;
     });
-
-    this.container
-      .querySelector(".submit-btn")
-      .addEventListener("click", this.submitCode);
   }
+
+    submitCode() {
+      // since we're using the button as a submit
+      // we don't want to actually submit the form when it's possible
+      // use checkValidity() to see if we have all the inputs filled out so that we can preventDefault the submit
+      if (this.form.checkValidity()) {
+        console.log(this.code);
+
+        this.inputs.forEach((input) => {
+            input.blur();
+            input.readOnly = true;
+        });
+
+        if (this.code.join("") === "1234") {
+
+        } else {
+            this.inputs.forEach((input) => {
+                input.value = '';
+            });
+            this.inputs.forEach((input) => {
+                input.dispatchEvent(new Event("invalid"));
+                input.readOnly = false;
+            });
+        }
+      }
+    }
 
   onInput(event) {
     let value = event.target.value.replace(/\s+/g, "").toUpperCase();
@@ -107,6 +126,9 @@ class TwoFactorCode {
       } else value = '';
     }
 
+    if (this.code.filter((str) => str.trim() !== "").length == this.numberOfInputs)
+        this.submitCode();
+
     // console.log(this.code);
   }
 
@@ -124,32 +146,12 @@ class TwoFactorCode {
     }
   }
 
-  onFocus(event) {
-    event.target.setSelectionRange(0, 0);
-  }
   // add this event handler on each the inputs to add a class that will handle highlighting the
   // input borders that are empty
   onInvalid(event) {
     this.container
       .querySelector(".two-factor-code-inputs")
       .classList.add("submitted");
-  }
-
-  submitCode(event) {
-    // since we're using the button as a submit
-    // we don't want to actually submit the form when it's possible
-    // use checkValidity() to see if we have all the inputs filled out so that we can preventDefault the submit
-    if (this.form.checkValidity()) {
-      event.preventDefault();
-
-      console.log(this.code);
-
-      if (this.code.join("") === this.answer) {
-
-      } else {
-
-      }
-    }
   }
 }
 
