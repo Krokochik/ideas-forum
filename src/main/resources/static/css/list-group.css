@@ -20,7 +20,6 @@
       .list-group-item-check {
         position: absolute;
         clip: rect(0, 0, 0, 0);
-        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out
       }
       .list-group-item-check:hover + .dark-theme {
         background-color: #212529;
@@ -37,12 +36,14 @@
         background-color: var(--bs-white);
         padding-left: 10px;
         width: 100%;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out
       }
       .list-group-item-check + .dark-theme {
         color: #fff;
         padding-left: 10px;
         background-color: #171a1c;
         width: 100%;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out
       }
       .list-group-item-check:checked + .light-theme {
         border: none;
