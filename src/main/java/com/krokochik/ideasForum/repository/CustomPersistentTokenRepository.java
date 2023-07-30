@@ -22,13 +22,14 @@ public class CustomPersistentTokenRepository implements PersistentTokenRepositor
 
     @Override
     public void createNewToken(PersistentRememberMeToken token) {
+        System.out.println("create0");
         String series = token.getSeries();
         String username = token.getUsername();
         String tokenValue = token.getTokenValue();
         LocalDateTime lastUsed = getLocal(token.getDate());
 
         repository.save(new PersistentRememberMe(series, username, tokenValue, lastUsed));
-        System.out.println("create");
+        System.out.println("create1");
     }
 
     @Override
