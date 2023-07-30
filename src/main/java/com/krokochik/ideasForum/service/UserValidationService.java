@@ -1,6 +1,6 @@
 package com.krokochik.ideasForum.service;
 
-import com.krokochik.ideasForum.model.User;
+import com.krokochik.ideasForum.model.db.User;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;

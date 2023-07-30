@@ -1,8 +1,8 @@
-package com.krokochik.ideasForum.controller;
+package com.krokochik.ideasForum.controller.pages;
 
 import com.google.zxing.WriterException;
-import com.krokochik.ideasForum.model.Token;
-import com.krokochik.ideasForum.model.User;
+import com.krokochik.ideasForum.model.service.Token;
+import com.krokochik.ideasForum.model.db.User;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MailService;
 import com.krokochik.ideasForum.service.mfa.MFAService;

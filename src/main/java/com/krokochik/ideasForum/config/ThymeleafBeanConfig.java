@@ -1,6 +1,6 @@
 package com.krokochik.ideasForum.config;
 
-import com.krokochik.ideasForum.model.UserAuth;
+import com.krokochik.ideasForum.model.functional.UserAuth;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.security.SecurityRoutineProvider;
 import org.springframework.beans.factory.annotation.Autowired;

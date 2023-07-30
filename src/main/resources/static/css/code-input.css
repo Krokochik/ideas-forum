@@ -1,0 +1,25 @@
+.two-factor-code-inputs {
+  display: flex;
+}
+
+.two-factor-code-inputs input {
+  width: 2rem;
+  height: 3rem;
+  margin-right: 7px;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.two-factor-code-inputs input::-webkit-outer-spin-button,
+.two-factor-code-inputs input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.submit-btn {
+  margin-top: 20px;
+}
+
+.two-factor-code-inputs.submitted input:invalid {
+  border: 2px solid red;
+}

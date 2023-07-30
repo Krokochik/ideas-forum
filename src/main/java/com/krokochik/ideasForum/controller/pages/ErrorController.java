@@ -1,4 +1,4 @@
-package com.krokochik.ideasForum.controller;
+package com.krokochik.ideasForum.controller.pages;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package com.krokochik.ideasForum.model;
+package com.krokochik.ideasForum.model.functional;
 
 import lombok.ToString;
 

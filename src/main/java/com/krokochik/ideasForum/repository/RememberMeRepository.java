@@ -1,6 +1,6 @@
 package com.krokochik.ideasForum.repository;
 
-import com.krokochik.ideasForum.model.PersistentRememberMe;
+import com.krokochik.ideasForum.model.db.PersistentRememberMe;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

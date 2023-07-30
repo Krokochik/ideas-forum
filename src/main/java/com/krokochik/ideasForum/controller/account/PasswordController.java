@@ -1,6 +1,6 @@
-package com.krokochik.ideasForum.controller;
+package com.krokochik.ideasForum.controller.account;
 
-import com.krokochik.ideasForum.model.Mail;
+import com.krokochik.ideasForum.model.service.Mail;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.UserValidationService;
 import com.krokochik.ideasForum.service.crypto.TokenService;

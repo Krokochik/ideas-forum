@@ -1,7 +1,7 @@
 package com.krokochik.ideasForum.service;
 
 
-import com.krokochik.ideasForum.model.Mail;
+import com.krokochik.ideasForum.model.service.Mail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;

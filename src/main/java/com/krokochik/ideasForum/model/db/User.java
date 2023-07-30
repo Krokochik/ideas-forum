@@ -1,5 +1,6 @@
-package com.krokochik.ideasForum.model;
+package com.krokochik.ideasForum.model.db;
 
+import com.krokochik.ideasForum.model.functional.Role;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
 

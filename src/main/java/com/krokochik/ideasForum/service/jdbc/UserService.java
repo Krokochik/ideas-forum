@@ -1,7 +1,7 @@
 package com.krokochik.ideasForum.service.jdbc;
 
-import com.krokochik.ideasForum.model.Role;
-import com.krokochik.ideasForum.model.User;
+import com.krokochik.ideasForum.model.functional.Role;
+import com.krokochik.ideasForum.model.db.User;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.crypto.TokenService;
 import lombok.SneakyThrows;

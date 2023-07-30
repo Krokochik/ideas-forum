@@ -1,6 +1,6 @@
 package com.krokochik.ideasForum.repository;
 
-import com.krokochik.ideasForum.model.User;
+import com.krokochik.ideasForum.model.db.User;
 import com.sun.istack.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

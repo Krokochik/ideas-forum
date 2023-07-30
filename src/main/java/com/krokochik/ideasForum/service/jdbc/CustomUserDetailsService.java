@@ -1,6 +1,6 @@
-package com.krokochik.ideasForum.service;
+package com.krokochik.ideasForum.service.jdbc;
 
-import com.krokochik.ideasForum.model.User;
+import com.krokochik.ideasForum.model.db.User;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.security.SecurityRoutineProvider;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.krokochik.ideasForum.controller;
+package com.krokochik.ideasForum.controller.pages;
 
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MailService;

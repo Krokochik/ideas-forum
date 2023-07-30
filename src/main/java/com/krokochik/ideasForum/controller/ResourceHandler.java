@@ -1,6 +1,6 @@
 package com.krokochik.ideasForum.controller;
 
-import com.krokochik.ideasForum.model.User;
+import com.krokochik.ideasForum.model.db.User;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.security.SecurityRoutineProvider;
 import org.apache.commons.codec.binary.Base64;

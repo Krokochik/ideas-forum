@@ -1,6 +1,6 @@
 package com.krokochik.ideasForum.repository;
 
-import com.krokochik.ideasForum.model.PersistentRememberMe;
+import com.krokochik.ideasForum.model.db.PersistentRememberMe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;

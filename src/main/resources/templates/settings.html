@@ -43,6 +43,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="prefetch" th:href="@{/avatar}">
     <link rel="icon" th:href="@{/images/favicon.png}">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap-edited.css}">
 </head>
 
 <body style="min-height: 100vh;" th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
@@ -65,20 +67,22 @@
             </div>
             <div th:class="'modal-body text-bg-' + ${theme}"
                  style="text-align: center;border-bottom-right-radius: calc(0.5rem - 1px);border-bottom-left-radius: calc(0.5rem - 1px);">
-                <div class="column" id="column1"></div>
-                <div class="column" id="column2"></div>
-                <div class="column" id="column3"></div>
-                <div class="column" id="column4"></div>
-                <img id="qrcode" src="/mfa-qr" class="mb-3">
+                <div id="modal-body">
+                    <div class="column" id="column1"></div>
+                    <div class="column" id="column2"></div>
+                    <div class="column" id="column3"></div>
+                    <div class="column" id="column4"></div>
+                    <img id="qrcode" src="/mfa-qr" class="mb-3">
 
-                <ol id="list" class="mt-3"
-                    style="text-align: left;width: 93%;font-family: 'Roboto';margin-left: 10px;">
-                    <li style="padding-left: 20px;">Скачайте мобильное приложение IdeasForumMfa <a
-                            href="https://ideas-forum.herokuapp.com/settings"> с нашего сервера</a> или из Play Market
-                    </li>
-                    <li style="padding-left: 20px;">Приложением отсканируйте QR-код выше или введите вручную: <b
-                            style="font-size: 1.2rem; letter-spacing: 2px" th:text="${token}"></b></li>
-                </ol>
+                    <ol id="list" class="mt-3"
+                        style="text-align: left;width: 93%;font-family: 'Roboto';margin-left: 10px;">
+                        <li style="padding-left: 20px;">Скачайте мобильное приложение IdeasForumMfa <a
+                                href="https://ideas-forum.herokuapp.com/settings"> с нашего сервера</a>
+                        </li>
+                        <li style="padding-left: 20px;">Приложением отсканируйте QR-код выше или введите вручную: <b
+                                style="font-size: 1.2rem; letter-spacing: 2px" th:text="${token}"></b></li>
+                    </ol>
+                </div>
             </div>
         </div>
     </div>
@@ -95,15 +99,15 @@
                 <p style="text-right: left; margin-right: auto;"
                    th:class="'mb-2 fs-2 fw-bold ' + ${theme == 'dark'? 'text-light' : 'text-dark'}">Безопасность</p>
                 <button class="h-auto"
-                        style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;"
-                        th:class="'btn btn-' + ${theme == 'dark'? 'drk' : 'lgt'}" id="chng1"
+                        style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;margin-bottom:7px;"
+                        th:class="'btn btn-' + ${theme == 'dark'? 'drk shadow-hd' : 'lgt shadow-sm'}" id="chng1"
                         onclick="window.location.href = '/password-change-instructions'" type="button">
                     Сменить пароль
                     <span class="d-block small opacity-50" id="thSpan1">Отправить письмо</span>
                 </button>
                 <button class="h-auto"
-                        style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;"
-                        th:class="'btn btn-' + ${theme == 'dark'? 'drk' : 'lgt'}" id="chng2"
+                        style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;margin-bottom:7px;"
+                        th:class="'btn btn-' + ${theme == 'dark'? 'drk shadow-hd' : 'lgt shadow-sm'}" id="chng2"
                         onclick="window.location.href = '/change-email?from=settings'" type="button">
                     Сменить почту
                     <span class="d-block small opacity-50" id="thSpan2"
@@ -111,7 +115,7 @@
                 </button>
                 <button class="h-auto"
                         style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;"
-                        th:class="'btn btn-' + ${theme == 'dark'? 'drk' : 'lgt'}" id="chng3" data-bs-toggle="modal"
+                        th:class="'btn btn-' + ${theme == 'dark'? 'drk shadow-hd' : 'lgt shadow-sm'}" id="chng3" data-bs-toggle="modal"
                         data-bs-target="#mfaModal" data-th-bool="${isIdConfirmed}" type="button">
                     Добавить 2fa
                     <span class="d-block small opacity-50" id="thSpan3">Скачать мобильное приложение</span>
@@ -129,15 +133,15 @@
                    th:class="'mb-2 fs-2 fw-bold ' + ${theme == 'dark'? 'text-light' : 'text-dark'}">Тема</p>
                 <input class="list-group-item-check pe-none" onclick="toDark();" type="radio"
                        name="listGroupCheckableRadios" id="fListGroupCheckableRadios1" value="" data-np-checked="1">
-                <label id="fLabel1" th:class="${(theme == 'light' ? 'light-theme' : 'dark-theme') + ' rounded-3 py-3'}"
-                       style="cursor: pointer;" for="fListGroupCheckableRadios1">
+                <label id="fLabel1" th:class="${(theme == 'light' ? 'light-theme shadow-sm' : 'dark-theme shadow-hd') + ' rounded-3 py-3'}"
+                       th:style="'margin-bottom:7px;cursor:' + ${theme == 'dark' ? 'default;' : 'pointer;'}" for="fListGroupCheckableRadios1">
                     Тёмная тема
                     <span class="d-block small opacity-50" style="" id="fSpan1">Включить тёмную тему</span></label>
 
                 <input class="list-group-item-check pe-none" type="radio" onclick="toLight();"
                        name="listGroupCheckableRadios" id="fListGroupCheckableRadios2" value="" data-np-checked="1">
                 <label id="fLabel2" th:class="${(theme == 'light' ? 'light-theme' : 'dark-theme') + ' rounded-3 py-3'}"
-                       style="cursor: pointer;" for="fListGroupCheckableRadios2">
+                       th:style="'cursor:' + ${theme == 'light' ? 'default;' : 'pointer;'}" for="fListGroupCheckableRadios2">
                     Светлая тема
                     <span class="d-block small opacity-50" style="" id="fSpan2">Включить светлую тему</span></label>
             </div>

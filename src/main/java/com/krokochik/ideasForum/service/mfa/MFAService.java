@@ -1,6 +1,6 @@
 package com.krokochik.ideasForum.service.mfa;
 
-import com.krokochik.ideasForum.model.Token;
+import com.krokochik.ideasForum.model.service.Token;
 import com.krokochik.ideasForum.service.crypto.TokenService;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;

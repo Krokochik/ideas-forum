@@ -1,9 +1,9 @@
 package com.krokochik.ideasForum.service.security;
 
-import com.krokochik.ideasForum.model.Role;
-import com.krokochik.ideasForum.model.User;
+import com.krokochik.ideasForum.model.functional.Role;
+import com.krokochik.ideasForum.model.db.User;
 import com.krokochik.ideasForum.repository.CustomPersistentTokenRepository;
-import com.krokochik.ideasForum.service.CustomUserDetailsService;
+import com.krokochik.ideasForum.service.jdbc.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -69,8 +69,8 @@ public class SecurityRoutineProvider {
 
         if (remember) {
             String rememberMeCookieName = "remember-me";
-            int tokenValiditySeconds = 15 * 24 * 60 * 60;
-            request = addParameterToRequest(request, rememberMeCookieName, "on");
+            int tokenValiditySeconds = 30 * 24 * 60 * 60;
+            request = addParameterToRequest(request, rememberMeCookieName, "on"); // it is necessary for spring
             PersistentTokenBasedRememberMeServices rememberMeServices = new PersistentTokenBasedRememberMeServices(
                     rememberMeCookieName, userDetailsService, tokenRepository);
             rememberMeServices.setTokenValiditySeconds(tokenValiditySeconds);
@@ -82,21 +82,18 @@ public class SecurityRoutineProvider {
         authorizeUser(securityContext, user, false, null, null);
     }
 
-    private HttpServletRequest addParameterToRequest(HttpServletRequest request, String newName, String newValue) {
+    public HttpServletRequest addParameterToRequest(HttpServletRequest request, String newName, String newValue) {
         return new HttpServletRequestWrapper(request) {
             @Override
             public String getParameter(String name) {
-                // Возвращаем новое значение параметра, если это необходимо
                 if (name.equals(newName)) {
                     return newValue;
                 }
-                // В противном случае, используем оригинальное значение параметра
                 return super.getParameter(name);
             }
 
             @Override
             public Map<String, String[]> getParameterMap() {
-                // Создаем новую мапу параметров и добавляем в нее новый параметр
                 Map<String, String[]> parameterMap = new HashMap<>(super.getParameterMap());
                 parameterMap.put(newName, new String[] { newValue });
                 return parameterMap;
@@ -104,7 +101,6 @@ public class SecurityRoutineProvider {
 
             @Override
             public Enumeration<String> getParameterNames() {
-                // Создаем новый список и добавляем в него новое имя параметра
                 List<String> parameterNames = Collections.list(super.getParameterNames());
                 parameterNames.add(newName);
                 return Collections.enumeration(parameterNames);

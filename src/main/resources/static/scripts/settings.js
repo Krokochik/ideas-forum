@@ -1,13 +1,29 @@
+function getCookieValue(cookieName) {
+  const cookieString = document.cookie;
+  const cookies = cookieString.split('; ');
+
+  for (const cookie of cookies) {
+    const [name, value] = cookie.split('=');
+    if (name === cookieName) {
+      return decodeURIComponent(value);
+    }
+  }
+
+  return null;
+}
+
        function toLight() {
-           if(document.cookie.theme != 'light')
+           if(getCookieValue("theme") !== 'light') {
                document.cookie = 'theme=light'
                window.location.href = window.location.href;
+           }
        }
 
        function toDark() {
-           if(document.cookie.theme != 'dark')
-               document.cookie = 'theme=dark'
+           if(getCookieValue("theme") !== 'dark') {
+               document.cookie = 'theme=dark';
                window.location.href = window.location.href;
+           }
        }
 
        function onLoad() {
@@ -53,15 +69,17 @@ var interval;
         $("#column2").append("<p>" + codes[j] + "</p>");
       }
 
-            $("#column3").empty();
+      $("#column3").empty();
       for (var k = 8; k < 12; k++) {
         $("#column3").append("<p>" + codes[j] + "</p>");
       }
 
-            $("#column4").empty();
+      $("#column4").empty();
       for (var l = 12; l < 16; l++) {
         $("#column4").append("<p>" + codes[j] + "</p>");
       }
+
+      $("#modal-body").append('<div data-fields=4 id="main"></div>')
     },
     error: function() {}
   });

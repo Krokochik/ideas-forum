@@ -22,7 +22,7 @@
         clip: rect(0, 0, 0, 0);
       }
       .list-group-item-check:hover + .dark-theme {
-        background-color: var(--bs-gray-900);
+        background-color: #292e31;
       }
       .list-group-item-check:hover + .light-theme {
         background-color: var(--bs-gray-300);
@@ -40,7 +40,7 @@
       .list-group-item-check + .dark-theme {
         color: #fff;
         padding-left: 10px;
-        background-color: var(--bs-gray-dark);
+        background-color: #171a1c;
         width: 100%;
       }
       .list-group-item-check:checked + .light-theme {

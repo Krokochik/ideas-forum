@@ -1,6 +1,6 @@
 package com.krokochik.ideasForum.repository;
 
-import com.krokochik.ideasForum.model.Post;
+import com.krokochik.ideasForum.model.db.Post;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

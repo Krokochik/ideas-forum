@@ -1,8 +1,8 @@
 package com.krokochik.ideasForum.rest;
 
 import com.google.gson.Gson;
-import com.krokochik.ideasForum.model.Token;
-import com.krokochik.ideasForum.model.User;
+import com.krokochik.ideasForum.model.service.Token;
+import com.krokochik.ideasForum.model.db.User;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.jdbc.UserService;
 import com.krokochik.ideasForum.service.crypto.Cryptographer;

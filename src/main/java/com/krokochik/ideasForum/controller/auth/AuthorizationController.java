@@ -1,9 +1,9 @@
-package com.krokochik.ideasForum.controller;
+package com.krokochik.ideasForum.controller.auth;
 
 import com.krokochik.ideasForum.hcaptcha.HCaptchaClient;
 import com.krokochik.ideasForum.hcaptcha.HCaptchaResponse;
-import com.krokochik.ideasForum.model.Role;
-import com.krokochik.ideasForum.model.User;
+import com.krokochik.ideasForum.model.functional.Role;
+import com.krokochik.ideasForum.model.db.User;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.UserValidationService;
 import com.krokochik.ideasForum.service.MailService;
