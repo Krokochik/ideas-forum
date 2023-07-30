@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/", "/main", "/main/**",
                         "/settings",
-                        "/mail-confirm", "/password-abort", "/abortPass", "/pass-abort-notify",
+                        "/email-validity-confirmation", "/password-reset-request", "/password-change", "/password-change-instructions",
                         "/scripts/**", "/images/**", "/css/**",
                         "/avatar", "/privacy",
                         "/mfa/**", "/terminal",
@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .antMatchers(HttpMethod.POST, "/sign-up", "/sign-up/**", "/terminal")
                     .permitAll()
-                .antMatchers(HttpMethod.GET,"/login", "/sign-up", "/password-abort", "/oauth2/**")
+                .antMatchers(HttpMethod.GET,"/login", "/sign-up", "/password-reset-request", "/oauth2/**")
                     .not().hasAnyAuthority(Role.USER.name(), Role.ANONYM.name())
                 .antMatchers(HttpMethod.POST, "/profile")
                     .hasAnyAuthority(Role.USER.name())
@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .formLogin()
                         .loginPage("/login")
                         .failureUrl("/login?loginError")
-                        .defaultSuccessUrl("/mail-confirm")
+                        .defaultSuccessUrl("/email-validity-confirmation")
                 .and()
                     .oauth2Login()
                     .loginPage("/login")
@@ -70,12 +70,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .rememberMe()
                         .useSecureCookie(true)
-                        .tokenValiditySeconds(5 * 24 * 60 * 60)
+                        .tokenValiditySeconds(15 * 24 * 60 * 60)
                         .tokenRepository(tokenRepository())
                 .and()
                     .csrf()
                         .ignoringAntMatchers("/mfa/**")
-                            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+                            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and().cors();
     }
 
     @Override
@@ -98,5 +99,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         return tokenRepository;
     }
-
 }

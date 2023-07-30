@@ -2,13 +2,9 @@ package com.krokochik.ideasForum.rest;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.krokochik.ideasForum.controller.SecurityController;
-import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
-import org.apache.commons.codec.binary.Base64;
+import com.krokochik.ideasForum.service.security.SecurityRoutineProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,17 +19,8 @@ public class ProfileController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping(value = "/avatar", produces = MediaType.IMAGE_PNG_VALUE)
-    public byte[] avatar(HttpServletResponse response) {
-        byte[] decodedAvatar;
-        if (SecurityController.isAuthenticated()) {
-            User user = userRepository.findByUsername(SecurityController.getContext().getAuthentication().getName());
-            decodedAvatar = Base64.decodeBase64(user.getAvatar());
-        } else {
-            decodedAvatar = Base64.decodeBase64(new User().getAvatar());
-        }
-        return decodedAvatar;
-    }
+    @Autowired
+    SecurityRoutineProvider srp;
 
     @PostMapping(value = "/profile", produces = "application/json")
     public Map<String, String> profile(@RequestBody String requestBodyStr, HttpServletResponse response) {
@@ -57,7 +44,7 @@ public class ProfileController {
             exception.printStackTrace();
         }
 
-        if (username.equalsIgnoreCase(SecurityController.getContext().getAuthentication().getName())) {
+        if (username.equalsIgnoreCase(srp.getContext().getAuthentication().getName())) {
             if (!avatar.equals("")) {
 
                 final double BYTES_IN_MEGABYTE = 1e+6;

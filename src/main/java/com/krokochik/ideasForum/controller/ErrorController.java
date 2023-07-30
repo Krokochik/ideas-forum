@@ -19,7 +19,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
             int statusCode = Integer.parseInt(status.toString());
 
             if (statusCode == 403)
-                return "redirect:/mail-confirm";
+                return "redirect:/email-validity-confirmation";
 
             model.addAttribute("code", statusCode + "");
             model.addAttribute("message", "Error " + statusCode + " : " +  HttpStatus.valueOf(statusCode).getReasonPhrase());

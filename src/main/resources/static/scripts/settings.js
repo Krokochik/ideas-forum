@@ -19,9 +19,9 @@
            var isIdConfirmed = document.querySelector('#chng3').getAttribute('bool');
 
             var btn = document.getElementById('chng3');
-            btn.addEventListener('click', function() { // Добавляем обработчик события на клик кнопки
+            btn.addEventListener('click', function() {
                 if (isIdConfirmed !== 'true') {
-                    window.location.href = '/id-confirmation'; //
+                    window.location.href = '/proof-identity?origin=settings';
                 }
             });
             if (isIdConfirmed === 'true') {

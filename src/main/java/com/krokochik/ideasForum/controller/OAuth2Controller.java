@@ -2,6 +2,7 @@ package com.krokochik.ideasForum.controller;
 
 import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
+import com.krokochik.ideasForum.service.security.SecurityRoutineProvider;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +22,9 @@ public class OAuth2Controller {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    SecurityRoutineProvider srp;
+
     @SneakyThrows
     @GetMapping("/oauth2/{status}")
     public String oauth2finished(OAuth2AuthenticationToken authentication, HttpSession session,
@@ -31,10 +35,8 @@ public class OAuth2Controller {
         } catch (NullPointerException exception) {
             return "redirect:/login";
         }
-        oauth2User.getAttributes().forEach((s, o) -> System.out.println(s + ": " + o));
 
-
-        if ("success".equals(status) && oauth2User.getAttribute("id") != null) {
+        if (status.equals("success") && oauth2User.getAttribute("id") != null) {
             String id;
             try {
                 id = oauth2User.getAttribute("id");
@@ -46,8 +48,8 @@ public class OAuth2Controller {
 
             User user;
             if ((user = userRepository.getUserByOAuth2Id(id)) != null) {
-                SecurityController.authorizeUser(SecurityContextHolder.getContext(), user);
-                return "redirect:/mail-confirm";
+                srp.authorizeUser(SecurityContextHolder.getContext(), user);
+                return "redirect:/email-validity-confirmation";
             } else {
                 URL avatarUrl = new URL("https://ideas-forum.herokuapp.com/avatar");
                 try {

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.krokochik.ideasForum.model.Token;
 import com.krokochik.ideasForum.model.User;
 import com.krokochik.ideasForum.repository.UserRepository;
+import com.krokochik.ideasForum.service.jdbc.UserService;
 import com.krokochik.ideasForum.service.crypto.Cryptographer;
 import com.krokochik.ideasForum.service.crypto.TokenService;
 import com.krokochik.ideasForum.service.mfa.MFAService;
@@ -12,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -28,6 +28,9 @@ public class MFAController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserService userService;
 
     /*
     * to connect mfa client must confirm the addition sending
@@ -119,9 +122,6 @@ public class MFAController {
             newUser.setMfaConnected(true);
             newUser.setQrcode(null);
             userRepository.save(newUser);
-
-            User[] users = userRepository.getAllUsers();
-            Arrays.stream(users).forEach(User::startMfaCodeGenerating);
 
             response.setStatus(200);
             return new HashMap<>() {{

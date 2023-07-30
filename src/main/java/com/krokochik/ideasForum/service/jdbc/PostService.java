@@ -1,8 +1,9 @@
-package com.krokochik.ideasForum.service;
+package com.krokochik.ideasForum.service.jdbc;
 
 import com.github.demidko.aot.WordformMeaning;
 import com.krokochik.ideasForum.model.Post;
 import com.krokochik.ideasForum.repository.PostRepository;
+import com.krokochik.ideasForum.service.SpellMorphService;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;

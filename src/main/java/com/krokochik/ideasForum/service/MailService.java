@@ -34,7 +34,7 @@ public class MailService {
             helper.setTo(mail.getReceiver());
             helper.setSubject(mail.getTheme());
 
-            Scanner scanner = new Scanner(new ClassPathResource("templates/" + htmlName).getInputStream());
+            Scanner scanner = new Scanner(new ClassPathResource("templates/mails" + htmlName).getInputStream());
             StringBuilder html = new StringBuilder();
 
             while (scanner.hasNextLine())
@@ -49,7 +49,7 @@ public class MailService {
     }
 
     public void sendConfirmationMail(Mail mail, String name, String content) {
-        sendEmail(mail, name, content,"confirm.html");
+        sendEmail(mail, name, content,"email-confirmation.html");
     }
 }
 

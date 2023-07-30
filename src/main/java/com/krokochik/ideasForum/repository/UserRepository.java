@@ -88,11 +88,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Transactional
-    @Query("update User usr set usr.mfaConnected=?1 where usr.id=?2")
-    void setMfaConnectedById(boolean connected, Long id);
-
-    @Modifying
-    @Transactional
     @Query(value = """
             DELETE FROM user_role
             WHERE user_role.user_id=?1

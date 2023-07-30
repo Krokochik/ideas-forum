@@ -2,8 +2,8 @@ package com.krokochik.ideasForum.controller;
 
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MailService;
-import com.krokochik.ideasForum.service.PostService;
-import com.krokochik.ideasForum.service.UserService;
+import com.krokochik.ideasForum.service.jdbc.PostService;
+import com.krokochik.ideasForum.service.jdbc.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,6 +52,6 @@ public class MainController {
                               @CookieValue(name = "theme", required = false, defaultValue = "dark") String theme) {
 
         model.addAttribute("theme", theme);
-        return "add-note";
+        return "add-post";
     }
 }
