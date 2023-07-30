@@ -115,7 +115,7 @@ public class EmailController {
         User user = userRepository.findByUsername(srp.getContext().getAuthentication().getName());
 
         if (email.isEmpty() || !UserValidationService.validateEmail(email) ||
-                (!password.equals(user.getPassword()) && user.getRoles().contains(Role.USER)))
+                (user.getRoles().contains(Role.USER) && !password.equals(user.getPassword())))
             return "redirect:/change-email?error";
 
         userRepository.setConfirmMailSentById(false, user.getId());
