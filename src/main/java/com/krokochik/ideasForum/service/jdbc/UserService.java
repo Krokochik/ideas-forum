@@ -23,12 +23,19 @@ public class UserService {
 
     {
         // start the mfa code generating cycle for in-db users
-        User[] users = userRepository.getAllUsers();
-        for (User user : users) {
-            if (user.isMfaActivated()) {
-                startGeneratingMfaCode(user);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                User[] users = userRepository.getAllUsers();
+                for (User user : users) {
+                    if (user.isMfaActivated()) {
+                        startGeneratingMfaCode(user);
+                    }
+                }
             }
-        }
+        }, 1000);
+
     }
 
     @SneakyThrows
