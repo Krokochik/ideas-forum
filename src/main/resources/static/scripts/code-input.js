@@ -27,7 +27,7 @@ class TwoFactorCode {
     return `
       <form>
         <div class="two-factor-code-inputs">${inputs.join("").trim()}</div>
-        <button class="submit-btn">Submit</button>
+        <button class="submit-btn">Отправить</button>
       </form>
     `;
   }
