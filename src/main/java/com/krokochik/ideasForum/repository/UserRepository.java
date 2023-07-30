@@ -5,11 +5,13 @@ import com.sun.istack.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Set;
 
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     @Override
     <S extends User> @org.jetbrains.annotations.NotNull S save(@org.jetbrains.annotations.NotNull S entity);

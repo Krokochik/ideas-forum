@@ -1,6 +1,8 @@
 package com.krokochik.ideasForum.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,8 +12,10 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "persistent_logins")
-public class PersistentLogin {
+public class PersistentRememberMe {
     @Id
     @Column(length = 64)
     String series;

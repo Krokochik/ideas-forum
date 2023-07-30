@@ -70,6 +70,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .rememberMe()
                         .useSecureCookie(true)
+                        .key("4R284g33vDkKkNm47ef9ADtm3XKhx9HD")
+                        .rememberMeCookieName("remember-me")
                         .tokenValiditySeconds(15 * 24 * 60 * 60)
                         .tokenRepository(tokenRepository())
                 .and()

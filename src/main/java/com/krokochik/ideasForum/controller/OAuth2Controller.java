@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -27,7 +29,9 @@ public class OAuth2Controller {
 
     @SneakyThrows
     @GetMapping("/oauth2/{status}")
-    public String oauth2finished(OAuth2AuthenticationToken authentication, HttpSession session,
+    public String oauth2finished(OAuth2AuthenticationToken authentication,
+                                 HttpSession session, HttpServletRequest request,
+                                 HttpServletResponse response,
                                  @PathVariable(name = "status") String status) {
         OAuth2User oauth2User;
         try {
@@ -48,7 +52,7 @@ public class OAuth2Controller {
 
             User user;
             if ((user = userRepository.getUserByOAuth2Id(id)) != null) {
-                srp.authorizeUser(SecurityContextHolder.getContext(), user);
+                srp.authorizeUser(SecurityContextHolder.getContext(), user, true, request, response);
                 return "redirect:/email-validity-confirmation";
             } else {
                 URL avatarUrl = new URL("https://ideas-forum.herokuapp.com/avatar");
