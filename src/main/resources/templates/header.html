@@ -42,7 +42,7 @@
 
     <header id="header" th:class="'p-3 select-none text-bg-' + ${theme == 'dark'? 'dark shadow-hd' : 'light shadow-sm'}"
             style="position: fixed;width: 100%;z-index: 100;top: 0;">
-        <script>document.getElementById('wrapper').style.height = document.getElementById('header').offsetHeight + 'px';</script>
+        <script>document.getElementById('wrapper').style.height = document.getElementById('header').clientHeight + 'px';</script>
         <input type="hidden" id="name" th:value="${@userAuth.getCurrentName()}">
 
         <div class="d-flex flex-wrap align-items-center justify-content-center container">
