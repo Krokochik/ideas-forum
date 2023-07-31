@@ -180,6 +180,10 @@ class TwoFactorCode {
         if (!this.editable) {
             event.preventDefault();
             event.target.blur();
+        } else {
+            if (event.target.value != "") {
+                event.target.setSelectionRange(0,1);
+            }
         }
     }
 

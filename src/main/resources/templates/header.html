@@ -4,7 +4,8 @@
 </head>
 <body>
 <header th:fragment="header (mainPage, theme)"
-        th:class="'p-3 mb-3 border-bottom select-none ' + ${theme == 'dark'? 'text-bg-dark' : 'text-bg-light'}">
+        th:class="'p-3 select-none text-bg-' + ${theme == 'dark'? 'dark shadow-hd' : 'light shadow-sm'}"
+        style="position: fixed;width: 100%;z-index: 100;top: 0;">
     <input type="hidden" id="name" th:value="${@userAuth.getCurrentName()}">
 
     <div class="modal fade" id="profileModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"

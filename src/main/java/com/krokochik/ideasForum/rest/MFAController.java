@@ -118,7 +118,10 @@ public class MFAController {
 
             HashSet<String> resetTokens = new HashSet<>();
             for (int i = 0; i < 16; i++) {
-                resetTokens.add(tokenService.generateMfaResetCode());
+                String token = tokenService.generateMfaResetCode();
+                if (!resetTokens.contains(token))
+                    resetTokens.add(token);
+                else i--;
             }
 
             user = userRepository.findByUsername(user.getUsername());
