@@ -13,9 +13,16 @@
   }
 }
 
-@media screen and (min-width: 301px) {
+@media screen and (min-width: 301px) and (max-width: 599px) {
   .column {
     width: 50%;
+    float: left;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .column {
+    width: 25%;
     float: left;
   }
 }
@@ -27,6 +34,7 @@
     font-family: 'Roboto';
     font-size: 1.2rem;
     font-weight: bold;
+}
 }</style>
 
     <link rel="stylesheet" th:href="@{/css/close-modal.css}">
@@ -66,8 +74,9 @@
                     </div>
                 </div>
             </div>
-            <div th:class="'modal-body text-bg-' + ${theme}"
+            <div id="modal-neck" th:class="'modal-body text-bg-' + ${theme}"
                  style="text-align: center;border-bottom-right-radius: calc(0.5rem - 1px);border-bottom-left-radius: calc(0.5rem - 1px);">
+
                 <div id="modal-body">
                     <div class="column" id="column1"></div>
                     <div class="column" id="column2"></div>
@@ -141,7 +150,7 @@
 
                 <input class="list-group-item-check pe-none" type="radio" onclick="toLight();"
                        name="listGroupCheckableRadios" id="fListGroupCheckableRadios2" value="" data-np-checked="1">
-                <label id="fLabel2" th:class="${(theme == 'light' ? 'light-theme' : 'dark-theme') + ' rounded-3 py-3'}"
+                <label id="fLabel2" th:class="${(theme == 'light' ? 'light-theme shadow-sm' : 'dark-theme shadow-hd') + ' rounded-3 py-3'}"
                        th:style="'cursor:' + ${theme == 'light' ? 'default;' : 'pointer;'}" for="fListGroupCheckableRadios2">
                     Светлая тема
                     <span class="d-block small opacity-50" style="" id="fSpan2">Включить светлую тему</span></label>

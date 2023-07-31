@@ -62,7 +62,7 @@ function updateMfaCodes() {
             $("#list").remove();
             $("#qrcode").remove();
 
-            $("#modal-neck").append(
+            $("#modal-neck").prepend(
                 '<h6 id="msg0" style="width: 90%;text-align: justify;display: inline-table;" class="mb-3"><span style="color: #647bb1;">' +
                 'Сохраните резервные коды ниже!</span>Если вы утратите доступ к мобильному аутентификатору, это единственный способ войти в аккаунт.</h6>'
             );

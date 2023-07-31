@@ -122,10 +122,10 @@ public class MFAController {
             }
 
             user = userRepository.findByUsername(user.getUsername());
+            user.setMfaResetTokens(resetTokens);
             user.setMfaConnecting(true);
             user.setQrcode(null);
             userRepository.save(user);
-            session.setAttribute("mfa-reset-tokens", resetTokens);
 
             response.setStatus(200);
             return new HashMap<>() {{
