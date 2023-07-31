@@ -44,7 +44,7 @@ public class SettingsController {
             if ((user.getQrcode() == null ||
                     !qrCodeManager.hasUserQrCode(user.getUsername()) ||
                     mfaService.getToken(user.getUsername()).isEmpty()) &&
-                    !user.isMfaActivated() &&)
+                    !user.isMfaActivated())
             {
                 try {
                     Token token = mfaService.addNewConnectionToken(user.getUsername());
