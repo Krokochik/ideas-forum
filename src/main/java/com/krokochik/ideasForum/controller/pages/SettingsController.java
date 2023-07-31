@@ -39,15 +39,12 @@ public class SettingsController {
     public String settings(Model model, HttpSession session,
                                @CookieValue(name = "theme", required = false, defaultValue = "dark") String theme) {
 
-        boolean isMfaProcessingAtSession = session.getAttribute("mfa-reset-tokens") != null;
-
         if (srp.isAuthenticated() ) {
             User user = userRepository.findByUsername(srp.getContext().getAuthentication().getName());
             if ((user.getQrcode() == null ||
                     !qrCodeManager.hasUserQrCode(user.getUsername()) ||
-                    !isMfaProcessingAtSession ||
                     mfaService.getToken(user.getUsername()).isEmpty()) &&
-                    !user.isMfaConnected())
+                    !user.isMfaActivated())
             {
                 try {
                     Token token = mfaService.addNewConnectionToken(user.getUsername());
