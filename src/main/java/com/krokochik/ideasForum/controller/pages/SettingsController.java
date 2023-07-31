@@ -41,7 +41,6 @@ public class SettingsController {
 
         boolean isMfaProcessingAtSession = session.getAttribute("mfa-reset-tokens") != null;
 
-
         if (srp.isAuthenticated() ) {
             User user = userRepository.findByUsername(srp.getContext().getAuthentication().getName());
             if ((user.getQrcode() == null ||

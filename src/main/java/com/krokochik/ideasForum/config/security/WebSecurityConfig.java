@@ -27,8 +27,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
+        http.requiresChannel().anyRequest().requiresSecure();
+        http.authorizeRequests()
                 .antMatchers(
                         "/", "/main", "/main/**",
                         "/settings",
@@ -78,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .csrf()
                         .ignoringAntMatchers("/mfa/**")
                             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and().cors();
+                .and().cors().and();
     }
 
     @Override
