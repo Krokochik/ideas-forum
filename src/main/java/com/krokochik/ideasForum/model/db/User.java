@@ -41,8 +41,7 @@ public class User
     boolean active = true;
     boolean confirmMailSent = false;
     boolean passwordAbortSent = false;
-    // mfa mobile app connected
-    boolean mfaConnected;
+    boolean mfaConnecting = false;
     // mfa finally connected
     boolean mfaActivated = false;
 

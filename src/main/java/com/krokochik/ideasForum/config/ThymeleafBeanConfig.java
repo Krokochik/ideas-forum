@@ -47,8 +47,8 @@ public class ThymeleafBeanConfig {
                 return new String(userRepository.findByUsername(srp.getContext().getAuthentication().getName()).getAvatar(), StandardCharsets.UTF_8);
             }
 
-            public boolean isMfaConnected() {
-                return userRepository.findByUsername(srp.getContext().getAuthentication().getName()).isMfaConnected();
+            public boolean isMfaActivated() {
+                return userRepository.findByUsername(srp.getContext().getAuthentication().getName()).isMfaActivated();
             }
 
             public boolean isAuth() {
