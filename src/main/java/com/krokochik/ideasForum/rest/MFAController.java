@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping("mfa")
@@ -48,16 +49,17 @@ public class MFAController {
     }
 
     @PostMapping(value = "/codes", produces = "application/json")
-    public HashMap<String, Object> produceMfaCodesToHtml(HttpServletResponse response, Authentication authentication) {
+    public HashMap<String, Object> produceMfaCodesToHtml(HttpServletResponse response, HttpSession session, Authentication authentication) {
         if (authentication == null) {
             response.setStatus(403);
             return new HashMap<>();
         }
         User user = userRepository.findByUsername(authentication.getName());
+        Set<String> tokens = (Set) session.getAttribute("mfa-reset-tokens");
         if (user.isMfaConnected()) {
             response.setStatus(200);
             return new HashMap<>() {{
-                put("codes", user.getMfaResetTokens());
+                put("codes", tokens);
             }};
         } else {
             response.setStatus(403);
