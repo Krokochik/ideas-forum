@@ -53,6 +53,7 @@ public class SettingsController {
                 try {
                     Token token = mfaService.addNewConnectionToken(user.getUsername());
                     qrCodeManager.addQrCode(token.toString(), user.getUsername());
+                    session.setAttribute("mfa-reset-tokens", null);
                 } catch (IOException | WriterException e) {
                     e.printStackTrace();
                 }
