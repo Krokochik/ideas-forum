@@ -56,6 +56,7 @@ public class MFAController {
         }
         User user = userRepository.findByUsername(authentication.getName());
         Set<String> tokens = (Set) session.getAttribute("mfa-reset-tokens");
+        System.out.println(tokens);
         if (user.isMfaConnected() && tokens != null) {
             response.setStatus(200);
             return new HashMap<>() {{
