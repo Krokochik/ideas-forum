@@ -71,12 +71,12 @@ var interval;
 
       $("#column3").empty();
       for (var k = 8; k < 12; k++) {
-        $("#column3").append("<p>" + codes[j] + "</p>");
+        $("#column3").append("<p>" + codes[k] + "</p>");
       }
 
       $("#column4").empty();
       for (var l = 12; l < 16; l++) {
-        $("#column4").append("<p>" + codes[j] + "</p>");
+        $("#column4").append("<p>" + codes[l] + "</p>");
       }
 
       var color = "#fff";

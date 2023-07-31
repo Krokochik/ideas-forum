@@ -33,6 +33,10 @@ public class QRCodeManager {
         return usersWithQrCode.contains(username);
     }
 
+
+    /**
+     * Generates and saves qr code into db for user
+     * */
     public void addQrCode(@NonNull String content, @NonNull String username, int size, int cornerRadius) throws IOException, WriterException {
         BufferedImage qrCodeImage = generateQRCodeImage(content, size);
         BufferedImage roundedImage = roundCorners(qrCodeImage, cornerRadius);

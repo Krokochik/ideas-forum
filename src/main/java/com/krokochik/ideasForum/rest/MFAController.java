@@ -1,18 +1,19 @@
 package com.krokochik.ideasForum.rest;
 
 import com.google.gson.Gson;
-import com.krokochik.ideasForum.model.service.Token;
 import com.krokochik.ideasForum.model.db.User;
+import com.krokochik.ideasForum.model.service.Token;
 import com.krokochik.ideasForum.repository.UserRepository;
-import com.krokochik.ideasForum.service.jdbc.UserService;
 import com.krokochik.ideasForum.service.crypto.Cryptographer;
 import com.krokochik.ideasForum.service.crypto.TokenService;
+import com.krokochik.ideasForum.service.jdbc.UserService;
 import com.krokochik.ideasForum.service.mfa.MFAService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -95,6 +96,7 @@ public class MFAController {
 
     @PostMapping("/confirm")
     public HashMap<String, Object> confirmMfaConnecting(HttpServletResponse response,
+                                                        HttpSession session,
                                                         @RequestBody String requestBodyString) {
 
         System.out.println(requestBodyString);
@@ -117,11 +119,11 @@ public class MFAController {
                 resetTokens.add(tokenService.generateMfaResetCode());
             }
 
-            User newUser = userRepository.findByUsername(user.getUsername());
-            newUser.setMfaResetTokens(resetTokens);
-            newUser.setMfaConnected(true);
-            newUser.setQrcode(null);
-            userRepository.save(newUser);
+            user = userRepository.findByUsername(user.getUsername());
+            user.setMfaConnected(true);
+            user.setQrcode(null);
+            userRepository.save(user);
+            session.setAttribute("mfa-reset-tokens", resetTokens);
 
             response.setStatus(200);
             return new HashMap<>() {{

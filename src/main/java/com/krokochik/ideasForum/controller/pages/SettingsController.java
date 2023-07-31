@@ -1,8 +1,8 @@
 package com.krokochik.ideasForum.controller.pages;
 
 import com.google.zxing.WriterException;
-import com.krokochik.ideasForum.model.service.Token;
 import com.krokochik.ideasForum.model.db.User;
+import com.krokochik.ideasForum.model.service.Token;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.MailService;
 import com.krokochik.ideasForum.service.mfa.MFAService;
@@ -39,10 +39,14 @@ public class SettingsController {
     public String settings(Model model, HttpSession session,
                                @CookieValue(name = "theme", required = false, defaultValue = "dark") String theme) {
 
+        boolean isMfaProcessingAtSession = session.getAttribute("mfa-reset-tokens") != null;
+
+
         if (srp.isAuthenticated() ) {
             User user = userRepository.findByUsername(srp.getContext().getAuthentication().getName());
             if ((user.getQrcode() == null ||
                     !qrCodeManager.hasUserQrCode(user.getUsername()) ||
+                    !isMfaProcessingAtSession ||
                     mfaService.getToken(user.getUsername()).isEmpty()) &&
                     !user.isMfaConnected())
             {
