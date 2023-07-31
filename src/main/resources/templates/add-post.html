@@ -28,7 +28,7 @@
 
 <body th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
 
-  <header th:insert="header :: header ('add-note', ${theme})"></header>
+  <header th:replace="header :: header ('add-note', ${theme})"></header>
 
   <script async src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
   <script async src="/upload.js" th:src="@{/scripts/upload.js}"></script>
