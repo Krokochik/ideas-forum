@@ -58,6 +58,8 @@ var interval;
 
       $("#list").remove();
       $("#qrcode").remove();
+      $("#msg0").remove();
+      $("#msg1").remove();
 
       $("#column1").empty();
       for (var i = 0; i < 4; i++) {

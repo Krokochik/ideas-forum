@@ -76,7 +76,7 @@
             </div>
             <div th:class="'modal-body text-bg-' + ${theme}"
                  style="text-align: center;border-bottom-right-radius: calc(0.5rem - 1px);border-bottom-left-radius: calc(0.5rem - 1px);">
-                <h6 style="width: 90%;text-align: justify;display: inline-table;" class="mb-3">
+                <h6 id="msg0" style="width: 90%;text-align: justify;display: inline-table;" class="mb-3">
                     <span style="color: #647bb1;">Сохраните резервные коды ниже!</span>
                     Если вы утратите доступ к мобильному аутентификатору, это единственный способ войти в аккаунт.
                 </h6>
@@ -87,7 +87,7 @@
                     <div class="column" id="column4"></div>
                     <img id="qrcode" src="/mfa-qr" class="mb-3">
 
-                    <span class="my-3" style="display: inline-table;max-width: 85%;text-align: center;font-weight: 500;font-size: 1rem">
+                    <span id="msg1" class="my-3" style="display: inline-table;max-width: 85%;text-align: center;font-weight: 500;font-size: 1rem">
                         Если вы
                         <span style="color: #647bb1;">сохранили коды</span>
                         , введите PIN из мобильного приложения:
