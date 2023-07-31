@@ -74,12 +74,9 @@
                     </div>
                 </div>
             </div>
-            <div th:class="'modal-body text-bg-' + ${theme}"
+            <div id="modal-neck" th:class="'modal-body text-bg-' + ${theme}"
                  style="text-align: center;border-bottom-right-radius: calc(0.5rem - 1px);border-bottom-left-radius: calc(0.5rem - 1px);">
-                <h6 id="msg0" style="width: 90%;text-align: justify;display: inline-table;" class="mb-3">
-                    <span style="color: #647bb1;">Сохраните резервные коды ниже!</span>
-                    Если вы утратите доступ к мобильному аутентификатору, это единственный способ войти в аккаунт.
-                </h6>
+
                 <div id="modal-body">
                     <div class="column" id="column1"></div>
                     <div class="column" id="column2"></div>
@@ -87,11 +84,6 @@
                     <div class="column" id="column4"></div>
                     <img id="qrcode" src="/mfa-qr" class="mb-3">
 
-                    <span id="msg1" class="my-3" style="display: inline-table;max-width: 85%;text-align: center;font-weight: 500;font-size: 1rem">
-                        Если вы
-                        <span style="color: #647bb1;">сохранили коды</span>
-                        , введите PIN из мобильного приложения:
-                    </span>
                     <ol id="list" class="mt-3"
                         style="text-align: left;width: 93%;font-family: 'Roboto';margin-left: 10px;">
                         <li style="padding-left: 20px;">Скачайте мобильное приложение IdeasForumMfa <a
