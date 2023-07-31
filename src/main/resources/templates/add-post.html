@@ -26,7 +26,7 @@
   <link rel="stylesheet" th:href="@{/css/bootstrap-edited.css}">
 </head>
 
-<body style="min-height: 100vh;" th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
+<body th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
 
   <header th:insert="header :: header ('add-note', ${theme})"></header>
 

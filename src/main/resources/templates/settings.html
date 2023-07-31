@@ -56,7 +56,7 @@
     <link rel="stylesheet" th:href="@{/css/code-input.css}">
 </head>
 
-<body style="min-height: 100vh;" th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
+<body th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
 <input type="hidden" id="theme" th:value="${theme}">
 
 <div th:if="${@userAuth.isAuth() && isIdConfirmed}" class="modal fade" id="mfaModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"

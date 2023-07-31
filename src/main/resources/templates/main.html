@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" th:href="@{/css/bootstrap-edited.css}">
 </head>
-<body style="min-height: 100vh;" th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
+<body th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
     <input type="hidden" id="theme" th:value="${theme}">
 
     <header th:replace="header :: header ('main', ${theme})"></header>
