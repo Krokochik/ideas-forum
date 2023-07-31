@@ -3,7 +3,7 @@
 <head>
 </head>
 <body>
-<div th:fragment="header (mainPage, theme)" id="wrapper" style="position: relative">
+<div th:fragment="header (mainPage, theme)" id="wrapper" style="position: relative" >
     <div class="modal fade" id="profileModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
          aria-labelledby="profileModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -42,7 +42,7 @@
 
     <header id="header" th:class="'p-3 select-none text-bg-' + ${theme == 'dark'? 'dark shadow-hd' : 'light shadow-sm'}"
             style="position: fixed;width: 100%;z-index: 100;top: 0;">
-        <script>document.getElementById('wrapper').style.width = document.getElementById('header').offsetWidth + 'px';</script>
+        <script>document.getElementById('wrapper').style.height = document.getElementById('header').offsetHeight + 'px';</script>
         <input type="hidden" id="name" th:value="${@userAuth.getCurrentName()}">
 
         <div class="d-flex flex-wrap align-items-center justify-content-center container">
