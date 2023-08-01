@@ -120,21 +120,24 @@ class TwoFactorCode {
                 changeScreen();
                 document.getElementById("modal-neck").style.height = height + "px";
 
-                let minRequestTimeMs = 1000;
+                const minRequestTimeMs = 1000;
                 let requestMs = 0;
 
-                $.ajax({
+                await $.ajax({
                     url: "/mfa/activate/",
                     method: "POST",
+                    async: true,
                     data: {
                         PIN: code.join(""),
                     },
                     success: function (response) {
                         setTimeout(function () {
-                            console.log("response: " + response)
+                            return true;
                         }, minRequestTimeMs - requestMs > 0 ? minRequestTimeMs - requestMs : 1);
                     },
-                    error: function () {}
+                    error: function () {
+                        return false;
+                    }
                 });
 
                 let interval = setInterval(function () {
@@ -144,19 +147,15 @@ class TwoFactorCode {
                 setTimeout(function () {
                     clearInterval(interval);
                 }, minRequestTimeMs);
-
-                await sleep(10000);
-                return code.join("") === "1234";
             };
 
             const badCode = () => {
                 changeScreen();
-                // Handle the incorrect code case here
+                this.inputs[0].focus();
             };
 
             if (await isCodeRight(this.code)) {
-                alert("yes");
-                // Handle the correct code case here
+                console.log('success');
             } else {
                 badCode();
                 this.editable = true;
