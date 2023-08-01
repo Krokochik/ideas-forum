@@ -147,7 +147,7 @@ public class MFAController {
     @PostMapping("/activate")
     public HashMap<String, Object> activateMfa(@RequestParam("PIN") String PIN, HttpServletResponse response) {
         User user = userRepository.findByUsername(srp.getContext().getAuthentication().getName());
-        if (user.getMfaActivatePIN().equals(PIN)) {
+        if (PIN.equals(user.getMfaActivatePIN())) {
             user.setMfaActivated(true);
             user.setMfaActivatePIN(null);
             userRepository.save(user);
