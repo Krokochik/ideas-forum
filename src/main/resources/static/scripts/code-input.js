@@ -76,7 +76,7 @@ class TwoFactorCode {
         });
     }
 
-    submitCode() {
+    async submitCode() {
         if (this.form.checkValidity()) {
             console.log(this.code);
 
@@ -117,7 +117,7 @@ class TwoFactorCode {
                 // Handle the incorrect code case here
             };
 
-            if (isCodeRight(this.code)) {
+            if (await isCodeRight(this.code)) {
                 alert("yes");
                 // Handle the correct code case here
             } else {
