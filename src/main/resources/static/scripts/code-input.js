@@ -149,16 +149,14 @@ class TwoFactorCode {
                                 reject(error);
                             }
                         });
-                    }).then(async (response) => {
-                        await sleep(minRequestTimeMs - requestMs > 0? minRequestTimeMs - requestMs : 1);
-                        resolve(true);
-                    }).catch(async (error) => {
-                        await sleep(minRequestTimeMs - requestMs > 0? minRequestTimeMs - requestMs : 1);
-                        resolve(false);
+                    }).catch(async () => {
+                        throw new Error("Failure");
                     });
 
+                    await sleep(minRequestTimeMs - requestMs > 0? minRequestTimeMs - requestMs : 1);
                     return true;
                 } catch (e) {
+                    await sleep(minRequestTimeMs - requestMs > 0? minRequestTimeMs - requestMs : 1);
                     return false;
                 }
             };
