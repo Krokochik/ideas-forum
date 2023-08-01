@@ -86,12 +86,21 @@ class TwoFactorCode {
                 input.readOnly = true;
             });
 
-            const isCodeRight = (code) => {
-                // Handle code here
+            const changeChildrenVisibility = () => {
+                let children = document.getElementById("modal-neck").childNodes;
+                children.forEach(child => {
+                    child.style.display = child.style.display === "none" ? "block" : "none";
+                });
+            }
+
+            const isCodeRight = async (code) => {
+                changeChildrenVisibility();
+                await sleep(2000);
                 return code.join("") === "1234";
             };
 
             const badCode = () => {
+                changeChildrenVisibility();
                 // Handle the incorrect code case here
             };
 
@@ -213,9 +222,14 @@ class TwoFactorCode {
     }
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function render() {
     const root = document.getElementById("code-input");
     root.innerHTML = "";
     const code = new TwoFactorCode(root);
     code.render();
 }
+
