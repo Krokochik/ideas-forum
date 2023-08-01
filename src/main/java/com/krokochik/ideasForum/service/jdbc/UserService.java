@@ -45,8 +45,6 @@ public class UserService {
             @Override
             public void run() {
                 user.setMfaCode(tokenService.generateMfaCode());
-                System.out.println(user.getUsername());
-                System.out.println(user.getMfaCode());
             }
         }, 0, 30 * 1000);
         mfaCodeGeneratingWorkers.put(user.getUsername(), worker);
