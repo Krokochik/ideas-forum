@@ -149,9 +149,14 @@ class TwoFactorCode {
                                 reject(error);
                             }
                         });
+                    }).then(async (response) => {
+                        await sleep(minRequestTimeMs - requestMs > 0? minRequestTimeMs - requestMs : 1);
+                        resolve(true);
+                    }).catch(async (error) => {
+                        await sleep(minRequestTimeMs - requestMs > 0? minRequestTimeMs - requestMs : 1);
+                        resolve(false);
                     });
 
-                    await sleep(minRequestTimeMs - requestMs > 0 ? minRequestTimeMs - requestMs : 1);
                     return true;
                 } catch (e) {
                     return false;
