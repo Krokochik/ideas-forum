@@ -86,33 +86,40 @@ class TwoFactorCode {
                 input.readOnly = true;
             });
 
-            const changeChildrenVisibility = () => {
-                let modalNeck = document.getElementById("modal-neck");
-                let children = modalNeck.childNodes;
-                let elementChildren = Array.from(children).filter(child => child.nodeType === 1);
-                elementChildren.forEach(child => {
-                    child.style.display = child.style.display === "none" ? "block" : "none";
-                });
+            let modalBody = document.getElementById("modal-body");
+            let msg = document.getElementById("msg0");
+            let displayProperties = {};
+            let currentScreen = 0;
 
-                // Now, include the same logic for "modal-body" children
-                let modalBody = document.getElementById("modal-body");
-                children = modalBody.childNodes;
-                elementChildren = Array.from(children).filter(child => child.nodeType === 1);
-                elementChildren.forEach(child => {
-                    child.style.display = child.style.display === "none" ? "block" : "none";
-                });
+            const changeScreen = () => {
+                children = Array.from(modalBody.childNodes)
+                               .filter(child => child.nodeType === 1);
+                if (currentScreen == 0) {
+                    children.forEach(child => {
+                        displayProperties[child.id] = child.style.display;
+                        child.style.display = child.style.display === "none" ? "block" : "none";
+                    });
+                    msg.style.display = "none";
+                    currentScreen = 1;
+                } else if (currentScreen == 1) {
+                    children.forEach(child => {
+                        child.style.display = displayProperties[child.id] || "block";
+                    });
+                    msg.style.display = "inline-table";
+                    currentScreen = 0;
+                }
             }
 
             const isCodeRight = async (code) => {
                 let height = document.getElementById("modal-neck").offsetHeight;
-                changeChildrenVisibility();
+                changeScreen();
                 document.getElementById("modal-neck").style.height = height + "px";
                 await sleep(10000);
                 return code.join("") === "1234";
             };
 
             const badCode = () => {
-                changeChildrenVisibility();
+                changeScreen();
                 alert("no");
                 // Handle the incorrect code case here
             };
