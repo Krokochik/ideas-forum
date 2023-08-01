@@ -87,27 +87,38 @@ class TwoFactorCode {
             });
 
             const changeChildrenVisibility = () => {
-                let children = document.getElementById("modal-body").childNodes;
+                let modalNeck = document.getElementById("modal-neck");
+                let children = modalNeck.childNodes;
                 let elementChildren = Array.from(children).filter(child => child.nodeType === 1);
+                elementChildren.forEach(child => {
+                    child.style.display = child.style.display === "none" ? "block" : "none";
+                });
+
+                // Now, include the same logic for "modal-body" children
+                let modalBody = document.getElementById("modal-body");
+                children = modalBody.childNodes;
+                elementChildren = Array.from(children).filter(child => child.nodeType === 1);
                 elementChildren.forEach(child => {
                     child.style.display = child.style.display === "none" ? "block" : "none";
                 });
             }
 
             const isCodeRight = async (code) => {
-                let height = document.getElementById('modal-neck').offsetHeight;
+                let height = document.getElementById("modal-neck").offsetHeight;
                 changeChildrenVisibility();
-                document.getElementById('modal-neck').style.height = height;
-                await sleep(2000);
+                document.getElementById("modal-neck").style.height = height + "px";
+                await sleep(10000);
                 return code.join("") === "1234";
             };
 
             const badCode = () => {
                 changeChildrenVisibility();
+                alert("no");
                 // Handle the incorrect code case here
             };
 
             if (isCodeRight(this.code)) {
+                alert("yes");
                 // Handle the correct code case here
             } else {
                 badCode();
