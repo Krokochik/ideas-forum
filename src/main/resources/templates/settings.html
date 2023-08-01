@@ -60,7 +60,7 @@
 <body th:class="'bg-' + ${theme == 'dark'? 'secondary' : 'white'}">
 <input type="hidden" id="theme" th:value="${theme}">
 
-<div th:if="${@userAuth.isAuth() && isIdConfirmed}" class="modal fade" id="mfaModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+<div th:if="${@userAuth.isAuth() && !@userAuth.isMfaActivated() && isIdConfirmed}" class="modal fade" id="mfaModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
      aria-labelledby="mfaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="border: none; border-radius: 10px;background-color: rgb(33, 37, 41);">
@@ -139,12 +139,18 @@
                     <span class="d-block small opacity-50" id="thSpan2"
                           th:text="'Текущая: ' + ${@userAuth.getCurrentEmail()}"></span>
                 </button>
-                <button class="h-auto"
+                <button th:unless="${@userAuth.isMfaActivated()}" class="h-auto"
                         style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;"
                         th:class="'btn btn-' + ${theme == 'dark'? 'drk shadow-hd' : 'lgt shadow-sm'}" id="chng3" data-bs-toggle="modal"
                         data-bs-target="#mfaModal" data-th-bool="${isIdConfirmed}" type="button">
                     Добавить 2fa
                     <span class="d-block small opacity-50" id="thSpan3">Скачать мобильное приложение</span>
+                </button>
+                <button th:if="${@userAuth.isMfaActivated()}" class="h-auto"
+                        style="width: 100%; padding-top: 13px; padding-bottom: 13px; text-align: left; border-radius: 0.5rem;"
+                        th:class="'btn btn-' + ${theme == 'dark'? 'drk shadow-hd' : 'lgt shadow-sm'}" id="chng3" type="button">
+                    Отвязать 2fa
+                    <span class="d-block small opacity-50" id="thSpan3">Разорвать контракт с агентом 2fa</span>
                 </button>
             </div>
 
@@ -152,7 +158,6 @@
 
         </form>
 
-        <script async src="/settings.js" th:src="@{/scripts/settings.js}"></script>
         <form>
             <div style="margin: 4rem auto; margin-top: 2rem;"
                  class="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
@@ -190,6 +195,7 @@
         integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
         crossorigin="anonymous"></script>
 <script async src="/code-input.js" th:src="@{/scripts/code-input.js}"></script>
+<script async src="/settings.js" th:src="@{/scripts/settings.js}"></script>
 <script async src="/upload.js" th:src="@{/scripts/upload.js}"></script>
 </body>
 </html>
