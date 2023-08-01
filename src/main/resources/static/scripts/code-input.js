@@ -123,30 +123,39 @@ class TwoFactorCode {
                 const minRequestTimeMs = 1000;
                 let requestMs = 0;
 
-                await $.ajax({
-                    url: "/mfa/activate/",
-                    method: "POST",
-                    async: true,
-                    data: {
-                        PIN: code.join(""),
-                    },
-                    success: function (response) {
-                        setTimeout(function () {
-                            return true;
-                        }, minRequestTimeMs - requestMs > 0 ? minRequestTimeMs - requestMs : 1);
-                    },
-                    error: function () {
-                        return false;
-                    }
-                });
 
-                let interval = setInterval(function () {
-                    requestMs++;
-                }, 1);
 
-                setTimeout(function () {
-                    clearInterval(interval);
-                }, minRequestTimeMs);
+                try {
+                    let interval = setInterval(function () {
+                        requestMs++;
+                    }, 1);
+    
+                    setTimeout(function () {
+                        clearInterval(interval);
+                    }, minRequestTimeMs);
+
+                    new Promise((resolve, reject) => {
+                        $.ajax({
+                            url: "/mfa/activate/",
+                            method: "POST",
+                            async: true,
+                            data: {
+                                PIN: code.join(""),
+                            },
+                            success: (response) => {
+                                resolve(response);
+                            },
+                            error: (error) => {
+                                reject(error);
+                            }
+                        });
+                    });
+
+                    await sleep(minRequestTimeMs - requestMs > 0 ? minRequestTimeMs - requestMs : 1);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
             };
 
             const badCode = () => {
