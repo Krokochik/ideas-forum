@@ -96,7 +96,7 @@ class TwoFactorCode {
 
             const isCodeRight = async (code) => {
                 changeChildrenVisibility();
-                document.getElementById('modal-neck').style.height = document.getElementById('modal-neck').clientHeight;
+                document.getElementById('modal-neck').style.height = document.getElementById('modal-neck').offsetHeight;
                 await sleep(2000);
                 return code.join("") === "1234";
             };
