@@ -96,7 +96,7 @@ class TwoFactorCode {
             let currentScreen = 0;
 
             const changeScreen = () => {
-                children = Array.from(modalBody.childNodes)
+                let children = Array.from(modalBody.childNodes)
                     .filter(child => child.nodeType === 1);
                 loader.style.marginTop = modalNeck.style.marginTop - modalHeader.style.marginTop / 2 - loader.clientHeight;
                 if (currentScreen == 0) {
@@ -124,10 +124,10 @@ class TwoFactorCode {
                 let requestMs = 0;
 
                 $.ajax({
-                    url: "/mfa/pin/",
+                    url: "/mfa/activate/",
                     method: "POST",
                     data: {
-                        pin: code.join(""),
+                        PIN: code.join(""),
                     },
                     success: function (response) {
                         setTimeout(function () {
