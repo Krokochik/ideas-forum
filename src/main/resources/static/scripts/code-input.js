@@ -92,7 +92,7 @@ class TwoFactorCode {
             let currentScreen = 0;
 
             const changeScreen = () => {
-                children = Array.from(modalBody.childNodes)
+                let children = Array.from(modalBody.childNodes)
                                .filter(child => child.nodeType === 1);
                 if (currentScreen == 0) {
                     children.forEach(child => {
