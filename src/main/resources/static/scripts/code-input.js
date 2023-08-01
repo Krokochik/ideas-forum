@@ -165,14 +165,33 @@ class TwoFactorCode {
     }
 
     onKeydown(event) {
+        const currentIndex = Number(event.target.dataset.index);
+        const prevIndex = currentIndex > 0
+                            ? currentIndex - 1
+                            : currentIndex;
+        const nextIndex = currentIndex < this.numberOfInputs
+                            ? currentIndex + 1
+                            : currentIndex;
         if (event.code === "Backspace" && this.editable) {
             event.preventDefault();
-            const currentIndex = Number(event.target.dataset.index);
-            const prevIndex =
-                currentIndex > 0 ? currentIndex - 1 : currentIndex;
             this.inputs[prevIndex].focus();
             this.inputs[currentIndex].value = "";
             this.code[currentIndex] = "";
+        }
+        else if (event.code === "ArrowLeft") {
+            event.preventDefault();
+            this.inputs[prevIndex].focus();
+            if (event.target.value != "") {
+                this.inputs[prevIndex].setSelectionRange(0,1);
+            }
+
+        }
+        else if (event.code === "ArrowRight") {
+            event.preventDefault();
+            this.inputs[nextIndex].focus();
+            if (event.target.value != "") {
+                this.inputs[nextIndex].setSelectionRange(0,1);
+            }
         }
     }
 
