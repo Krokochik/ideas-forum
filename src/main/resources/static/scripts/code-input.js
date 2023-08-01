@@ -87,8 +87,9 @@ class TwoFactorCode {
             });
 
             const changeChildrenVisibility = () => {
-                let children = document.getElementById("modal-neck").children;
-                children.forEach(child => {
+                let children = document.getElementById("modal-neck").childNodes;
+                let elementChildren = Array.from(children).filter(child => child.nodeType === 1);
+                elementChildren.forEach(child => {
                     child.style.display = child.style.display === "none" ? "block" : "none";
                 });
             }
