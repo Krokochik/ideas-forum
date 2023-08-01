@@ -95,6 +95,22 @@
                     </ol>
                 </div>
             </div>
+            <script>
+                const height1 = document.getElementById('modal-neck').clientHeight;
+                const height2 = document.getElementById('modal-header').clientHeight;
+                let margin = (height1 - height2) / 2 - 50;
+                document.getElementById('modal-body').innerHTML += `
+                    <div class="loader"
+                        id="loader-2"
+                        style="margin-top: ${margin}px;
+                               height: 50px;
+                               display: none;">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                `;
+            </script>
         </div>
     </div>
 </div>
@@ -175,23 +191,5 @@
         crossorigin="anonymous"></script>
 <script async src="/code-input.js" th:src="@{/scripts/code-input.js}"></script>
 <script async src="/upload.js" th:src="@{/scripts/upload.js}"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const height1 = document.getElementById('modal-neck').offsetHeight;
-        const height2 = document.getElementById('modal-header').offsetHeight;
-        let margin = (height1 - height2) / 2 - 50;
-        document.getElementById('modal-body').innerHTML += `
-            <div class="loader"
-                id="loader-2"
-                style="margin-top: ${margin}px;
-                       height: 50px;
-                       display: none;">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        `;
-    });
-</script>
 </body>
 </html>
