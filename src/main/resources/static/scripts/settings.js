@@ -29,12 +29,12 @@ function toDark() {
 function onLoad() {
     if (document.getElementById("theme").value == "dark")
         document
-            .getElementById("fListGroupCheckableRadios1")
-            .setAttribute("checked", "");
+        .getElementById("fListGroupCheckableRadios1")
+        .setAttribute("checked", "");
     else
         document
-            .getElementById("fListGroupCheckableRadios2")
-            .setAttribute("checked", "");
+        .getElementById("fListGroupCheckableRadios2")
+        .setAttribute("checked", "");
 
     var isIdConfirmed = document.querySelector("#chng3").getAttribute("bool");
 
@@ -50,6 +50,7 @@ function onLoad() {
 }
 onLoad();
 var interval;
+
 function updateMfaCodes() {
     $.ajax({
         url: "/mfa/codes",
@@ -89,8 +90,8 @@ function updateMfaCodes() {
 
             $("#modal-body").append(
                 '<span id="msg1" class="my-3" style="display: inline-table;max-width: 85%;text-align: center;font-weight: 500;font-size: 1rem">' +
-                    'Если вы <span style="color: #647bb1;">сохранили коды</span>' +
-                     ', введите PIN из мобильного приложения:' +
+                'Если вы <span style="color: #647bb1;">сохранили коды</span>' +
+                ', введите PIN из мобильного приложения:' +
                 '</span>'
             );
 
@@ -98,8 +99,8 @@ function updateMfaCodes() {
             if (getCookieValue("theme") === "light") color = "#000";
             $("#modal-body").append(
                 '<div data-color="' +
-                    color +
-                    '" data-filter="num" data-fields="4" id="code-input"></div>'
+                color +
+                '" data-filter="num" data-fields="4" id="code-input"></div>'
             );
             render();
         },

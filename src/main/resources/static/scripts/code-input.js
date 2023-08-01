@@ -2,9 +2,9 @@ class TwoFactorCode {
     constructor(root) {
         this.root = root;
         this.numberOfInputs =
-            root.dataset.fields != undefined
-                ? parseInt(root.dataset.fields, 10)
-                : 4;
+            root.dataset.fields != undefined ?
+            parseInt(root.dataset.fields, 10) :
+            4;
         this.color =
             root.dataset.color != undefined ? root.dataset.color : "#000";
         this.style = root.dataset.style != undefined ? root.dataset.style : "";
@@ -24,9 +24,10 @@ class TwoFactorCode {
         if (this.style == "") this.style = "color:" + this.color;
         else if (!this.style.includes("color:"))
             this.style += ";color:" + this.color;
-        const inputs = Array.from(
-            { length: this.numberOfInputs },
-            (_, index) =>
+        const inputs = Array.from({
+                    length: this.numberOfInputs
+                },
+                (_, index) =>
                 `<input
               data-index="${index}"
               aria-label="input for code at position ${index}"
@@ -35,7 +36,7 @@ class TwoFactorCode {
               style="${this.style}"
               required
              />`
-        )
+            )
             .join("")
             .trim();
 
@@ -86,14 +87,18 @@ class TwoFactorCode {
                 input.readOnly = true;
             });
 
+            let modalNeck = document.getElementById("modal-neck");
             let modalBody = document.getElementById("modal-body");
+            let modalHeader = document.getElementById("modal-header");
+            let loader = document.getElementById("loader-2");
             let msg = document.getElementById("msg0");
             let displayProperties = {};
             let currentScreen = 0;
 
             const changeScreen = () => {
-                let children = Array.from(modalBody.childNodes)
-                               .filter(child => child.nodeType === 1);
+                children = Array.from(modalBody.childNodes)
+                    .filter(child => child.nodeType === 1);
+                loader.style.marginTop = modalNeck.style.marginTop - modalHeader.style.marginTop / 2 - loader.clientHeight;
                 if (currentScreen == 0) {
                     children.forEach(child => {
                         displayProperties[child.id] = child.style.display;
@@ -114,13 +119,38 @@ class TwoFactorCode {
                 let height = document.getElementById("modal-neck").offsetHeight;
                 changeScreen();
                 document.getElementById("modal-neck").style.height = height + "px";
+
+                let minRequestTimeMs = 1000;
+                let requestMs = 0;
+
+                $.ajax({
+                    url: "/mfa/pin/",
+                    method: "POST",
+                    data: {
+                        pin: code.join(""),
+                    },
+                    success: function (response) {
+                        setTimeout(function () {
+                            console.log("response: " + response)
+                        }, minRequestTimeMs - requestMs > 0 ? minRequestTimeMs - requestMs : 1);
+                    },
+                    error: function () {}
+                });
+
+                let interval = setInterval(function () {
+                    requestMs++;
+                }, 1);
+
+                setTimeout(function () {
+                    clearInterval(interval);
+                }, minRequestTimeMs);
+
                 await sleep(10000);
                 return code.join("") === "1234";
             };
 
             const badCode = () => {
                 changeScreen();
-                alert("no");
                 // Handle the incorrect code case here
             };
 
@@ -152,13 +182,13 @@ class TwoFactorCode {
             const lettersAndDigitsRegex = /^[A-Za-z0-9]+$/;
 
             const filter = this.root.dataset.filter?.split("+") || [];
-            const regex = filter.includes("num")
-                ? filter.includes("ltr")
-                    ? lettersAndDigitsRegex
-                    : digitsRegex
-                : filter.includes("ltr")
-                ? lettersRegex
-                : digitsRegex;
+            const regex = filter.includes("num") ?
+                filter.includes("ltr") ?
+                lettersAndDigitsRegex :
+                digitsRegex :
+                filter.includes("ltr") ?
+                lettersRegex :
+                digitsRegex;
 
             if (!regex.test(value)) {
                 event.target.value = this.code[currentIndex];
@@ -196,31 +226,29 @@ class TwoFactorCode {
 
     onKeydown(event) {
         const currentIndex = Number(event.target.dataset.index);
-        const prevIndex = currentIndex > 0
-                            ? currentIndex - 1
-                            : currentIndex;
-        const nextIndex = currentIndex < this.numberOfInputs
-                            ? currentIndex + 1
-                            : currentIndex;
+        const prevIndex = currentIndex > 0 ?
+            currentIndex - 1 :
+            currentIndex;
+        const nextIndex = currentIndex < this.numberOfInputs ?
+            currentIndex + 1 :
+            currentIndex;
         if (event.code === "Backspace" && this.editable) {
             event.preventDefault();
             this.inputs[prevIndex].focus();
             this.inputs[currentIndex].value = "";
             this.code[currentIndex] = "";
-        }
-        else if (event.code === "ArrowLeft") {
+        } else if (event.code === "ArrowLeft") {
             event.preventDefault();
             this.inputs[prevIndex].focus();
             if (event.target.value != "") {
-                this.inputs[prevIndex].setSelectionRange(0,1);
+                this.inputs[prevIndex].setSelectionRange(0, 1);
             }
 
-        }
-        else if (event.code === "ArrowRight") {
+        } else if (event.code === "ArrowRight") {
             event.preventDefault();
             this.inputs[nextIndex].focus();
             if (event.target.value != "") {
-                this.inputs[nextIndex].setSelectionRange(0,1);
+                this.inputs[nextIndex].setSelectionRange(0, 1);
             }
         }
     }
@@ -231,7 +259,7 @@ class TwoFactorCode {
             event.target.blur();
         } else {
             if (event.target.value != "") {
-                event.target.setSelectionRange(0,1);
+                event.target.setSelectionRange(0, 1);
             }
         }
     }
@@ -244,7 +272,7 @@ class TwoFactorCode {
 }
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function render() {
@@ -253,4 +281,3 @@ function render() {
     const code = new TwoFactorCode(root);
     code.render();
 }
-

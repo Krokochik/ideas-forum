@@ -46,6 +46,10 @@ public class TokenService {
         return generateToken(6L, "1234567890".repeat(100));
     }
 
+    public String generateMfaPIN() {
+        return generateToken(4L, "1234567890".repeat(100));
+    }
+
     public String generateMfaResetCode() {
         return generateToken(9L, "1234567890".repeat(100));
     }

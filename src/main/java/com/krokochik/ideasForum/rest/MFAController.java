@@ -6,8 +6,8 @@ import com.krokochik.ideasForum.model.service.Token;
 import com.krokochik.ideasForum.repository.UserRepository;
 import com.krokochik.ideasForum.service.crypto.Cryptographer;
 import com.krokochik.ideasForum.service.crypto.TokenService;
-import com.krokochik.ideasForum.service.jdbc.UserService;
 import com.krokochik.ideasForum.service.mfa.MFAService;
+import com.krokochik.ideasForum.service.security.SecurityRoutineProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +31,7 @@ public class MFAController {
     UserRepository userRepository;
 
     @Autowired
-    UserService userService;
+    SecurityRoutineProvider srp;
 
     /*
     * to connect mfa client must confirm the addition sending
@@ -128,11 +128,13 @@ public class MFAController {
             user.setMfaResetTokens(resetTokens);
             user.setMfaConnecting(true);
             user.setQrcode(null);
+            String PIN;
+            user.setMfaActivatePIN(PIN = tokenService.generateMfaPIN());
             userRepository.save(user);
 
             response.setStatus(200);
             return new HashMap<>() {{
-                put("mfaResetTokens", resetTokens);
+                put("PIN", PIN);
             }};
         }
 
@@ -140,5 +142,23 @@ public class MFAController {
             response.setStatus(500);
 
         return new HashMap<>();
+    }
+
+    @PostMapping("/activate")
+    public HashMap<String, Object> activateMfa(@RequestParam("PIN") String PIN, HttpServletResponse response) {
+        User user = userRepository.findByUsername(srp.getContext().getAuthentication().getName());
+        if (user.getMfaActivatePIN().equals(PIN)) {
+            user.setMfaActivated(true);
+            user.setMfaActivatePIN(null);
+            userRepository.save(user);
+            return new HashMap<>() {{
+                put("response", "activated");
+            }};
+        } else {
+            response.setStatus(403);
+            return new HashMap<>() {{
+                put("response", "wrong PIN");
+            }};
+        }
     }
 }

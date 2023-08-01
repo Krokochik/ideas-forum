@@ -36,6 +36,7 @@ public class User
     String passwordAbortToken;
     String mfaCode;
     String mfaToken;
+    String mfaActivatePIN;
 
     // flags
     boolean active = true;
