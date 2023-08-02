@@ -14,7 +14,9 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+/**
+ * @deprecated Will be absolutely reworked in the future
+ * */
 public class SpellMorphService {
 
     private static final int MAX_REQUEST_LENGTH = 10_000; // макс длина POST запроса Ya. Speller
