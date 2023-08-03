@@ -38,7 +38,7 @@ function onLoad() {
 
     var isIdConfirmed = document.querySelector("#chng3").getAttribute("bool");
 
-    var btn = document.getElementById("chng3");
+    let btn = document.getElementById("chng3");
     btn.addEventListener("click", function () {
         if (isIdConfirmed !== "true") {
             window.location.href = "/proof-identity?origin=settings";
@@ -48,65 +48,84 @@ function onLoad() {
         btn.click();
     }
 }
-onLoad();
+
 var interval;
+var gotCodes = false;
 
 function updateMfaCodes() {
-    $.ajax({
-        url: "/mfa/codes",
-        method: "POST",
-        success: function (response) {
-            clearInterval(interval);
-            var codes = [];
-            response.codes.forEach((code) => codes.push(code));
+    if (!gotCodes) {
+        $.ajax({
+            url: "/mfa/codes",
+            method: "POST",
+            success: function (response) {
+                clearInterval(interval);
+                gotCodes = true;
+                let codes = [];
+                response.codes.forEach((code) => codes.push(code));
 
-            $("#list").remove();
-            $("#qrcode").remove();
+                $("#list").remove();
+                $("#qrcode").remove();
 
-            $("#modal-neck").prepend(
-                '<h6 id="msg0" style="width: 90%;text-align: justify;display: inline-table;" class="mb-3"><span style="color: #647bb1;">' +
-                'Сохраните резервные коды ниже!</span> Если вы утратите доступ к мобильному аутентификатору, это единственный способ войти в аккаунт.</h6>'
-            );
+                $("#modal-neck").prepend(
+                    '<h6 id="msg0" style="width: 90%;text-align: justify;display: inline-table;" class="mb-3"><span style="color: #647bb1;">' +
+                    'Сохраните резервные коды ниже!</span> Если вы утратите доступ к мобильному аутентификатору, это единственный способ войти в аккаунт.</h6>'
+                );
 
-            $("#column1").empty();
-            for (var i = 0; i < 4; i++) {
-                $("#column1").append("<p>" + codes[i] + "</p>");
-            }
+                $("#column1").empty();
+                for (let i = 0; i < 4; i++) {
+                    $("#column1").append("<p>" + codes[i] + "</p>");
+                }
 
-            $("#column2").empty();
-            for (var j = 4; j < 8; j++) {
-                $("#column2").append("<p>" + codes[j] + "</p>");
-            }
+                $("#column2").empty();
+                for (let i = 4; i < 8; i++) {
+                    $("#column2").append("<p>" + codes[i] + "</p>");
+                }
 
-            $("#column3").empty();
-            for (var k = 8; k < 12; k++) {
-                $("#column3").append("<p>" + codes[k] + "</p>");
-            }
+                $("#column3").empty();
+                for (let i = 8; i < 12; i++) {
+                    $("#column3").append("<p>" + codes[i] + "</p>");
+                }
 
-            $("#column4").empty();
-            for (var l = 12; l < 16; l++) {
-                $("#column4").append("<p>" + codes[l] + "</p>");
-            }
+                $("#column4").empty();
+                for (let i = 12; i < 16; i++) {
+                    $("#column4").append("<p>" + codes[i] + "</p>");
+                }
 
-            $("#modal-body").append(
-                '<span id="msg1" class="my-3" style="display: inline-table;max-width: 85%;text-align: center;font-weight: 500;font-size: 1rem">' +
-                'Если вы <span style="color: #647bb1;">сохранили коды</span>' +
-                ', введите PIN из мобильного приложения:' +
-                '</span>'
-            );
+                $("#modal-body").append(
+                    '<span id="msg1" class="my-3" style="display: inline-table;max-width: 85%;text-align: center;font-weight: 500;font-size: 1rem">' +
+                    'Если вы <span style="color: #647bb1;">сохранили коды</span>' +
+                    ', введите PIN из мобильного приложения:' +
+                    '</span>'
+                );
 
-            var color = "#fff";
-            if (getCookieValue("theme") === "light") color = "#000";
-            $("#modal-body").append(
-                '<div data-color="' +
-                color +
-                '" data-filter="num" data-fields="4" id="code-input"></div>'
-            );
-            render();
-        },
-        error: function () {}
-    });
+                let color = "#fff";
+                if (getCookieValue("theme") === "light") color = "#000";
+                $("#modal-body").append(
+                    '<div data-color="' +
+                    color +
+                    '" data-filter="num" data-fields="4" id="code-input"></div>'
+                );
+                render();
+            },
+            error: function () {}
+        });
+    } else clearInterval(interval);
 }
 
-updateMfaCodes();
-interval = setInterval(updateMfaCodes, 5000);
+document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "hidden" || document.visibilityState === "unloaded") {
+        let runnable = () => clearInterval(interval);
+        setTimeout(runnable, 10000);
+    } else if (isIdConfirmed === "true") {
+        updateMfaCodes();
+        interval = setInterval(updateMfaCodes, 5000);
+    }
+});
+
+var isTheFirstMfaButtonClick = true;
+document.getElementById("chng3").addEventListener("click", function () {
+    if (isTheFirstMfaButtonClick && isIdConfirmed === "true") {
+        isTheFirstMfaButtonClick = false;
+        interval = setInterval(updateMfaCodes, 5000);
+    }
+});
