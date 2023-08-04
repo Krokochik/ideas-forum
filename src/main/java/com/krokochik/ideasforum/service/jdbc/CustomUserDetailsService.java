@@ -25,4 +25,6 @@ public class CustomUserDetailsService extends SecurityRoutineProvider implements
         System.out.println("User details");
         return convertUserToUserDetails(user);
     }
+
+
 }

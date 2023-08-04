@@ -30,8 +30,8 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        //http.requiresChannel(channelRequestMatcherRegistry ->
-                //channelRequestMatcherRegistry.anyRequest().requiresSecure());
+        http.requiresChannel(registry ->
+                registry.anyRequest().requiresSecure());
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(
@@ -84,11 +84,11 @@ public class WebSecurityConfig {
                                 .tokenRepository(tokenRepository())
                                 .userDetailsService(new CustomUserDetailsService())
                 )
-                .userDetailsService(userDetailsService())
+                .userDetailsService(new CustomUserDetailsService())
                 .csrf(csrf ->
                         csrf
-                                .ignoringRequestMatchers("/mfa/**")
-                                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                            .ignoringRequestMatchers("/mfa/**")
+                            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
                 .cors(configurer -> configurer.configure(http));
 
