@@ -130,7 +130,7 @@ public class AuthorizationController {
             return "redirect:/sign-up?regErr";
         }
 
-        String oauth2Param = "oauth2".equals(oauth2) ? "&oauth2" : "";
+        String oauth2Param = "oauth2".equals(oauth2) ? "&oauth2=true" : "";
         Enum<? extends Enum<?>> validate = UserValidator.validate(user);
         if (validate.equals(UserValidator.Result.OK)) {
             if (userService.exists(user.getUsername())) {

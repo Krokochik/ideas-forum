@@ -35,6 +35,7 @@ public class OAuth2Controller {
                                  HttpSession session, HttpServletRequest request,
                                  HttpServletResponse response,
                                  @PathVariable(name = "status") String status) {
+        log.info("oauth2");
         OAuth2User oauth2User;
         try {
             oauth2User = authentication.getPrincipal();
