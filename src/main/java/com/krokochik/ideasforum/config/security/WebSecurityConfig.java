@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
 
 import javax.sql.DataSource;
 
@@ -90,7 +91,7 @@ public class WebSecurityConfig {
                             .ignoringRequestMatchers("/mfa/**")
                             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
-                .cors(configurer -> configurer.configure(http));
+                .cors(request -> new CorsConfiguration().applyPermitDefaultValues());
 
         return http.build();
     }
