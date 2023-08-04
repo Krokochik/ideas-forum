@@ -130,11 +130,11 @@ public class AuthorizationController {
             return "redirect:/sign-up?regErr";
         }
 
-        String currentURI = "/sign-up" + ("oauth2".equals(oauth2) ? "/oauth2" : "");
+        String oauth2Param = "oauth2".equals(oauth2) ? "&oauth2" : "";
         Enum<? extends Enum<?>> validate = UserValidator.validate(user);
         if (validate.equals(UserValidator.Result.OK)) {
             if (userService.exists(user.getUsername())) {
-                return "redirect:" + currentURI + "?regErr&nameTakenErr";
+                return "redirect:/sign-up?regErr&nameTakenErr" + oauth2Param;
             }
             Set<Role> userRoles = Collections.singleton(Role.ANONYM);
             if (oauth2 != null && !oauth2.isBlank() && session.getAttribute("oauth2Id") != null) {
@@ -172,13 +172,13 @@ public class AuthorizationController {
 
             return "redirect:/email-validity-confirmation";
         } else if (validate.equals(UserValidator.Result.INVALID_USERNAME.SHORT)) {
-            return "redirect:" + currentURI + "?regErr&nameLenErr";
+            return "redirect:/sign-up?regErr&nameLenErr" + oauth2Param;
         } else if (validate.equals(UserValidator.Result.INVALID_USERNAME.BLANK)) {
-            return "redirect:" + currentURI + "?regErr&nameErr";
+            return "redirect:/sign-up?regErr&nameErr" + oauth2Param;
         } else if (validate.equals(UserValidator.Result.INVALID_PASSWORD)) {
-            return "redirect:" + currentURI + "?regErr&passInsecureErr";
+            return "redirect:/sign-up?regErr&passInsecureErr" + oauth2Param;
         } else if (validate.equals(UserValidator.Result.INVALID_EMAIL)) {
-            return "redirect:" + currentURI + "?regErr&emailFormErr";
+            return "redirect:/sign-up?regErr&emailFormErr" + oauth2Param;
         }
 
         return "redirect:/login";
