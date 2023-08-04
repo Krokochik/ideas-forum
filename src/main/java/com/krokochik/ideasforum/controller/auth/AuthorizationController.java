@@ -160,12 +160,14 @@ public class AuthorizationController {
         } catch (UserValidationService.UsernameLengthException exception) {
             return "redirect:/sign-up?regErr&nameLenErr";
         } catch (NullPointerException exception) {
+            log.error("nlp", exception);
             return "redirect:/sign-up?regErr&nameErr";
         } catch (UserValidationService.PasswordInsecureException exception) {
             return "redirect:/sign-up?regErr&passInsecureErr";
         } catch (UserValidationService.EmailFormatException exception) {
             return "redirect:/sign-up?regErr&emailFormErr";
         }
+        log.info("to login");
         return "redirect:/login";
     }
 }

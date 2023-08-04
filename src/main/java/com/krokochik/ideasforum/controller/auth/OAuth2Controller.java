@@ -4,6 +4,7 @@ import com.krokochik.ideasforum.model.db.User;
 import com.krokochik.ideasforum.repository.UserRepository;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -18,6 +19,7 @@ import jakarta.servlet.http.HttpSession;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+@Slf4j
 @Controller
 public class OAuth2Controller {
 
@@ -40,6 +42,7 @@ public class OAuth2Controller {
             return "redirect:/login";
         }
 
+        oauth2User.getAttributes().forEach(log::info);
         if (status.equals("success") && oauth2User.getAttribute("id") != null) {
             String id;
             try {
@@ -52,6 +55,7 @@ public class OAuth2Controller {
 
             User user;
             if ((user = userRepository.getUserByOAuth2Id(id)) != null) {
+                log.info(user.toString());
                 srp.authorizeUser(SecurityContextHolder.getContext(), user, true, request, response);
                 return "redirect:/email-validity-confirmation";
             } else {
@@ -72,6 +76,7 @@ public class OAuth2Controller {
                 String provider = oauth2User.getAttribute("global_name") != null ? "discord" :
                         oauth2User.getAttribute("username") != null ? "discord" : "github";
 
+                log.info("sign-up");
                 // attributes to signing up
                 session.setAttribute("oauth2Id", id);
                 session.setAttribute("oauth2Username", username);
