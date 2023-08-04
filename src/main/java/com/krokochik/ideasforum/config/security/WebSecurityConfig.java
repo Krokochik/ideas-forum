@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -31,29 +30,29 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.requiresChannel(channelRequestMatcherRegistry ->
-                channelRequestMatcherRegistry.anyRequest().requiresSecure());
-        http.authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                .requestMatchers(
-                                        "/", "/main", "/main/**",
-                                        "/settings",
-                                        "/email-validity-confirmation", "/password-reset-request", "/password-change", "/password-change-instructions",
-                                        "/scripts/**", "/images/**", "/css/**",
-                                        "/avatar", "/privacy",
-                                        "/mfa/**", "/terminal",
-                                        "/googleb8fcdd64aa45ba54.html", "/yandex_f4f03a518326d43b.html", "/bootstrap.min.css.map")
-                                .permitAll()
-                                .requestMatchers(HttpMethod.POST, "/sign-up", "/sign-up/**", "/terminal")
-                                .permitAll()
-                                .requestMatchers(HttpMethod.GET, "/login", "/sign-up", "/password-reset-request", "/oauth2/**")
-                                .hasAnyAuthority(Role.USER.name(), Role.ANONYM.name())
-                                .requestMatchers(HttpMethod.POST, "/profile")
-                                .hasAnyAuthority(Role.USER.name())
-                                .requestMatchers("/add-note")
-                                .hasAnyAuthority(Role.USER.name())
-                                .anyRequest()
-                                .authenticated()
+        //http.requiresChannel(channelRequestMatcherRegistry ->
+                //channelRequestMatcherRegistry.anyRequest().requiresSecure());
+        http
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers(
+                                "/", "/main", "/main/**",
+                                "/settings",
+                                "/email-validity-confirmation", "/password-reset-request", "/password-change", "/password-change-instructions",
+                                "/scripts/**", "/images/**", "/css/**",
+                                "/avatar", "/privacy",
+                                "/mfa/**", "/terminal",
+                                "/googleb8fcdd64aa45ba54.html", "/yandex_f4f03a518326d43b.html", "/bootstrap.min.css.map")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/sign-up", "/sign-up/**", "/terminal")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET,"/login", "/sign-up", "/password-reset-request", "/oauth2/**")
+                        .anonymous()
+                        .requestMatchers(HttpMethod.POST, "/profile")
+                        .hasAnyAuthority(Role.USER.name())
+                        .requestMatchers("/add-note")
+                        .hasAnyAuthority(Role.USER.name())
+                        .anyRequest()
+                        .authenticated()
                 )
                 .formLogin(withDefaults ->
                         withDefaults
@@ -87,12 +86,13 @@ public class WebSecurityConfig {
                                 .tokenRepository(tokenRepository())
                                 .userDetailsService(new CustomUserDetailsService())
                 )
+                .userDetailsService(userDetailsService())
                 .csrf(csrf ->
                         csrf
                                 .ignoringRequestMatchers("/mfa/**")
                                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
-                .cors(AbstractHttpConfigurer::disable);
+                .cors(configurer -> configurer.configure(http));
 
         return http.build();
     }
