@@ -11,6 +11,7 @@ import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -113,61 +114,75 @@ public class AuthorizationController {
                          @RequestParam(name = "password") String pass,
                          @RequestParam(name = "h-captcha-response", required = false) String captchaToken,
                          @PathVariable(name = "oauth2", required = false) String oauth2) {
+
         User user = new User(name, email, pass);
+
+        HCaptchaResponse response = null;
         try {
-            HCaptchaResponse response = HCaptchaClient.verify(secret, captchaToken, sitekey);
-            if (response == null || !response.isSuccess()) {
-                httpResponse.setHeader("User Password", "wa'fuck, man?");
-                return "redirect:/sign-up?areYouRobot";
-            }
-        } catch (IOException | InterruptedException exc) {
-            log.error("An error occurred", exc);
-            return "redirect:/sign-up?regErr";
+            response = HCaptchaClient.verify(secret, captchaToken, sitekey);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
+
         session.setAttribute("authData", new AuthData(name, email));
-        try {
-            if (UserValidationService.validate(user)) {
-                if (userService.exists(user.getUsername())) {
-                    return "redirect:/sign-up?regErr&nameTakenErr";
-                }
-                Set<Role> userRoles = Collections.singleton(Role.ANONYM);
-                if (oauth2 != null && !oauth2.isBlank() && session.getAttribute("oauth2Id") != null) {
-                    String oauth2Id = (String) session.getAttribute("oauth2Id");
-                    user.setOauth2Id(oauth2Id);
-                    if (session.getAttribute("oauth2Email") != null && session.getAttribute("oauth2Email").equals(email)) {
-                        userRoles = Collections.singleton(Role.USER);
-                    }
-                    URL avatarUrl = (URL) session.getAttribute("oauth2AvatarUrl");
-                    if (avatarUrl != null) {
-                        try {
-                            BufferedImage image = ImageIO.read(avatarUrl);
-                            ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
-                            ImageIO.write(image, "png", byteArrayOutStream);
-                            byte[] avatar = java.util.Base64.getEncoder().encode(byteArrayOutStream.toByteArray());
-                            user.setAvatar(avatar);
-                        } catch (IOException ignored) {
+
+        if ((response != null && response.isSuccess()) ||
+                ((session.getAttribute("oauth2Username") != null) &&
+                        (session.getAttribute("oauth2Id") != null) &&
+                        oauth2.equals("oauth2"))) {
+            try {
+                if (UserValidationService.validate(user)) {
+                    if (userRepository.findByUsername(user.getUsername()) == null) {
+                        Set<Role> userRoles = Collections.singleton(Role.ANONYM);
+                        if (oauth2.equals("oauth2") && (session.getAttribute("oauth2Id") != null)) {
+                            String oauth2Id = (String) session.getAttribute("oauth2Id");
+                            user.setOauth2Id(oauth2Id);
+
+                            if (session.getAttribute("oauth2Email") != null)
+                                if (session.getAttribute("oauth2Email").equals(email))
+                                    userRoles = Collections.singleton(Role.USER);
+
+                            URL avatarUrl;
+                            if ((avatarUrl = (URL) session.getAttribute("oauth2AvatarUrl")) != null) {
+                                byte[] avatar = new User().getAvatar();
+                                try {
+                                    BufferedImage image = ImageIO.read(avatarUrl);
+                                    ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
+                                    ImageIO.write(image, "png", byteArrayOutStream);
+                                    avatar = Base64.encodeBase64(byteArrayOutStream.toByteArray());
+                                } catch (IOException ignored) {
+                                }
+                                user.setAvatar(avatar);
+                            }
                         }
-                    }
+
+                        user.setRoles(userRoles);
+                        userRepository.save(user);
+
+                        // Authorize user and remember if oauth2Id is present
+
+
+                        session.setAttribute("oauth2Id", null);
+                        session.setAttribute("oauth2Username", null);
+                        session.setAttribute("oauth2Email", null);
+                        session.setAttribute("oauth2AvatarUrl", null);
+                        session.setAttribute("authData", null);
+                    } else return "redirect:/sign-up?regErr&nameTakenErr";
                 }
-                user.setRoles(userRoles);
-                userRepository.save(user);
-                session.removeAttribute("oauth2Id");
-                session.removeAttribute("oauth2Username");
-                session.removeAttribute("oauth2Email");
-                session.removeAttribute("oauth2AvatarUrl");
-                session.removeAttribute("authData");
+            } catch (UserValidationService.UsernameLengthException exception) {
+                return "redirect:/sign-up?regErr&nameLenErr";
+            } catch (NullPointerException exception) {
+                return "redirect:/sign-up?regErr&nameErr";
+            } catch (UserValidationService.PasswordInsecureException exception) {
+                return "redirect:/sign-up?regErr&passInsecureErr";
+            } catch (UserValidationService.EmailFormatException exception) {
+                return "redirect:/sign-up?regErr&emailFormErr";
             }
-        } catch (UserValidationService.UsernameLengthException exception) {
-            return "redirect:/sign-up?regErr&nameLenErr";
-        } catch (NullPointerException exception) {
-            log.error("nlp", exception);
-            return "redirect:/sign-up?regErr&nameErr";
-        } catch (UserValidationService.PasswordInsecureException exception) {
-            return "redirect:/sign-up?regErr&passInsecureErr";
-        } catch (UserValidationService.EmailFormatException exception) {
-            return "redirect:/sign-up?regErr&emailFormErr";
+        } else {
+            httpResponse.setHeader("User Password", "wa'fuck, man?");
+            return "redirect:/sign-up?areYouRobot";
         }
-        log.info("to login");
+
         return "redirect:/login";
     }
 }
