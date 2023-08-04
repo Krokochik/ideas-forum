@@ -4,7 +4,7 @@ import com.krokochik.ideasforum.model.functional.Role;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Set;
 
 @Data

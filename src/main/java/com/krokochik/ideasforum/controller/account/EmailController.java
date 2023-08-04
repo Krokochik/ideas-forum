@@ -9,6 +9,7 @@ import com.krokochik.ideasforum.service.crypto.TokenService;
 import com.krokochik.ideasforum.service.MailService;
 import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
+import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 import java.util.Collections;
 
 @Slf4j
@@ -39,7 +40,7 @@ public class EmailController {
     SecurityRoutineProvider srp;
 
     @GetMapping("/email-validity-confirmation")
-    public String checkingIfUserEmailIsOk(@RequestParam(name = "newEmail", required = false) String mode, HttpSession session, Model model) {
+    public String checkingIfUserEmailIsOk(@RequestParam(name = "newEmail", required = false) String mode, HttpSession session, Model model) throws MessagingException {
         Object temp = null;
         String newEmail = "";
         try {
@@ -71,7 +72,11 @@ public class EmailController {
                     mail.setTheme("Подтверждение почты");
                     mail.setLink("https://ideas-forum.herokuapp.com/confirm?name=" + ctx.getAuthentication().getName() +
                             "&token=" + userToken + (isEmailChanging ? "&newEmail=" + finalNewEmail : ""));
-                    mailService.sendConfirmationMail(mail, user.getUsername(), isAnonym ? "На вашу почту был зарегестрирован новый аккаунт." : "К вашей почте был привязан аккаунт.");
+                    try {
+                        mailService.sendConfirmationMail(mail, user.getUsername(), isAnonym ? "На вашу почту был зарегестрирован новый аккаунт." : "К вашей почте был привязан аккаунт.");
+                    } catch (MessagingException e) {
+                        throw new RuntimeException(e);
+                    }
                 });
                 mailSending.start();
                 userRepository.setConfirmMailSentById(true, user.getId());

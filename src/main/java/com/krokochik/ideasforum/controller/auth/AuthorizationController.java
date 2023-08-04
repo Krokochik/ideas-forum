@@ -8,6 +8,8 @@ import com.krokochik.ideasforum.repository.UserRepository;
 import com.krokochik.ideasforum.service.UserValidationService;
 import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,8 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

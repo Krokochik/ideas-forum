@@ -2,6 +2,9 @@ package com.krokochik.ideasforum.service;
 
 
 import com.krokochik.ideasforum.model.service.Mail;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,9 +13,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -26,7 +26,7 @@ public class MailService {
     @Value("${spring.mail.sender.email}")
     String senderEmail;
 
-    public void sendEmail(Mail mail, String name, String content, String htmlName) {
+    public void sendEmail(Mail mail, String name, String content, String htmlName) throws MessagingException {
         try
         {
             MimeMessage message = javaMailSender.createMimeMessage();
@@ -50,7 +50,7 @@ public class MailService {
         }
     }
 
-    public void sendConfirmationMail(Mail mail, String name, String content) {
+    public void sendConfirmationMail(Mail mail, String name, String content) throws MessagingException {
         sendEmail(mail, name, content,"email-confirmation.html");
     }
 }

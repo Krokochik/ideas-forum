@@ -61,7 +61,7 @@ public class Cryptographer {
      * @param secretKey  any-length non-blank string to be used by AES as a key.
      * @param initVector any-length string to be used by AES as a parameter.
      * @return decrypted string.
-     * @throws BadPaddingException inherited from {@link javax.crypto.Cipher}.
+     * @throws BadPaddingException inherited from {@link jakarta.crypto.Cipher}.
      */
     public static String decrypt(@NonNull String str,
                                  @NonNull String secretKey,

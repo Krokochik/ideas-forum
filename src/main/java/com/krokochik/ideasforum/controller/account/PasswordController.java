@@ -6,6 +6,7 @@ import com.krokochik.ideasforum.service.UserValidationService;
 import com.krokochik.ideasforum.service.crypto.TokenService;
 import com.krokochik.ideasforum.service.MailService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
@@ -36,7 +37,11 @@ public class PasswordController {
             mail.setReceiver(userRepository.findByUsername(context.getAuthentication().getName()).getEmail());
             mail.setLink("https://ideas-forum.herokuapp.com/password-change?name=" + context.getAuthentication().getName() + "&token=" + passToken);
             userRepository.setPasswordAbortTokenById(passToken, userRepository.findByUsername(context.getAuthentication().getName()).getId());
-            mailService.sendEmail(mail, context.getAuthentication().getName(), "", "password-change.html");
+            try {
+                mailService.sendEmail(mail, context.getAuthentication().getName(), "", "password-change.html");
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
             userRepository.setPasswordAbortSentById(true, userRepository.findByUsername(context.getAuthentication().getName()).getId());
         });
         mailSending.start();
@@ -88,7 +93,11 @@ public class PasswordController {
                     mail.setReceiver(userRepository.findByUsername(name).getEmail());
                     mail.setLink("https://ideas-forum.herokuapp.com/password-change?name=" + name + "&token=" + passToken);
                     userRepository.setPasswordAbortTokenById(passToken, userRepository.findByUsername(name).getId());
-                    mailService.sendEmail(mail, name, "", "password-change.html");
+                    try {
+                        mailService.sendEmail(mail, name, "", "password-change.html");
+                    } catch (MessagingException e) {
+                        throw new RuntimeException(e);
+                    }
                     userRepository.setPasswordAbortSentById(true, userRepository.findByUsername(name).getId());
                 });
                 mailSending.start();

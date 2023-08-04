@@ -1,13 +1,12 @@
 package com.krokochik.ideasforum.model.db;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.Type;
 import org.jetbrains.annotations.NotNull;
 
-import javax.persistence.*;
 import java.sql.Date;
 
 @Data
@@ -38,6 +37,6 @@ public class Post
     @NotNull
     String author;
 
-    @Type(type = "java.sql.Date")
+    @Temporal(TemporalType.DATE)
     Date creationDate = new Date(System.currentTimeMillis());
 }

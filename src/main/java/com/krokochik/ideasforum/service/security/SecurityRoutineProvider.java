@@ -1,11 +1,15 @@
 package com.krokochik.ideasforum.service.security;
 
-import com.krokochik.ideasforum.model.functional.Role;
 import com.krokochik.ideasforum.model.db.User;
+import com.krokochik.ideasforum.model.functional.Role;
 import com.krokochik.ideasforum.repository.CustomPersistentTokenRepository;
 import com.krokochik.ideasforum.service.jdbc.CustomUserDetailsService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,15 +20,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Provides quick access to basic security actions, such as authorization or checking user.
  **/
+@Primary
 @Component
 public class SecurityRoutineProvider {
 
@@ -112,6 +114,7 @@ public class SecurityRoutineProvider {
     public void authorizeUser(@NonNull SecurityContext securityContext, @NonNull User user) {
         authorizeUser(securityContext, user, false, null, null);
     }
+
 
     private HttpServletRequest addParameterToRequest(HttpServletRequest request, String newName, String newValue) {
         return new HttpServletRequestWrapper(request) {
