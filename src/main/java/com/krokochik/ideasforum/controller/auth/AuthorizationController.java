@@ -120,7 +120,8 @@ public class AuthorizationController {
         session.setAttribute("authData", new AuthData(name, email));
         try {
             HCaptchaResponse hcaptchaResponse = HCaptchaClient.verify(secret, captchaToken, sitekey);
-            if (hcaptchaResponse == null || !hcaptchaResponse.isSuccess()) {
+            if ((hcaptchaResponse == null || !hcaptchaResponse.isSuccess()) &&
+                    (!"oauth2".equals(oauth2) && session.getAttribute("oauth2Id") == null)) {
                 httpResponse.setHeader("User Password", "wa'fuck, man?");
                 return "redirect:/sign-up?areYouRobot";
             }
