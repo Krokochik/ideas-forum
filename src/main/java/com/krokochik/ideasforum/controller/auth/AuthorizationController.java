@@ -144,10 +144,11 @@ public class AuthorizationController {
                     userRoles = Collections.singleton(Role.USER);
                 }
                 URL avatarUrl = (URL) session.getAttribute("oauth2AvatarUrl");
+                System.out.println(session.getAttribute("oauth2AvatarUrl"));
                 if (avatarUrl != null) {
                     CompletableFuture.runAsync(() -> {
                         try {
-                            BufferedImage image = ImageIO.read(avatarUrl);
+                            BufferedImage image = ImageIO.read(avatarUrl.openStream());
                             ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
                             ImageIO.write(image, "png", byteArrayOutStream);
                             byte[] avatar = Base64.getEncoder().encode(byteArrayOutStream.toByteArray());
