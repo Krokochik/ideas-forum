@@ -4,7 +4,7 @@ import com.krokochik.ideasforum.model.service.Mail;
 import com.krokochik.ideasforum.model.functional.Role;
 import com.krokochik.ideasforum.model.db.User;
 import com.krokochik.ideasforum.repository.UserRepository;
-import com.krokochik.ideasforum.service.UserValidationService;
+import com.krokochik.ideasforum.service.UserValidator;
 import com.krokochik.ideasforum.service.crypto.TokenService;
 import com.krokochik.ideasforum.service.MailService;
 import com.krokochik.ideasforum.service.jdbc.UserService;
@@ -105,7 +105,7 @@ public class EmailController {
 
             userService.setRolesById(user.getId(), Collections.singleton(Role.USER));
             user.setRoles(Collections.singleton(Role.USER));
-            srp.authorizeUser(SecurityContextHolder.getContext(), user);
+            srp.authorizeUser(user, SecurityContextHolder.getContext());
 
             return "redirect:/main";
 
@@ -121,7 +121,7 @@ public class EmailController {
 
         User user = userRepository.findByUsername(srp.getContext().getAuthentication().getName());
 
-        if (email.isBlank() || !UserValidationService.validateEmail(email) ||
+        if (email.isBlank() || !UserValidator.validateEmail(email) ||
                 (user.getRoles().contains(Role.USER) && !password.equals(user.getPassword())))
             return "redirect:/change-email?error";
 

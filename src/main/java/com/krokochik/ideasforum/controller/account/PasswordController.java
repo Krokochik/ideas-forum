@@ -2,7 +2,7 @@ package com.krokochik.ideasforum.controller.account;
 
 import com.krokochik.ideasforum.model.service.Mail;
 import com.krokochik.ideasforum.repository.UserRepository;
-import com.krokochik.ideasforum.service.UserValidationService;
+import com.krokochik.ideasforum.service.UserValidator;
 import com.krokochik.ideasforum.service.crypto.TokenService;
 import com.krokochik.ideasforum.service.MailService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
@@ -64,7 +64,7 @@ public class PasswordController {
                                  @RequestParam(name = "pass") String password, @RequestParam(name = "passConf") String passwordConfirm,
                                  @RequestParam(name = "name") String name, @RequestParam(name = "token") String token) {
         if (userRepository.findByUsername(name) != null && userRepository.findByUsername(name).getPasswordAbortToken().equals(token)) {
-            if (UserValidationService.validatePassword(password)) {
+            if (UserValidator.validatePassword(password)) {
                 if (password.equals(passwordConfirm)) {
                     userRepository.setPasswordById(password, userRepository.findByUsername(name).getId());
                     return "redirect:/login";

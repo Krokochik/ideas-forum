@@ -79,12 +79,12 @@ public class SecurityRoutineProvider {
      * Authorizes user into Spring manually.
      *
      * @param remember is it needed to add remember-me cookie to response and database.
-     * @param request the user's request (spring-generated). If remember is true, must not be null.
+     * @param request  the user's request (spring-generated). If remember is true, must not be null.
      * @param response the server response (spring-generated). If remember is true, must not be null.
      * @throws NullPointerException if a parameter is null.
      **/
-    public void authorizeUser(@NonNull SecurityContext securityContext, @NonNull User user,
-                              boolean remember, HttpServletRequest request, HttpServletResponse response) {
+    public void authorizeUser(@NonNull User user, boolean remember, @NonNull SecurityContext securityContext,
+                              HttpServletRequest request, HttpServletResponse response) {
         Set<SimpleGrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.name()))
                 .collect(Collectors.toSet());
@@ -111,8 +111,8 @@ public class SecurityRoutineProvider {
      *
      * @throws NullPointerException if a parameter is null.
      **/
-    public void authorizeUser(@NonNull SecurityContext securityContext, @NonNull User user) {
-        authorizeUser(securityContext, user, false, null, null);
+    public void authorizeUser(@NonNull User user, @NonNull SecurityContext securityContext) {
+        authorizeUser(user, false, securityContext, null, null);
     }
 
 

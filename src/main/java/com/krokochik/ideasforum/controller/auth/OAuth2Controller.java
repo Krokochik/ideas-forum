@@ -56,7 +56,7 @@ public class OAuth2Controller {
             User user;
             if ((user = userRepository.getUserByOAuth2Id(id)) != null) {
                 log.info(user.toString());
-                srp.authorizeUser(SecurityContextHolder.getContext(), user, true, request, response);
+                srp.authorizeUser(user, true, SecurityContextHolder.getContext(), request, response);
                 return "redirect:/email-validity-confirmation";
             } else {
                 URL avatarUrl = new URL("https://ideas-forum.herokuapp.com/avatar");
