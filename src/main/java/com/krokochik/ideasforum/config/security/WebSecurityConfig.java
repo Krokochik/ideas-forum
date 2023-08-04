@@ -29,6 +29,12 @@ public class WebSecurityConfig {
     @Autowired
     DataSource dataSource;
 
+    @Autowired
+    CustomUserDetailsService userDetailsService;
+
+    @Autowired
+
+
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.requiresChannel(registry ->
@@ -83,9 +89,9 @@ public class WebSecurityConfig {
                                 .rememberMeCookieName("remember-me")
                                 .tokenValiditySeconds(15 * 24 * 60 * 60)
                                 .tokenRepository(tokenRepository())
-                                .userDetailsService(new CustomUserDetailsService())
+                                .userDetailsService(userDetailsService)
                 )
-                .userDetailsService(new CustomUserDetailsService())
+                .userDetailsService(userDetailsService)
                 .csrf(csrf ->
                         csrf
                             .ignoringRequestMatchers("/mfa/**")
