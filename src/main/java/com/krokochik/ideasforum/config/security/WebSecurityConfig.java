@@ -93,7 +93,7 @@ public class WebSecurityConfig {
                 .userDetailsService(userDetailsService)
                 .csrf(csrf ->
                         csrf
-                            .ignoringRequestMatchers("/mfa/**")
+                            .ignoringRequestMatchers("/mfa/**", "/oauth2/**", "/login/oauth2/**")
                             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
                 .cors(request -> new CorsConfiguration().applyPermitDefaultValues());
