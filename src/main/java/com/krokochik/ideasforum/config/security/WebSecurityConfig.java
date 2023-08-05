@@ -58,17 +58,17 @@ public class WebSecurityConfig {
                         .anyRequest()
                         .authenticated()
                 )
-                .formLogin(withDefaults ->
-                        withDefaults
-                                .loginPage("/login")
-                                .failureUrl("/login?loginError")
-                                .defaultSuccessUrl("/email-validity-confirmation")
-                )
                 .oauth2Login(withDefaults ->
                         withDefaults
                                 .loginPage("/login")
                                 .failureUrl("/oauth2/failure")
                                 .defaultSuccessUrl("/oauth2/success")
+                )
+                .formLogin(withDefaults ->
+                        withDefaults
+                                .loginPage("/login")
+                                .failureUrl("/login?loginError")
+                                .defaultSuccessUrl("/email-validity-confirmation")
                 )
                 .logout(logout ->
                         logout

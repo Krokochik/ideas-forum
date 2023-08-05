@@ -13,6 +13,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
     @GetMapping("/error")
     public String handleError(HttpServletRequest request, Model model) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+        request.getAttributeNames().asIterator().forEachRemaining(string -> System.out.println(string + ": " + request.getAttribute(string)));
 
         if (status != null) {
             int statusCode = Integer.parseInt(status.toString());
