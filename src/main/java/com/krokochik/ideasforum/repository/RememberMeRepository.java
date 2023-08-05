@@ -22,7 +22,7 @@ public interface RememberMeRepository extends JpaRepository<PersistentRememberMe
     @Modifying
     @Transactional
     @Query(value = """
-            DELETE *
+            DELETE
             FROM persistent_remember_me
             WHERE username = ?1
             """, nativeQuery = true)
