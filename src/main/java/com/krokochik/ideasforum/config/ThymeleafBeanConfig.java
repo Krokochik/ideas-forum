@@ -1,7 +1,7 @@
 package com.krokochik.ideasforum.config;
 
 import com.krokochik.ideasforum.model.functional.UserAuth;
-import com.krokochik.ideasforum.repository.UserRepository;
+import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 public class ThymeleafBeanConfig {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     SecurityRoutineProvider srp;
@@ -23,7 +23,9 @@ public class ThymeleafBeanConfig {
         return new UserAuth() {
             @Override
             public String getCurrentEmail() {
-                return userRepository.findByUsername(srp.getContext().getAuthentication().getName()).getEmail();
+                return userService.findByUsernameOrUnknown(srp
+                                .getContext().getAuthentication().getName())
+                        .getEmail();
             }
 
             @Override
@@ -33,22 +35,29 @@ public class ThymeleafBeanConfig {
 
             @Override
             public Long getCurrentId() {
-                return userRepository.findByUsername(srp.getContext().getAuthentication().getName()).getId();
+                return userService.findByUsernameOrUnknown(srp
+                                .getContext().getAuthentication().getName())
+                        .getId();
             }
 
             public String getNickname() {
                 if (srp.isAuthenticated()) {
-                    return userRepository.findByUsername(srp.getContext().getAuthentication().getName()).getNickname();
-                }
-                else return "guest";
+                    return userService.findByUsernameOrUnknown(srp
+                                    .getContext().getAuthentication().getName())
+                            .getNickname();
+                } else return "guest";
             }
 
             public String getAvatar() {
-                return new String(userRepository.findByUsername(srp.getContext().getAuthentication().getName()).getAvatar(), StandardCharsets.UTF_8);
+                return new String(userService.findByUsernameOrUnknown(srp
+                                .getContext().getAuthentication().getName())
+                        .getAvatar(), StandardCharsets.UTF_8);
             }
 
             public boolean isMfaActivated() {
-                return userRepository.findByUsername(srp.getContext().getAuthentication().getName()).isMfaActivated();
+                return userService.findByUsernameOrUnknown(srp
+                                .getContext().getAuthentication().getName())
+                        .isMfaActivated();
             }
 
             public boolean isAuth() {

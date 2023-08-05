@@ -1,10 +1,11 @@
 package com.krokochik.ideasforum.controller.account;
 
+import com.krokochik.ideasforum.model.db.User;
 import com.krokochik.ideasforum.model.service.Mail;
-import com.krokochik.ideasforum.repository.UserRepository;
+import com.krokochik.ideasforum.service.MailService;
 import com.krokochik.ideasforum.service.UserValidator;
 import com.krokochik.ideasforum.service.crypto.TokenService;
-import com.krokochik.ideasforum.service.MailService;
+import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
 @Controller
 public class PasswordController {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     MailService mailService;
@@ -30,21 +34,26 @@ public class PasswordController {
     @GetMapping("/password-change-instructions")
     public String changePassword(Model model) {
         SecurityContext context = srp.getContext();
-        Thread mailSending = new Thread(() -> {
+        CompletableFuture.runAsync(() -> {
             String passToken = new TokenService().generateToken();
             Mail mail = new Mail();
             mail.setTheme("Сброс пароля");
-            mail.setReceiver(userRepository.findByUsername(context.getAuthentication().getName()).getEmail());
-            mail.setLink("https://ideas-forum.herokuapp.com/password-change?name=" + context.getAuthentication().getName() + "&token=" + passToken);
-            userRepository.setPasswordAbortTokenById(passToken, userRepository.findByUsername(context.getAuthentication().getName()).getId());
+            mail.setReceiver(userService.findByUsernameOrUnknown(srp
+                    .getContext().getAuthentication().getName()).getEmail());
+            mail.setLink("https://ideas-forum.herokuapp.com/password-change?name="
+                    + context.getAuthentication().getName()
+                    + "&token=" + passToken);
+            userService.setPasswordAbortTokenById(passToken, userService
+                    .findByUsernameOrUnknown(context.getAuthentication().getName()).getId());
             try {
-                mailService.sendEmail(mail, context.getAuthentication().getName(), "", "password-change.html");
+                mailService.sendEmail(mail, context.getAuthentication().getName(),
+                        "", "password-change.html");
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
             }
-            userRepository.setPasswordAbortSentById(true, userRepository.findByUsername(context.getAuthentication().getName()).getId());
+            userService.setPasswordAbortSentById(true, userService
+                    .findByUsernameOrUnknown(context.getAuthentication().getName()).getId());
         });
-        mailSending.start();
 
         model.addAttribute("from", "/settings");
 
@@ -52,8 +61,11 @@ public class PasswordController {
     }
 
     @GetMapping("/password-change")
-    public String changePassword(Model model, @RequestParam(name = "name") String name, @RequestParam(name = "token") String token) {
-        if (userRepository.findByUsername(name) != null && userRepository.findByUsername(name).getPasswordAbortToken().equals(token)) {
+    public String changePassword(Model model,
+                                 @RequestParam(name = "name") String name,
+                                 @RequestParam(name = "token") String token) {
+        Optional<User> user = userService.findByUsername(name);
+        if (user.isPresent() && user.get().getPasswordAbortToken().equals(token)) {
             return "password-change";
         }
         return "redirect:/password-reset-request";
@@ -61,12 +73,15 @@ public class PasswordController {
 
     @PostMapping("/password-change")
     public String changePassword(Model model,
-                                 @RequestParam(name = "pass") String password, @RequestParam(name = "passConf") String passwordConfirm,
-                                 @RequestParam(name = "name") String name, @RequestParam(name = "token") String token) {
-        if (userRepository.findByUsername(name) != null && userRepository.findByUsername(name).getPasswordAbortToken().equals(token)) {
+                                 @RequestParam(name = "pass") String password,
+                                 @RequestParam(name = "passConf") String passwordConfirm,
+                                 @RequestParam(name = "name") String name,
+                                 @RequestParam(name = "token") String token) {
+        Optional<User> user = userService.findByUsername(name);
+        if (user.isPresent() && user.get().getPasswordAbortToken().equals(token)) {
             if (UserValidator.validatePassword(password)) {
                 if (password.equals(passwordConfirm)) {
-                    userRepository.setPasswordById(password, userRepository.findByUsername(name).getId());
+                    userService.setPasswordById(password, user.get().getId());
                     return "redirect:/login";
                 }
                 return "redirect:/password-change?name=" + name + "&token=" + token + "&error";
@@ -85,22 +100,23 @@ public class PasswordController {
     public String resetPassword(Model model,
                                 @RequestParam(name = "nick") String name) {
         if (!name.isBlank()) {
-            if (userRepository.findByUsername(name) != null) {
-                Thread mailSending = new Thread(() -> {
-                    String passToken = new TokenService().generateToken();
+            Optional<User> user = userService.findByUsername(name);
+            if (user.isPresent()) {
+                CompletableFuture.runAsync(() -> {
+                    String token = new TokenService().generateToken();
                     Mail mail = new Mail();
                     mail.setTheme("Сброс пароля");
-                    mail.setReceiver(userRepository.findByUsername(name).getEmail());
-                    mail.setLink("https://ideas-forum.herokuapp.com/password-change?name=" + name + "&token=" + passToken);
-                    userRepository.setPasswordAbortTokenById(passToken, userRepository.findByUsername(name).getId());
+                    mail.setReceiver(user.get().getEmail());
+                    mail.setLink("https://ideas-forum.herokuapp.com/password-change?name="
+                            + name + "&token=" + token);
+                    userService.setPasswordAbortTokenById(token, user.get().getId());
                     try {
                         mailService.sendEmail(mail, name, "", "password-change.html");
                     } catch (MessagingException e) {
                         throw new RuntimeException(e);
                     }
-                    userRepository.setPasswordAbortSentById(true, userRepository.findByUsername(name).getId());
+                    userService.setPasswordAbortSentById(true, user.get().getId());
                 });
-                mailSending.start();
                 return "redirect:/password-change-instructions";
             }
             return "redirect:/password-reset-request?notFoundErr";

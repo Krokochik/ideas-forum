@@ -1,34 +1,33 @@
 package com.krokochik.ideasforum.controller.account;
 
-import com.krokochik.ideasforum.model.service.Mail;
-import com.krokochik.ideasforum.model.functional.Role;
 import com.krokochik.ideasforum.model.db.User;
-import com.krokochik.ideasforum.repository.UserRepository;
+import com.krokochik.ideasforum.model.functional.Role;
+import com.krokochik.ideasforum.model.service.Mail;
+import com.krokochik.ideasforum.service.MailService;
 import com.krokochik.ideasforum.service.UserValidator;
 import com.krokochik.ideasforum.service.crypto.TokenService;
-import com.krokochik.ideasforum.service.MailService;
 import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import jakarta.servlet.http.HttpSession;
 import java.util.Collections;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Controller
 public class EmailController {
-
-    @Autowired
-    UserRepository userRepository;
 
     @Autowired
     UserService userService;
@@ -37,10 +36,14 @@ public class EmailController {
     MailService mailService;
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
     SecurityRoutineProvider srp;
 
     @GetMapping("/email-validity-confirmation")
-    public String checkingIfUserEmailIsOk(@RequestParam(name = "newEmail", required = false) String mode, HttpSession session, Model model) throws MessagingException {
+    public String checkingIfUserEmailIsOk(HttpSession session, Model model,
+                                          @RequestParam(name = "newEmail", required = false) String mode) {
         Object temp = null;
         String newEmail = "";
         try {
@@ -56,30 +59,32 @@ public class EmailController {
 
         val ctx = srp.getContext();
 
-        User user = userRepository.findByUsername(ctx.getAuthentication().getName());
-        if (srp.hasRole(Role.ANONYM) || srp.hasRole(Role.USER)) {
+        User user = userService
+                .findByUsernameOrUnknown(ctx.getAuthentication().getName());
+        if (srp.hasRole(Role.ANONYM) || srp.hasRole(Role.USER) && !user.getEmail().equals("unknown")) {
             if (!user.isConfirmMailSent()) {
                 String userToken = new TokenService().generateToken();
-                userRepository.setMailConfirmationTokenById(userToken, user.getId());
+                userService.setMailConfirmationTokenById(userToken, user.getId());
 
                 boolean isEmailChanging = !newEmail.isBlank();
                 boolean isAnonym = srp.hasRole(Role.ANONYM);
                 String finalNewEmail = newEmail;
 
-                Thread mailSending = new Thread(() -> {
+                CompletableFuture.runAsync(() -> {
                     Mail mail = new Mail();
                     mail.setReceiver(isEmailChanging ? finalNewEmail : user.getEmail());
                     mail.setTheme("Подтверждение почты");
                     mail.setLink("https://ideas-forum.herokuapp.com/confirm?name=" + ctx.getAuthentication().getName() +
                             "&token=" + userToken + (isEmailChanging ? "&newEmail=" + finalNewEmail : ""));
                     try {
-                        mailService.sendConfirmationMail(mail, user.getUsername(), isAnonym ? "На вашу почту был зарегестрирован новый аккаунт." : "К вашей почте был привязан аккаунт.");
+                        mailService.sendConfirmationMail(mail, user.getUsername(), isAnonym
+                                ? "На вашу почту был зарегестрирован новый аккаунт."
+                                : "К вашей почте был привязан аккаунт.");
                     } catch (MessagingException e) {
                         throw new RuntimeException(e);
                     }
                 });
-                mailSending.start();
-                userRepository.setConfirmMailSentById(true, user.getId());
+                userService.setConfirmMailSentById(true, user.getId());
             }
             model.addAttribute("newEmail", newEmail);
             return "email-confirmation-instructions";
@@ -95,10 +100,11 @@ public class EmailController {
                                @RequestParam(name = "token") String token,
                                @RequestParam(name = "newEmail", required = false) String newEmail,
                                HttpSession session, Model model) {
-        User user = userRepository.findByUsername(name);
-        if (user != null && user.getMailConfirmationToken().equals(token)) {
+        Optional<User> userOptional = userService.findByUsername(name);
+        User user = userOptional.orElse(null);
+        if (userOptional.isPresent() && user.getMailConfirmationToken().equals(token)) {
             if (newEmail != null && srp.hasRole(Role.USER)) {
-                userRepository.setEmailById(newEmail, user.getId());
+                userService.setEmailById(newEmail, user.getId());
                 session.removeAttribute("newEmail");
                 return "redirect:/settings";
             }
@@ -110,22 +116,23 @@ public class EmailController {
             return "redirect:/main";
 
         }
-        return "redirect:/main";
+        return "redirect:/email-validity-confirmation";
     }
 
     @PostMapping("/change-email")
-    public String changeEmail(Model model,
+    public String changeEmail(Model model, HttpSession session,
                               @RequestParam(name = "email") String email,
-                              @RequestParam(name = "password", required = false) String password,
-                              HttpSession session) {
+                              @RequestParam(name = "password", required = false) String password) {
 
-        User user = userRepository.findByUsername(srp.getContext().getAuthentication().getName());
+        Optional<User> userOptional = userService.findByUsername(srp.getContext().getAuthentication().getName());
+        User user = userOptional.orElse(null);
 
-        if (email.isBlank() || !UserValidator.validateEmail(email) ||
-                (user.getRoles().contains(Role.USER) && !password.equals(user.getPassword())))
+        if (userOptional.isEmpty() || email.isBlank() || !UserValidator.validateEmail(email) ||
+                (user.getRoles().contains(Role.USER) &&
+                        !user.getPassword().equals(passwordEncoder.encode(password))))
             return "redirect:/change-email?error";
 
-        userRepository.setConfirmMailSentById(false, user.getId());
+        userService.setConfirmMailSentById(false, user.getId());
 
         session.setAttribute("newEmail", email);
         return "redirect:/email-validity-confirmation?newEmail";

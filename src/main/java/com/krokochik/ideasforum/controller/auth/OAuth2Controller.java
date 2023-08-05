@@ -1,8 +1,11 @@
 package com.krokochik.ideasforum.controller.auth;
 
 import com.krokochik.ideasforum.model.db.User;
-import com.krokochik.ideasforum.repository.UserRepository;
+import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +16,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Optional;
 
 @Slf4j
 @Controller
 public class OAuth2Controller {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     SecurityRoutineProvider srp;
@@ -55,7 +56,9 @@ public class OAuth2Controller {
             }
 
             User user;
-            if ((user = userRepository.getUserByOAuth2Id(id)) != null) {
+            Optional<User> userOptional = userService.findUserByOAuth2Id(id);
+            if (userOptional.isPresent()) {
+                user = userOptional.get();
                 log.info(user.toString());
                 srp.authorizeUser(user, true, SecurityContextHolder.getContext(), request, response);
                 return "redirect:/email-validity-confirmation";

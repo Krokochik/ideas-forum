@@ -3,8 +3,8 @@ package com.krokochik.ideasforum.controller.pages;
 import com.google.zxing.WriterException;
 import com.krokochik.ideasforum.model.db.User;
 import com.krokochik.ideasforum.model.service.Token;
-import com.krokochik.ideasforum.repository.UserRepository;
 import com.krokochik.ideasforum.service.MailService;
+import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.mfa.MFAService;
 import com.krokochik.ideasforum.service.mfa.QRCodeManager;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
@@ -17,13 +17,14 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @Controller
 public class SettingsController {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     MailService mailService;
@@ -40,9 +41,11 @@ public class SettingsController {
     @GetMapping("/settings")
     public String settings(Model model, HttpSession session,
                                @CookieValue(name = "theme", required = false, defaultValue = "dark") String theme) {
+        Optional<User> userOptional = userService
+                .findByUsername(srp.getContext().getAuthentication().getName());
+        User user = userOptional.orElse(null);
 
-        if (srp.isAuthenticated() ) {
-            User user = userRepository.findByUsername(srp.getContext().getAuthentication().getName());
+        if (userOptional.isPresent() && srp.isAuthenticated()) {
             if ((user.getQrcode() == null ||
                     !qrCodeManager.hasUserQrCode(user.getUsername()) ||
                     mfaService.getToken(user.getUsername()).isEmpty()) &&

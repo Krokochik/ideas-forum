@@ -3,20 +3,22 @@ package com.krokochik.ideasforum.rest;
 import com.google.gson.Gson;
 import com.krokochik.ideasforum.model.db.User;
 import com.krokochik.ideasforum.model.service.Token;
-import com.krokochik.ideasforum.repository.UserRepository;
 import com.krokochik.ideasforum.service.crypto.Cryptographer;
 import com.krokochik.ideasforum.service.crypto.TokenService;
+import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.mfa.MFAService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @RestController
@@ -30,7 +32,7 @@ public class MFAController {
     TokenService tokenService;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     SecurityRoutineProvider srp;
@@ -55,11 +57,14 @@ public class MFAController {
             response.setStatus(403);
             return new HashMap<>();
         }
-        User user = userRepository.findByUsername(authentication.getName());
-        if (user.isMfaConnecting() || user.isMfaActivated()) {
+        Optional<User> userOptional = userService.findByUsername(authentication.getName());
+        User user;
+
+        if (userOptional.isPresent() && ((user = userOptional.get())
+                .isMfaConnecting() || user.isMfaActivated())) {
             response.setStatus(200);
             user.setMfaConnecting(false);
-            userRepository.save(user);
+            userService.update(user);
             return new HashMap<>() {{
                 put("codes", user.getMfaResetTokens());
             }};
@@ -76,11 +81,12 @@ public class MFAController {
         User user = new User();
         short statusCode = 403;
         try {
-            user = userRepository.findByUsername(mfaService.getUsernameByPublicTokenPart(publicToken).orElse(""));
+            user = userService.findByUsernameOrUnknown(
+                    mfaService.getUsernameByPublicTokenPart(publicToken).orElse(""));
             Token token = mfaService.getToken(user.getUsername()).orElse(new Token());
             if (token.getPublicPart().equals(publicToken)) {
                 mfaToken = tokenService.generateToken();
-                userRepository.setMfaTokenById(mfaToken, user.getId());
+                userService.setMfaTokenById(mfaToken, user.getId());
                 mfaToken = Cryptographer.encrypt(mfaToken, token.getPrivatePart(), "");
                 statusCode = 200;
             }
@@ -104,58 +110,74 @@ public class MFAController {
                                                         @RequestBody String requestBodyString) {
 
         System.out.println(requestBodyString);
-        HashMap<String, String> requestBody = new Gson().fromJson(requestBodyString, HashMap.class);
-        User user = userRepository.findByUsername(requestBody.get("username"));
+        HashMap<String, String> requestBody = new Gson()
+                .fromJson(requestBodyString, HashMap.class);
+        AtomicReference<HashMap<String, Object>> responseBody =
+                new AtomicReference<>(new HashMap<>());
+        Optional<User> userOptional = userService.findByUsername(requestBody.get("username"));
 
-        String mfaStatus = requestBody.get("mfaStatus");
-        try {
-            mfaStatus = Cryptographer.decrypt(mfaStatus, user.getMfaToken(), "");
-        } catch (Exception e) {
-            response.setStatus(400);
-            if (mfaStatus == null)
-                mfaStatus = "";
-        }
-        if (mfaStatus.equals("connected")) {
-            mfaService.removeToken(user.getUsername());
-
-            HashSet<String> resetTokens = new HashSet<>();
-            for (int i = 0; i < 16; i++) {
-                String token = tokenService.generateMfaResetCode();
-                if (!resetTokens.contains(token))
-                    resetTokens.add(token);
-                else i--;
+        userOptional.ifPresentOrElse(user -> {
+            String mfaStatus = requestBody.get("mfaStatus");
+            try {
+                mfaStatus = Cryptographer.decrypt(mfaStatus, user.getMfaToken(), "");
+            } catch (Exception e) {
+                response.setStatus(400);
+                if (mfaStatus == null)
+                    mfaStatus = "";
             }
+            if (mfaStatus.equals("connected")) {
+                mfaService.removeToken(user.getUsername());
 
-            user = userRepository.findByUsername(user.getUsername());
-            user.setMfaResetTokens(resetTokens);
-            user.setMfaConnecting(true);
-            user.setQrcode(null);
-            String PIN;
-            user.setMfaActivatePIN(PIN = tokenService.generateMfaPIN());
-            userRepository.save(user);
+                HashSet<String> resetTokens = new HashSet<>();
+                for (int i = 0; i < 16; i++) {
+                    String token = tokenService.generateMfaResetCode();
+                    if (!resetTokens.contains(token))
+                        resetTokens.add(token);
+                    else i--;
+                }
 
-            response.setStatus(200);
-            return new HashMap<>() {{
-                put("PIN", PIN);
-            }};
-        }
+                user = userService.findByUsername(user.getUsername()).orElse(user);
+                user.setMfaResetTokens(resetTokens);
+                user.setMfaConnecting(true);
+                user.setQrcode(null);
+                String PIN;
+                user.setMfaActivatePIN(PIN = tokenService.generateMfaPIN());
+                userService.update(user);
+
+                response.setStatus(200);
+                responseBody.set(new HashMap<>() {{
+                    put("PIN", PIN);
+                }});
+            }
+        }, () -> response.setStatus(400));
 
         if (response.getStatus() != 400)
             response.setStatus(500);
 
-        return new HashMap<>();
+        return responseBody.get();
     }
 
     @PostMapping("/activate")
-    public HashMap<String, Object> activateMfa(@RequestParam("PIN") String PIN, HttpServletResponse response) {
-        User user = userRepository.findByUsername(srp.getContext().getAuthentication().getName());
+    public HashMap<String, Object> activateMfa(@RequestParam("PIN") String PIN,
+                                               HttpServletResponse response) {
+        Optional<User> userOptional = userService.findByUsername(
+                srp.getContext().getAuthentication().getName());
+        User user;
+        if (userOptional.isPresent()) {
+            user = userOptional.get();
+        } else {
+            response.setStatus(403);
+            return new HashMap<>() {{
+                put("response", "forbidden");
+            }};
+        }
         System.out.println(user.getUsername());
         System.out.println(user.getMfaActivatePIN());
         System.out.println(PIN);
         if (PIN.equals(user.getMfaActivatePIN())) {
             user.setMfaActivated(true);
             user.setMfaActivatePIN(null);
-            userRepository.save(user);
+            userService.update(user);
             return new HashMap<>() {{
                 put("response", "activated");
             }};

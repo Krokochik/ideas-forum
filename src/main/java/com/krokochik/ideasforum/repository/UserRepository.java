@@ -24,7 +24,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Transactional
     @Query(value = "select * from usr where usr.oauth2id=?1", nativeQuery = true)
-    User getUserByOAuth2Id(String id);
+    User findUserByOAuth2Id(String id);
 
     @Modifying
     @Transactional

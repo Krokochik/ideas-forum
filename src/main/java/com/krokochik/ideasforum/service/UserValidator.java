@@ -1,6 +1,7 @@
 package com.krokochik.ideasforum.service;
 
 import com.krokochik.ideasforum.model.db.User;
+import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
@@ -15,7 +16,7 @@ public class UserValidator {
             "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.\\S+$).{8,}$"
     );
 
-    public static Enum<? extends Enum<?>> validate(User user) {
+    public static Enum<? extends Enum<?>> validate(@NonNull User user) {
         if (user.getUsername().isBlank()) {
             return Result.INVALID_USERNAME.BLANK;
         }

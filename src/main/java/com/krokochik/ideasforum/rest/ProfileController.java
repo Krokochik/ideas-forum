@@ -2,24 +2,26 @@ package com.krokochik.ideasforum.rest;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.krokochik.ideasforum.repository.UserRepository;
+import com.krokochik.ideasforum.model.db.User;
+import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RestController
 public class ProfileController {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     SecurityRoutineProvider srp;
@@ -46,7 +48,9 @@ public class ProfileController {
             log.error("An error occurred", exc);
         }
 
-        if (username.equalsIgnoreCase(srp.getContext().getAuthentication().getName())) {
+        Optional<User> user = userService.findByUsername(username);
+        if (user.isPresent() &&
+                username.equalsIgnoreCase(srp.getContext().getAuthentication().getName())) {
             if (!avatar.isBlank()) {
 
                 final double BYTES_IN_MEGABYTE = 1e+6;
@@ -54,7 +58,7 @@ public class ProfileController {
                 final double MAX_AVATAR_WEIGHT = 5.0;
 
                 if ((avatar.length() / BYTES_IN_MEGABYTE / INFELICITY_COEFFICIENT) <= MAX_AVATAR_WEIGHT) {
-                    userRepository.setAvatarById(avatar.getBytes(), userRepository.findByUsername(username).getId());
+                    userService.setAvatarById(avatar.getBytes(), user.get().getId());
                 } else {
                     message = "Avatar is too heavy.";
                 }
@@ -63,7 +67,7 @@ public class ProfileController {
             }
 
             if (!nickname.isBlank() && nickname.length() >= 4) {
-                userRepository.setNicknameById(nickname, userRepository.findByUsername(username).getId());
+                userService.setNicknameById(nickname, user.get().getId());
             } else {
                 statusCode = 400;
                 message = "New name is null.";

@@ -13,6 +13,9 @@
     <file url="file://$PROJECT_DIR$/src/main/java/com/krokochik/ideasforum/ideasForum.java" />
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" value="$USER_HOME$/Desktop" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>

@@ -4,7 +4,6 @@ import com.krokochik.ideasforum.hcaptcha.HCaptchaClient;
 import com.krokochik.ideasforum.hcaptcha.HCaptchaResponse;
 import com.krokochik.ideasforum.model.db.User;
 import com.krokochik.ideasforum.model.functional.Role;
-import com.krokochik.ideasforum.repository.UserRepository;
 import com.krokochik.ideasforum.service.UserValidator;
 import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
@@ -14,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,16 +36,15 @@ import java.util.concurrent.CompletableFuture;
 public class AuthorizationController {
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     UserService userService;
 
     @Autowired
     SecurityRoutineProvider srp;
 
-    record AuthData(String login, String email) {
-    }
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    record AuthData(String login, String email) {}
 
     @GetMapping("/proof-identity")
     public String proofIdentity() {
@@ -56,8 +55,10 @@ public class AuthorizationController {
     public String proofIdentity(HttpSession session,
                                 @RequestParam(name = "password", defaultValue = "") String password,
                                 @RequestParam(name = "origin") String origin) {
-        User user = userRepository.findByUsername(srp.getContext().getAuthentication().getName());
-        boolean isIdConfirmed = password.equals(user.getPassword());
+        User user = userService.findByUsernameOrUnknown(
+                srp.getContext().getAuthentication().getName());
+        boolean isIdConfirmed = user.getPassword()
+                .equals(passwordEncoder.encode(password));
         if (!isIdConfirmed)
             return "redirect:/proof-identity?error=bad+password&origin=" + origin;
         else {
@@ -133,7 +134,7 @@ public class AuthorizationController {
         String oauth2Param = "oauth2".equals(oauth2) ? "&oauth2=true" : "";
         Enum<? extends Enum<?>> validate = UserValidator.validate(user);
         if (validate.equals(UserValidator.Result.OK)) {
-            if (userService.exists(user.getUsername())) {
+            if (userService.exists(user)) {
                 return "redirect:/sign-up?regErr&nameTakenErr" + oauth2Param;
             }
             Set<Role> userRoles = Collections.singleton(Role.ANONYM);
@@ -162,7 +163,7 @@ public class AuthorizationController {
             user.setRoles(userRoles);
             boolean remember = session.getAttribute("oauth2Id") != null;
 
-            userRepository.save(user);
+            userService.save(user);
             srp.authorizeUser(user, remember, srp.getContext(), httpRequest, httpResponse);
 
             session.removeAttribute("oauth2Id");

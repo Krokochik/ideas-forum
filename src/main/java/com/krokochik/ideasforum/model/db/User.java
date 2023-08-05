@@ -1,10 +1,10 @@
 package com.krokochik.ideasforum.model.db;
 
 import com.krokochik.ideasforum.model.functional.Role;
-import lombok.*;
-import org.jetbrains.annotations.NotNull;
-
 import jakarta.persistence.*;
+import lombok.*;
+import org.jetbrains.annotations.Contract;
+
 import java.util.Set;
 
 @Data
@@ -22,13 +22,13 @@ public class User
     String oauth2Id;
 
     // absolutes
-    @NotNull
+    @NonNull
     String username;
-    @NotNull
+    @NonNull
     String nickname;
-    @NotNull
+    @NonNull
     String email;
-    @NotNull
+    @NonNull
     String password;
 
     // tokens
@@ -60,7 +60,12 @@ public class User
     @CollectionTable(name = "mfa_reset_token", joinColumns = @JoinColumn(name = "user_id"))
     Set<String> mfaResetTokens;
 
-    public User(@NotNull @NonNull String username, @NotNull @NonNull String email, @NotNull @NonNull String password) {
+    @Contract(" -> new")
+    public static @NonNull User unknown() {
+        return new User("unknown", "unknown", "unknown");
+    }
+
+    public User(@NonNull String username, @NonNull String email, @NonNull String password) {
         this.username = username;
         this.email = email;
         this.password = password;

@@ -1,6 +1,7 @@
 package com.krokochik.ideasforum.config.security;
 
 import com.krokochik.ideasforum.model.functional.Role;
+import com.krokochik.ideasforum.repository.CustomPersistentTokenRepository;
 import com.krokochik.ideasforum.service.jdbc.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,12 +11,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
@@ -33,7 +32,7 @@ public class WebSecurityConfig {
     CustomUserDetailsService userDetailsService;
 
     @Autowired
-
+    CustomPersistentTokenRepository tokenRepository;
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -88,7 +87,7 @@ public class WebSecurityConfig {
                                 .key("4R284g33vDkKkNm47ef9ADtm3XKhx9HD")
                                 .rememberMeCookieName("remember-me")
                                 .tokenValiditySeconds(15 * 24 * 60 * 60)
-                                .tokenRepository(tokenRepository())
+                                .tokenRepository(tokenRepository)
                                 .userDetailsService(userDetailsService)
                 )
                 .userDetailsService(userDetailsService)
@@ -100,14 +99,6 @@ public class WebSecurityConfig {
                 .cors(request -> new CorsConfiguration().applyPermitDefaultValues());
 
         return http.build();
-    }
-
-    @Bean
-    public PersistentTokenRepository tokenRepository() {
-        return new JdbcTokenRepositoryImpl(){{
-            setDataSource(dataSource);
-            setCreateTableOnStartup(false);
-        }};
     }
 
     @Bean
@@ -123,6 +114,6 @@ public class WebSecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 }
