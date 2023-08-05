@@ -44,7 +44,7 @@ public class OAuth2Controller {
             return "redirect:/login";
         }
 
-        oauth2User.getAttributes().forEach(log::info);
+        oauth2User.getAttributes().forEach((string, o) -> log.info(string, o));
         if (status.equals("success") && oauth2User.getAttribute("id") != null) {
             String id;
             try {
