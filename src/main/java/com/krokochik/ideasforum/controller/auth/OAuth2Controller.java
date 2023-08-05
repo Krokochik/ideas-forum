@@ -45,7 +45,7 @@ public class OAuth2Controller {
         }
 
         oauth2User.getAttributes().forEach((s, o) -> log.info(s + ": " + o));
-        if (status.equals("success") && oauth2User.getAttribute("id") != null) {
+        if (oauth2User.getAttribute("id") != null) {
             String id;
             try {
                 id = oauth2User.getAttribute("id");
