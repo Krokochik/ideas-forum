@@ -16,9 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -99,12 +97,13 @@ public class WebSecurityConfig {
                     .userDetailsService(userDetailsService)
             )
             .csrf(conf ->
-                conf
-                    .ignoringRequestMatchers("/mfa/**")
-                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                conf.disable()
+//                    .ignoringRequestMatchers("/mfa/**")
+//                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             )
             .cors(request ->
-                    new CorsConfiguration().applyPermitDefaultValues()
+                    request.disable()
+//                    new CorsConfiguration().applyPermitDefaultValues()
             );
 
         return http.build();
