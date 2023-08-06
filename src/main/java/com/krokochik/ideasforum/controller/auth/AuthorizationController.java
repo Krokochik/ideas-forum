@@ -149,11 +149,11 @@ public class AuthorizationController {
                 if (avatarUrl != null) {
                     CompletableFuture.runAsync(() -> {
                         try {
-                            BufferedImage image = ImageIO.read(avatarUrl.openStream());
+                            BufferedImage image = ImageIO.read(avatarUrl);
                             ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
                             ImageIO.write(image, "png", byteArrayOutStream);
                             byte[] avatar = Base64.getEncoder().encode(byteArrayOutStream.toByteArray());
-                            user.setAvatar(avatar);
+                            userService.setAvatarById(avatar, user.getId());
                         } catch (IOException ioe) {
                             log.error("An error occurred during downloading avatar", ioe);
                         }

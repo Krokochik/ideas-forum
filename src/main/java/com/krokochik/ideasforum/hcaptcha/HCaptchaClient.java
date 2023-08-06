@@ -43,7 +43,6 @@ public class HCaptchaClient {
             responseBody.append(line);
         } reader.close();
 
-        System.out.println(responseBody);
         try {
             response = gson.fromJson(responseBody.toString(), HCaptchaResponse.class);
         } catch (JsonSyntaxException e) {
