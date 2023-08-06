@@ -128,7 +128,7 @@ public class EmailController {
 
         if (userOptional.isEmpty() || email.isBlank() || !UserValidator.validateEmail(email) ||
                 (user.getRoles().contains(Role.USER) &&
-                        !user.getPassword().equals(passwordEncoder.encode(password))))
+                        !passwordEncoder.matches(password, user.getPassword())))
             return "redirect:/change-email?error";
 
         userService.setConfirmMailSentById(false, user.getId());
