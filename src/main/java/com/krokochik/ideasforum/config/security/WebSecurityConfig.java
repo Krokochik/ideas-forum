@@ -51,6 +51,8 @@ public class WebSecurityConfig {
                         .permitAll()
                         .requestMatchers("oauth2/authorization/**", "/sign-up")
                         .anonymous()
+                        .requestMatchers(HttpMethod.POST, "/sign-up/**")
+                        .anonymous()
                         .requestMatchers(HttpMethod.POST, "/profile")
                         .hasAnyAuthority(Role.USER.name())
                         .requestMatchers("/add-note")
