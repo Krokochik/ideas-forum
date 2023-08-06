@@ -4,7 +4,6 @@ import com.krokochik.ideasforum.model.db.User;
 import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -40,11 +39,14 @@ public class ResourceHandler {
     public byte[] avatar(HttpServletResponse response) {
         byte[] decodedAvatar;
         if (srp.isAuthenticated()) {
+            System.out.println("auth");
             User user = userService
                     .findByUsernameOrUnknown(srp.getContext().getAuthentication().getName());
-            decodedAvatar = Base64.decodeBase64(user.getAvatar());
+            System.out.println(user.getUsername());
+            decodedAvatar = user.getAvatar();
         } else {
-            decodedAvatar = Base64.decodeBase64(new User().getAvatar());
+            System.out.println("!auth");
+            decodedAvatar = new User().getAvatar();
         }
         return decodedAvatar;
     }

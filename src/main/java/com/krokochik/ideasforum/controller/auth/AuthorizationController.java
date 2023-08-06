@@ -26,8 +26,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -151,27 +149,25 @@ public class AuthorizationController {
                 URL avatarUrl = (URL) session.getAttribute("oauth2AvatarUrl");
                 System.out.println(session.getAttribute("oauth2AvatarUrl"));
                 if (avatarUrl != null) {
+                    Set<Role> finalUserRoles = userRoles;
                     CompletableFuture.runAsync(() -> {
                         try {
-                            Long id = user.getId();
                             BufferedImage image = ImageIO.read(avatarUrl);
                             ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
                             ImageIO.write(image, "png", byteArrayOutStream);
-                            byte[] avatar = Base64.getEncoder().encode(byteArrayOutStream.toByteArray());
-                            System.out.println(Arrays.toString(avatar));
-                            userService.setAvatarById(avatar, id);
+                            byte[] avatar = byteArrayOutStream.toByteArray();
+                            user.setAvatar(avatar);
+                            user.setRoles(finalUserRoles);
                         } catch (Exception e) {
                             log.error("An error occurred during downloading avatar", e);
                         }
+                    }).thenRunAsync(() -> {
+                        userService.save(user);
                     });
                 }
             }
             user.setRoles(userRoles);
             boolean remember = session.getAttribute("oauth2Id") != null;
-
-            CompletableFuture.runAsync(() ->
-                userService.save(user)
-            );
 
             srp.authorizeUser(user, remember, srp.getContext(), httpRequest, httpResponse);
 

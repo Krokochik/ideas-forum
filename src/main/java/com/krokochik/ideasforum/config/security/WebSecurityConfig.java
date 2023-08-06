@@ -58,6 +58,8 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/sign-up/**", "/password-reset-request")
                     .access((auth, o) ->
                             hasNotAnyRole(auth.get(), Role.USER))
+                .requestMatchers(HttpMethod.POST, "/profile/**")
+                    .hasAnyAuthority(Role.USER.name())
                 .anyRequest()
                     .authenticated()
             )

@@ -39,8 +39,8 @@ public class PasswordController {
             String passToken = new TokenService().generateToken();
             Mail mail = new Mail();
             mail.setTheme("Сброс пароля");
-            mail.setReceiver(userService.findByUsernameOrUnknown(srp
-                    .getContext().getAuthentication().getName()).getEmail());
+            mail.setReceiver(userService.findByUsernameOrUnknown(context
+                    .getAuthentication().getName()).getEmail());
             mail.setLink("https://ideas-forum.herokuapp.com/password-change?name="
                     + context.getAuthentication().getName()
                     + "&token=" + passToken);
