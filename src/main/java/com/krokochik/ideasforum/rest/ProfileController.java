@@ -49,6 +49,8 @@ public class ProfileController {
         }
 
         Optional<User> user = userService.findByUsername(username);
+        System.out.println(user.get().getUsername());
+        System.out.println(username);
         if (user.isPresent() &&
                 username.equalsIgnoreCase(srp.getContext().getAuthentication().getName())) {
             if (!avatar.isBlank()) {

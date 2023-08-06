@@ -57,6 +57,10 @@ public class AuthorizationController {
                                 @RequestParam(name = "origin") String origin) {
         User user = userService.findByUsernameOrUnknown(
                 srp.getContext().getAuthentication().getName());
+        System.out.println(password);
+        System.out.println(user.getPassword());
+        System.out.println(user.getUsername());
+        System.out.println(passwordEncoder.encode(password));
         boolean isIdConfirmed = user.getPassword()
                 .equals(passwordEncoder.encode(password));
         if (!isIdConfirmed)
