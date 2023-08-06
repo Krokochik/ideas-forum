@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -113,9 +112,6 @@ public class AuthorizationController {
 
     @Value("${hcaptcha.sitekey}")
     String sitekey;
-
-    @Async
-    private void saveAvatar(URL u, Long l)
 
     @PostMapping("/sign-up/{oauth2}")
     public String signUp(HttpSession session, HttpServletResponse httpResponse, HttpServletRequest httpRequest,
