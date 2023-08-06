@@ -30,6 +30,7 @@ import java.net.URL;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Controller
@@ -44,7 +45,8 @@ public class AuthorizationController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    record AuthData(String login, String email) {}
+    record AuthData(String login, String email) {
+    }
 
     @GetMapping("/proof-identity")
     public String proofIdentity() {
@@ -113,17 +115,7 @@ public class AuthorizationController {
     String sitekey;
 
     @Async
-    private void saveAvatar(URL u, Long id) {
-        try {
-            BufferedImage image = ImageIO.read(u);
-            ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
-            ImageIO.write(image, "png", byteArrayOutStream);
-            byte[] avatar = Base64.getEncoder().encode(byteArrayOutStream.toByteArray());
-            userService.setAvatarById(avatar, id);
-        } catch (IOException ioe) {
-            log.error("An error occurred during downloading avatar", ioe);
-        }
-    }
+    private void saveAvatar(URL u, Long l)
 
     @PostMapping("/sign-up/{oauth2}")
     public String signUp(HttpSession session, HttpServletResponse httpResponse, HttpServletRequest httpRequest,
@@ -162,15 +154,26 @@ public class AuthorizationController {
                 URL avatarUrl = (URL) session.getAttribute("oauth2AvatarUrl");
                 System.out.println(session.getAttribute("oauth2AvatarUrl"));
                 if (avatarUrl != null) {
-                    System.out.println("a1");
-                    saveAvatar(avatarUrl, user.getId());
-                    System.out.println("a2");
+                    CompletableFuture.runAsync(() -> {
+                        try {
+                            BufferedImage image = ImageIO.read(avatarUrl);
+                            ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
+                            ImageIO.write(image, "png", byteArrayOutStream);
+                            byte[] avatar = Base64.getEncoder().encode(byteArrayOutStream.toByteArray());
+                            userService.setAvatarById(avatar, user.getId());
+                        } catch (IOException ioe) {
+                            log.error("An error occurred during downloading avatar", ioe);
+                        }
+                    });
                 }
             }
             user.setRoles(userRoles);
             boolean remember = session.getAttribute("oauth2Id") != null;
 
-            userService.save(user);
+            CompletableFuture.runAsync(() ->
+                userService.save(user)
+            );
+
             srp.authorizeUser(user, remember, srp.getContext(), httpRequest, httpResponse);
 
             session.removeAttribute("oauth2Id");
