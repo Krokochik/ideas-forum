@@ -52,6 +52,12 @@ public class WebSecurityConfig {
                     .access((authentication, object) ->
                         new AuthorityAuthorizationDecision(false, Collections
                                 .singleton(Role.USER.toAuthority())))
+                .requestMatchers("/oauth2/**", "/sign-up", "/login/**", "/password-reset-request")
+                    .access((authentication, object) ->
+                            new AuthorityAuthorizationDecision(true, Collections
+                                    .singleton(Role.ANONYM.toAuthority())))
+                .requestMatchers("/oauth2/**", "/sign-up", "/login/**", "/password-reset-request")
+                    .anonymous()
                 .requestMatchers(HttpMethod.POST, "/sign-up/**", "/password-reset-request")
                     .access((authentication, object) ->
                             new AuthorityAuthorizationDecision(false, Collections
