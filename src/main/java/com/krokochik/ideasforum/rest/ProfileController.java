@@ -7,6 +7,7 @@ import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.base64.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,8 +50,6 @@ public class ProfileController {
         }
 
         Optional<User> user = userService.findByUsername(username);
-        System.out.println(user.get().getUsername());
-        System.out.println(username);
         if (user.isPresent() &&
                 username.equalsIgnoreCase(srp.getContext().getAuthentication().getName())) {
             if (!avatar.isBlank()) {
@@ -60,7 +59,7 @@ public class ProfileController {
                 final double MAX_AVATAR_WEIGHT = 5.0;
 
                 if ((avatar.length() / BYTES_IN_MEGABYTE / INFELICITY_COEFFICIENT) <= MAX_AVATAR_WEIGHT) {
-                    userService.setAvatarById(avatar.getBytes(), user.get().getId());
+                    userService.setAvatarById(Base64.decode(avatar), user.get().getId());
                 } else {
                     message = "Avatar is too heavy.";
                 }

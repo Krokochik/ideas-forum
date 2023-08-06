@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -102,8 +103,7 @@ public class WebSecurityConfig {
 //                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             )
             .cors(request ->
-                    request.disable()
-//                    new CorsConfiguration().applyPermitDefaultValues()
+                    new CorsConfiguration().applyPermitDefaultValues()
             );
 
         return http.build();
