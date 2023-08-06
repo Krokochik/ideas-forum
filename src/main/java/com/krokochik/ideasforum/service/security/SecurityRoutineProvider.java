@@ -143,8 +143,8 @@ public class SecurityRoutineProvider {
     }
 
     protected UserDetails convertUserToUserDetails(User user) {
-        Set<SimpleGrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.name()))
+        Set<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(Role::toAuthority)
                 .collect(Collectors.toSet());
         return new UserDetails() {
             @Override
