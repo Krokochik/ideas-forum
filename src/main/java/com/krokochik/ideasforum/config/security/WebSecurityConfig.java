@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authorization.AuthorityAuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -18,7 +20,9 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -49,19 +53,11 @@ public class WebSecurityConfig {
                         "/googleb8fcdd64aa45ba54.html", "/yandex_f4f03a518326d43b.html", "/bootstrap.min.css.map")
                     .permitAll()
                 .requestMatchers("/oauth2/**", "/sign-up", "/login/**", "/password-reset-request")
-                    .access((authentication, object) ->
-                        new AuthorityAuthorizationDecision(false, Collections
-                                .singleton(Role.USER.toAuthority())))
-                .requestMatchers("/oauth2/**", "/sign-up", "/login/**", "/password-reset-request")
-                    .access((authentication, object) ->
-                            new AuthorityAuthorizationDecision(true, Collections
-                                    .singleton(Role.ANONYM.toAuthority())))
-                .requestMatchers("/oauth2/**", "/sign-up", "/login/**", "/password-reset-request")
-                    .anonymous()
+                    .access((auth, o) ->
+                            hasNotAnyRole(auth.get(), Role.USER))
                 .requestMatchers(HttpMethod.POST, "/sign-up/**", "/password-reset-request")
-                    .access((authentication, object) ->
-                            new AuthorityAuthorizationDecision(false, Collections
-                                    .singleton(Role.USER.toAuthority())))
+                    .access((auth, o) ->
+                            hasNotAnyRole(auth.get(), Role.USER))
                 .anyRequest()
                     .authenticated()
             )
@@ -110,6 +106,22 @@ public class WebSecurityConfig {
             );
 
         return http.build();
+    }
+
+
+    // Same as Spring Boot 3 .not().hasAnyAuthority()
+    private AuthorizationDecision hasNotAnyRole(Authentication authentication, Role... role) {
+        Set<GrantedAuthority> authorities = Arrays.stream(role)
+                .map(Role::toAuthority)
+                .collect(Collectors.toSet());
+        boolean granted = true;
+        for (GrantedAuthority authority : authorities) {
+            if (authentication.getAuthorities().contains(authority)) {
+                granted = false;
+                break;
+            }
+        }
+        return new AuthorizationDecision(granted);
     }
 
     @Bean
