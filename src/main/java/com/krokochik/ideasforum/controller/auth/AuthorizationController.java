@@ -26,6 +26,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Set;
@@ -152,13 +153,15 @@ public class AuthorizationController {
                 if (avatarUrl != null) {
                     CompletableFuture.runAsync(() -> {
                         try {
+                            Long id = user.getId();
                             BufferedImage image = ImageIO.read(avatarUrl);
                             ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
                             ImageIO.write(image, "png", byteArrayOutStream);
                             byte[] avatar = Base64.getEncoder().encode(byteArrayOutStream.toByteArray());
-                            userService.setAvatarById(avatar, user.getId());
-                        } catch (IOException ioe) {
-                            log.error("An error occurred during downloading avatar", ioe);
+                            System.out.println(Arrays.toString(avatar));
+                            userService.setAvatarById(avatar, id);
+                        } catch (Exception e) {
+                            log.error("An error occurred during downloading avatar", e);
                         }
                     });
                 }
