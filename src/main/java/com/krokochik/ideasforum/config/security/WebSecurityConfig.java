@@ -16,6 +16,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
+import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -35,6 +38,15 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+        CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        XorCsrfTokenRequestAttributeHandler delegate = new XorCsrfTokenRequestAttributeHandler();
+        // set the name of the attribute the CsrfToken will be populated on
+        delegate.setCsrfRequestAttributeName("_csrf");
+        // Use only the handle() method of XorCsrfTokenRequestAttributeHandler and the
+        // default implementation of resolveCsrfTokenValue() from CsrfTokenRequestHandler
+        CsrfTokenRequestHandler requestHandler = delegate::handle;
+
+
         http.requiresChannel(registry ->
             registry
                 .anyRequest()
@@ -98,9 +110,10 @@ public class WebSecurityConfig {
                     .userDetailsService(userDetailsService)
             )
             .csrf(conf ->
-                conf.disable()
-//                    .ignoringRequestMatchers("/mfa/**")
-//                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                conf
+                    .ignoringRequestMatchers("/mfa/**")
+                    .csrfTokenRepository(csrfTokenRepository)
+                    .csrfTokenRequestHandler(requestHandler)
             )
             .cors(request ->
                     new CorsConfiguration().applyPermitDefaultValues()
