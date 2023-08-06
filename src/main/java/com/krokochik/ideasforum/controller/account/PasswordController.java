@@ -1,6 +1,7 @@
 package com.krokochik.ideasforum.controller.account;
 
 import com.krokochik.ideasforum.model.db.User;
+import com.krokochik.ideasforum.model.functional.Role;
 import com.krokochik.ideasforum.model.service.Mail;
 import com.krokochik.ideasforum.service.MailService;
 import com.krokochik.ideasforum.service.UserValidator;
@@ -79,15 +80,21 @@ public class PasswordController {
                                  @RequestParam(name = "name") String name,
                                  @RequestParam(name = "token") String token) {
         Optional<User> user = userService.findByUsername(name);
-        if (user.isPresent() && user.get().getPasswordAbortToken().equals(token)) {
-            if (UserValidator.validatePassword(password)) {
-                if (password.equals(passwordConfirm)) {
-                    userService.setPasswordById(password, user.get().getId());
-                    return "redirect:/login";
+        if (user.isPresent()) {
+            if (user.get().getPasswordAbortToken().equals(token)) {
+                if (UserValidator.validatePassword(password)) {
+                    if (password.equals(passwordConfirm)) {
+                        userService.setPasswordById(password, user.get().getId());
+                        return user.get().getRoles().contains(Role.USER)
+                                ? "redirect:/settings"
+                                : "redirect:/login";
+                    }
+                    return "redirect:/password-change?name=" + name + "&token=" + token + "&error";
                 }
-                return "redirect:/password-change?name=" + name + "&token=" + token + "&error";
-            }
-            return "redirect:/password-change?name=" + name + "&token=" + token + "&passInsecureErr";
+                return "redirect:/password-change?name=" + name + "&token=" + token + "&passInsecureErr";
+            } return user.get().getRoles().contains(Role.USER)
+                    ? "redirect:/settings"
+                    : "redirect:/login";
         }
         return "redirect:/password-reset-request";
     }
