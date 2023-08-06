@@ -45,11 +45,11 @@ public class WebSecurityConfig {
                                 "/settings",
                                 "/email-validity-confirmation", "/password-reset-request", "/password-change", "/password-change-instructions",
                                 "/scripts/**", "/images/**", "/css/**",
-                                "/avatar", "/privacy",
+                                "/avatar", "/privacy", "/login/**",
                                 "/mfa/**", "/terminal",
                                 "/googleb8fcdd64aa45ba54.html", "/yandex_f4f03a518326d43b.html", "/bootstrap.min.css.map")
                         .permitAll()
-                        .requestMatchers("oauth2/authorization/**", "/login/**", "/sign-up")
+                        .requestMatchers("oauth2/authorization/**", "/sign-up")
                         .anonymous()
                         .requestMatchers(HttpMethod.POST, "/profile")
                         .hasAnyAuthority(Role.USER.name())
