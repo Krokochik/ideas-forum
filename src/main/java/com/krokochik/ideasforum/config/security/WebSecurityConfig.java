@@ -49,10 +49,8 @@ public class WebSecurityConfig {
                                 "/mfa/**", "/terminal",
                                 "/googleb8fcdd64aa45ba54.html", "/yandex_f4f03a518326d43b.html", "/bootstrap.min.css.map")
                         .permitAll()
-                        .requestMatchers("oauth2/**", "/login/**", "/sign-up")
+                        .requestMatchers("oauth2/authorization/**", "/login/**", "/sign-up")
                         .anonymous()
-                        .requestMatchers(HttpMethod.POST, "/sign-up", "/sign-up/**", "/terminal")
-                        .permitAll()
                         .requestMatchers(HttpMethod.POST, "/profile")
                         .hasAnyAuthority(Role.USER.name())
                         .requestMatchers("/add-note")
