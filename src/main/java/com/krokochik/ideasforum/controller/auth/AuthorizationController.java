@@ -69,6 +69,8 @@ public class AuthorizationController {
 
     @GetMapping("/login")
     public String login(Model model) {
+        if (srp.isAuthenticated() || srp.hasRole(Role.ANONYM))
+            return "redirect:/email-validity-confirmation";
         model.addAttribute("discord", false);
         model.addAttribute("github", false);
         return "login";

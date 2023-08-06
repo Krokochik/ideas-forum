@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Controller
@@ -36,7 +35,7 @@ public class PasswordController {
     @GetMapping("/password-change-instructions")
     public String changePassword(Model model) {
         SecurityContext context = srp.getContext();
-        CompletableFuture.runAsync(() -> {
+        new Thread(() -> {
             String passToken = new TokenService().generateToken();
             Mail mail = new Mail();
             mail.setTheme("Сброс пароля");
@@ -55,7 +54,7 @@ public class PasswordController {
             }
             userService.setPasswordAbortSentById(true, userService
                     .findByUsernameOrUnknown(context.getAuthentication().getName()).getId());
-        });
+        }).start();
 
         model.addAttribute("from", "/settings");
 
@@ -104,7 +103,7 @@ public class PasswordController {
         if (!name.isBlank()) {
             Optional<User> user = userService.findByUsername(name);
             if (user.isPresent()) {
-                CompletableFuture.runAsync(() -> {
+                new Thread(() -> {
                     String token = new TokenService().generateToken();
                     Mail mail = new Mail();
                     mail.setTheme("Сброс пароля");
@@ -118,7 +117,7 @@ public class PasswordController {
                         throw new RuntimeException(e);
                     }
                     userService.setPasswordAbortSentById(true, user.get().getId());
-                });
+                }).start();
                 return "redirect:/password-change-instructions";
             }
             return "redirect:/password-reset-request?notFoundErr";

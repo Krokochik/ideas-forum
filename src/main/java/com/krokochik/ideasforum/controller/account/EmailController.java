@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collections;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Controller
@@ -70,7 +69,7 @@ public class EmailController {
                 boolean isAnonym = srp.hasRole(Role.ANONYM);
                 String finalNewEmail = newEmail;
 
-                CompletableFuture.runAsync(() -> {
+                new Thread(() -> {
                     Mail mail = new Mail();
                     mail.setReceiver(isEmailChanging ? finalNewEmail : user.getEmail());
                     mail.setTheme("Подтверждение почты");
@@ -82,9 +81,9 @@ public class EmailController {
                                 : "К вашей почте был привязан аккаунт.");
                         userService.setConfirmMailSentById(true, user.getId());
                     } catch (MessagingException e) {
-                        throw new RuntimeException(e);
+                        log.error("", e);
                     }
-                });
+                }).start();
             }
             model.addAttribute("newEmail", newEmail);
             return "email-confirmation-instructions";
