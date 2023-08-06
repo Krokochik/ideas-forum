@@ -40,12 +40,14 @@ public class WebSecurityConfig {
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
         XorCsrfTokenRequestAttributeHandler delegate = new XorCsrfTokenRequestAttributeHandler();
-        // set the name of the attribute the CsrfToken will be populated on
         delegate.setCsrfRequestAttributeName("_csrf");
-        // Use only the handle() method of XorCsrfTokenRequestAttributeHandler and the
-        // default implementation of resolveCsrfTokenValue() from CsrfTokenRequestHandler
         CsrfTokenRequestHandler requestHandler = delegate::handle;
-
+        // FUCKING SPRING SEC6 DOESN'T WORK W/O IT
+        // I HATE FUCKING SPRING
+        // B/C WAST 5 HOURS ON THIS SHIT
+        // SPRING SECURITY WAS MADE BY STUPID FAGGOTS
+        // ...
+        // FUCK U Rob Winch OR SOME1 WHO DID THIS
 
         http.requiresChannel(registry ->
             registry
