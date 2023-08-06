@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +30,6 @@ import java.net.URL;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Controller
@@ -112,6 +112,19 @@ public class AuthorizationController {
     @Value("${hcaptcha.sitekey}")
     String sitekey;
 
+    @Async
+    private void saveAvatar(URL u, Long id) {
+        try {
+            BufferedImage image = ImageIO.read(u);
+            ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", byteArrayOutStream);
+            byte[] avatar = Base64.getEncoder().encode(byteArrayOutStream.toByteArray());
+            userService.setAvatarById(avatar, id);
+        } catch (IOException ioe) {
+            log.error("An error occurred during downloading avatar", ioe);
+        }
+    }
+
     @PostMapping("/sign-up/{oauth2}")
     public String signUp(HttpSession session, HttpServletResponse httpResponse, HttpServletRequest httpRequest,
                          @RequestParam(name = "username") String name,
@@ -149,17 +162,9 @@ public class AuthorizationController {
                 URL avatarUrl = (URL) session.getAttribute("oauth2AvatarUrl");
                 System.out.println(session.getAttribute("oauth2AvatarUrl"));
                 if (avatarUrl != null) {
-                    CompletableFuture.runAsync(() -> {
-                        try {
-                            BufferedImage image = ImageIO.read(avatarUrl);
-                            ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
-                            ImageIO.write(image, "png", byteArrayOutStream);
-                            byte[] avatar = Base64.getEncoder().encode(byteArrayOutStream.toByteArray());
-                            userService.setAvatarById(avatar, user.getId());
-                        } catch (IOException ioe) {
-                            log.error("An error occurred during downloading avatar", ioe);
-                        }
-                    });
+                    System.out.println("a1");
+                    saveAvatar(avatarUrl, user.getId());
+                    System.out.println("a2");
                 }
             }
             user.setRoles(userRoles);
