@@ -61,7 +61,7 @@ public class EmailController {
 
         User user = userService
                 .findByUsernameOrUnknown(ctx.getAuthentication().getName());
-        if (srp.hasRole(Role.ANONYM) || srp.hasRole(Role.USER) && !user.getEmail().equals("unknown")) {
+        if ((srp.hasRole(Role.ANONYM) || srp.hasRole(Role.USER)) && !user.getEmail().equals("unknown")) {
             if (!user.isConfirmMailSent()) {
                 String userToken = new TokenService().generateToken();
                 userService.setMailConfirmationTokenById(userToken, user.getId());
@@ -80,11 +80,11 @@ public class EmailController {
                         mailService.sendConfirmationMail(mail, user.getUsername(), isAnonym
                                 ? "На вашу почту был зарегестрирован новый аккаунт."
                                 : "К вашей почте был привязан аккаунт.");
+                        userService.setConfirmMailSentById(true, user.getId());
                     } catch (MessagingException e) {
                         throw new RuntimeException(e);
                     }
                 });
-                userService.setConfirmMailSentById(true, user.getId());
             }
             model.addAttribute("newEmail", newEmail);
             return "email-confirmation-instructions";

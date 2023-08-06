@@ -8,6 +8,7 @@ import com.krokochik.ideasforum.service.crypto.TokenService;
 import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
 import jakarta.mail.MessagingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @Controller
 public class PasswordController {
 
@@ -49,7 +51,7 @@ public class PasswordController {
                 mailService.sendEmail(mail, context.getAuthentication().getName(),
                         "", "password-change.html");
             } catch (MessagingException e) {
-                throw new RuntimeException(e);
+                log.error("An error occurred during email sending", e);
             }
             userService.setPasswordAbortSentById(true, userService
                     .findByUsernameOrUnknown(context.getAuthentication().getName()).getId());
