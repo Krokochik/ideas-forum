@@ -33,11 +33,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         'X-XSRF-TOKEN': xsrfToken,
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: new URLSearchParams(formData)
+                    body: new URLSearchParams(formData),
+                    redirect: 'manual'
                 });
 
                 if (response.redirected) {
                     const redirectUrl = response.url;
+                    window.location.href = redirectUrl;
+                } else if (response.status === 302) {
+                    const redirectUrl = response.headers.get('Location');
                     window.location.href = redirectUrl;
                 } else if (response.ok) {
                     console.log('Запрос успешно выполнен.');
