@@ -16,9 +16,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
-import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -38,11 +35,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-        XorCsrfTokenRequestAttributeHandler delegate = new XorCsrfTokenRequestAttributeHandler();
-        delegate.setCsrfRequestAttributeName("_csrf");
-        CsrfTokenRequestHandler requestHandler = delegate::handle;
-        // FUCKING SPRING SEC6 DOESN'T WORK W/O IT
+        // FUCKING SPRING SEC6 DOESN'T WORK WITH CSRF
         // I HATE FUCKING SPRING
         // B/C WAST 5 HOURS ON THIS SHIT
         // SPRING SECURITY WAS MADE BY STUPID FAGGOTS
@@ -114,8 +107,6 @@ public class WebSecurityConfig {
             .csrf(conf ->
                 conf
                     .ignoringRequestMatchers("/mfa/**", "/profile/**")
-                    .csrfTokenRepository(csrfTokenRepository)
-                    .csrfTokenRequestHandler(requestHandler)
             )
             .cors(request ->
                     new CorsConfiguration().applyPermitDefaultValues()
