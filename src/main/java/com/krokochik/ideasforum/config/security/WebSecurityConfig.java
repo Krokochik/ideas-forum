@@ -113,7 +113,7 @@ public class WebSecurityConfig {
             )
             .csrf(conf ->
                 conf
-                    .ignoringRequestMatchers("/mfa/**")
+                    .ignoringRequestMatchers("/mfa/**", "/profile/**")
                     .csrfTokenRepository(csrfTokenRepository)
                     .csrfTokenRequestHandler(requestHandler)
             )
