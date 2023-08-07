@@ -1,13 +1,13 @@
 function getCsrfToken() {
-      const cookieValue = document.cookie
+    const cookieValue = document.cookie
         .split('; ')
         .find(cookie => cookie.startsWith('XSRF-TOKEN='));
 
-      if (cookieValue) {
+    if (cookieValue) {
         return cookieValue.split('=')[1];
-      }
+    }
 
-      return null;
+    return null;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -20,29 +20,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const forms = document.querySelectorAll('form');
 
     forms.forEach(function(form) {
-        form.addEventListener('submit', function(event) {
+        form.addEventListener('submit', async function(event) {
             event.preventDefault();
 
             const xsrfToken = getCsrfToken();
-            const xhr = new XMLHttpRequest();
-
-            xhr.open('POST', form.action, true);
-            xhr.setRequestHeader('X-XSRF-TOKEN', xsrfToken);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-            xhr.onload = function() {
-                if (xhr.status === 302) {
-                    const redirectUrl = xhr.getResponseHeader('Location');
-                    window.location.href = redirectUrl;
-                }
-            };
-
-            xhr.onerror = function() {
-                console.error('Произошла ошибка при выполнении запроса.');
-            };
-
             const formData = new FormData(form);
-            xhr.send(new URLSearchParams(formData));
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-XSRF-TOKEN': xsrfToken,
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams(formData)
+                });
+
+                if (response.redirected) {
+                    const redirectUrl = response.url;
+                    window.location.href = redirectUrl;
+                } else if (response.ok) {
+                    console.log('Запрос успешно выполнен.');
+                    console.log(await response.text());
+                } else {
+                    console.error('Произошла ошибка при выполнении запроса.');
+                }
+            } catch (error) {
+                console.error('Произошла ошибка при выполнении запроса.', error);
+            }
         });
     });
 });
