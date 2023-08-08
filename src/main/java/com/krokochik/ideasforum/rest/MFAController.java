@@ -53,6 +53,7 @@ public class MFAController {
 
     @PostMapping(value = "/codes", produces = "application/json")
     public HashMap<String, Object> produceMfaCodesToHtml(HttpServletResponse response, Authentication authentication) {
+        System.out.println("codes");
         if (authentication == null) {
             response.setStatus(403);
             return new HashMap<>();
@@ -60,8 +61,8 @@ public class MFAController {
         Optional<User> userOptional = userService.findByUsername(authentication.getName());
         User user;
 
-        if (userOptional.isPresent() && ((user = userOptional.get())
-                .isMfaConnecting() || user.isMfaActivated())) {
+        if (userOptional.isPresent() &&
+                ((user = userOptional.get()).isMfaConnecting())) {
             response.setStatus(200);
             user.setMfaConnecting(false);
             userService.update(user);
