@@ -41,7 +41,7 @@ public class MFAController {
     * to connect mfa client must confirm the addition sending
     * encrypted with the private token's part a message
     * to a path that is the public token's part
-    * */
+    */
 
     @GetMapping(value = "/ping", produces = "application/json")
     public HashMap<String, Object> ping(HttpServletResponse response) {
@@ -51,7 +51,7 @@ public class MFAController {
         }};
     }
 
-    @PostMapping(value = "/codes", produces = "application/json")
+    @PostMapping(value = "/codes", produces = "application/json") // todo fix this
     public HashMap<String, Object> produceMfaCodesToHtml(HttpServletResponse response, Authentication authentication) {
         System.out.println("codes");
         if (authentication == null) {
@@ -60,7 +60,8 @@ public class MFAController {
         }
         Optional<User> userOptional = userService.findByUsername(authentication.getName());
         User user;
-
+        System.out.println(userOptional.get());
+        System.out.println();
         if (userOptional.isPresent() &&
                 ((user = userOptional.get()).isMfaConnecting())) {
             response.setStatus(200);
