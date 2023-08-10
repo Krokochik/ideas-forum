@@ -122,6 +122,7 @@ public class MFAController {
             String mfaStatus = requestBody.get("mfaStatus");
             try {
                 mfaStatus = Cryptographer.decrypt(mfaStatus, user.getMfaToken(), "");
+                System.out.println(mfaStatus);
             } catch (Exception e) {
                 response.setStatus(400);
                 if (mfaStatus == null)

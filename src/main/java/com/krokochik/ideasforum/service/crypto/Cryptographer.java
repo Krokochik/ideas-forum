@@ -5,18 +5,13 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.Base64;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Functional class containing static methods that are working with cryptography.
@@ -25,6 +20,7 @@ public class Cryptographer {
 
     private static final String AES_ALGORITHM = "AES/CBC/PKCS5PADDING";
     private static final String HASH_ALGORITHM = "SHA-512";
+
 
     /**
      * Encrypts a string with AES algorithm.
@@ -36,22 +32,26 @@ public class Cryptographer {
      */
     public static String encrypt(@NonNull String str,
                                  @NonNull String secretKey,
-                                 @NonNull String initVector) throws InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+                                 @NonNull String initVector) {
         if (str.isEmpty()) throw new IllegalArgumentException("This parameter can't be empty: str");
-        if (secretKey.isBlank()) throw new IllegalArgumentException("This parameter can't be blank: secretKey");
+        if (secretKey.trim().isEmpty()) throw new IllegalArgumentException("This parameter can't be blank: secretKey");
 
-        IvParameterSpec iv = new IvParameterSpec(
-                SingleStepKdf.fromSha256().derive(initVector
-                        .getBytes(StandardCharsets.UTF_8), 16));
-        SecretKeySpec key = new SecretKeySpec(
-                SingleStepKdf.fromSha256().derive(secretKey
-                        .getBytes(StandardCharsets.UTF_8), 16), "AES");
-        byte[] subject = str.getBytes();
+        try {
+            IvParameterSpec iv = new IvParameterSpec(
+                    SingleStepKdf.fromSha256().derive(initVector
+                            .getBytes(StandardCharsets.UTF_8), 16));
+            SecretKeySpec key = new SecretKeySpec(
+                    SingleStepKdf.fromSha256().derive(secretKey
+                            .getBytes(StandardCharsets.UTF_8), 16), "AES");
+            byte[] subject = str.getBytes();
 
-        Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
-        cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+            Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, key, iv);
 
-        return Base64.encodeBase64String(cipher.doFinal(subject));
+            return Base64.encodeBase64String(cipher.doFinal(subject));
+        } catch (Exception unreachable) {
+            return "";
+        }
     }
 
     /**
@@ -61,23 +61,29 @@ public class Cryptographer {
      * @param secretKey  any-length non-blank string to be used by AES as a key.
      * @param initVector any-length string to be used by AES as a parameter.
      * @return decrypted string.
-     * @throws BadPaddingException inherited from {@link jakarta.crypto.Cipher}.
+     * @throws IllegalBlockSizeException inherited from {@link javax.crypto.Cipher}.
      */
     public static String decrypt(@NonNull String str,
                                  @NonNull String secretKey,
-                                 @NonNull String initVector) throws InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
-        IvParameterSpec iv = new IvParameterSpec(
-                SingleStepKdf.fromSha256()
-                        .derive(initVector.getBytes(StandardCharsets.UTF_8), 16));
-        SecretKeySpec key = new SecretKeySpec(
-                SingleStepKdf.fromSha256().derive(secretKey
-                        .getBytes(StandardCharsets.UTF_8), 16), "AES");
-        byte[] subject = str.getBytes();
+                                 @NonNull String initVector) throws IllegalBlockSizeException {
+        try {
+            IvParameterSpec iv = new IvParameterSpec(
+                    SingleStepKdf.fromSha256()
+                            .derive(initVector.getBytes(StandardCharsets.UTF_8), 16));
+            SecretKeySpec key = new SecretKeySpec(
+                    SingleStepKdf.fromSha256().derive(secretKey
+                            .getBytes(StandardCharsets.UTF_8), 16), "AES");
+            byte[] subject = str.getBytes();
 
-        Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
-        cipher.init(Cipher.DECRYPT_MODE, key, iv);
+            Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, key, iv);
 
-        return new String(cipher.doFinal(subject));
+            return new String(cipher.doFinal(Base64.decodeBase64(subject)));
+        } catch (IllegalBlockSizeException e) {
+            throw new IllegalBlockSizeException(e.getMessage());
+        } catch (Exception unreachable) {
+            return "";
+        }
     }
 
     /**
