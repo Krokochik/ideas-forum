@@ -134,7 +134,7 @@ class TwoFactorCode {
 
                     await new Promise((resolve, reject) => {
                         $.ajax({
-                            url: "/mfa/activate/",
+                            url: "/mfa/activate",
                             method: "POST",
                             async: true,
                             data: {

@@ -26,6 +26,8 @@ function toDark() {
     }
 }
 
+var isIdConfirmed;
+
 function onLoad() {
     if (document.getElementById("theme").value == "dark")
         document
@@ -36,7 +38,7 @@ function onLoad() {
         .getElementById("fListGroupCheckableRadios2")
         .setAttribute("checked", "");
 
-    var isIdConfirmed = document.querySelector("#chng3").getAttribute("bool");
+    isIdConfirmed = document.querySelector("#chng3").getAttribute("bool");
 
     let btn = document.getElementById("chng3");
     btn.addEventListener("click", function () {
@@ -111,16 +113,6 @@ function updateMfaCodes() {
         });
     } else clearInterval(interval);
 }
-
-document.addEventListener("visibilitychange", function () {
-    if (document.visibilityState === "hidden" || document.visibilityState === "unloaded") {
-        let runnable = () => clearInterval(interval);
-        setTimeout(runnable, 10000);
-    } else if (isIdConfirmed === "true") {
-        updateMfaCodes();
-        interval = setInterval(updateMfaCodes, 5000);
-    }
-});
 
 var isTheFirstMfaButtonClick = true;
 document.getElementById("chng3").addEventListener("click", function () {
