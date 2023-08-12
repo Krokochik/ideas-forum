@@ -106,8 +106,8 @@ public class SecurityRoutineProvider {
      *
      * @throws NullPointerException if a parameter is null.
      **/
-    public void authorizeUser(@NonNull User user, @NonNull SecurityContext securityContext) {
-        authorizeUser(user, false, securityContext, null, null);
+    public SecurityContext authorizeUser(@NonNull User user, @NonNull SecurityContext securityContext) {
+        return authorizeUser(user, false, securityContext, null, null);
     }
 
 

@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
+import static org.springframework.security.core.context.SecurityContextHolder.setContext;
 
 
 @Slf4j
@@ -115,7 +116,7 @@ public class EmailController {
 
             userService.setRolesById(user.getId(), Collections.singleton(Role.USER));
             user.setRoles(Collections.singleton(Role.USER));
-            setContext(srp.authorizeUser(user, SecurityContextHolder.getContext());
+            setContext(srp.authorizeUser(user, getContext()));
 
             return "redirect:/main";
 
