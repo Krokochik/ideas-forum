@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
+import static org.springframework.security.core.context.SecurityContextHolder.setContext;
 
 @Slf4j
 @Controller
@@ -167,7 +168,9 @@ public class AuthorizationController {
             log.info(userService.save(user).toString());
 
             boolean remember = session.getAttribute("oauth2Id") != null;
-            srp.authorizeUser(user, remember, getContext(), httpRequest, httpResponse);
+            setContext(srp.authorizeUser(
+                    user, remember, getContext(), httpRequest, httpResponse)
+            );
 
             session.removeAttribute("oauth2Id");
             session.removeAttribute("oauth2Username");

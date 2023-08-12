@@ -76,23 +76,19 @@ public class SecurityRoutineProvider {
      * @param response the server response (spring-generated). If remember is true, must not be null.
      * @throws NullPointerException if a parameter is null.
      **/
-    public void authorizeUser(@NonNull User user, boolean remember, @NonNull SecurityContext securityContext,
-                              HttpServletRequest request, HttpServletResponse response) {
-        log.info("AuthorizeUser()");
-        log.info(user.toString());
+    public SecurityContext authorizeUser(@NonNull User user, boolean remember,
+                                         @NonNull SecurityContext securityContext,
+                                         HttpServletRequest request, HttpServletResponse response) {
         Set<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(Role::toAuthority)
                 .collect(Collectors.toSet());
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 convertUserToUserDetails(user), user, authorities);
-        log.info(authentication.toString());
         securityContext.setAuthentication(authentication);
-        log.info(securityContext.getAuthentication().toString());
-        log.info(securityContext.getAuthentication().getName());
 
         if (remember) {
             if (request == null) throw new NullPointerException("request"); // lombok's @NonNull format
-            if(response == null) throw new NullPointerException("response");
+            if (response == null) throw new NullPointerException("response");
 
             String rememberMeCookieName = "remember-me";
             int tokenValiditySeconds = 30 * 24 * 60 * 60;
@@ -102,6 +98,7 @@ public class SecurityRoutineProvider {
             rememberMeServices.setTokenValiditySeconds(tokenValiditySeconds);
             rememberMeServices.loginSuccess(request, response, authentication);
         }
+        return securityContext;
     }
 
     /**
@@ -127,7 +124,7 @@ public class SecurityRoutineProvider {
             @Override
             public Map<String, String[]> getParameterMap() {
                 Map<String, String[]> parameterMap = new HashMap<>(super.getParameterMap());
-                parameterMap.put(newName, new String[] { newValue });
+                parameterMap.put(newName, new String[]{newValue});
                 return parameterMap;
             }
 

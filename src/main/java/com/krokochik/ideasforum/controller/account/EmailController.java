@@ -115,7 +115,7 @@ public class EmailController {
 
             userService.setRolesById(user.getId(), Collections.singleton(Role.USER));
             user.setRoles(Collections.singleton(Role.USER));
-            srp.authorizeUser(user, SecurityContextHolder.getContext());
+            setContext(srp.authorizeUser(user, SecurityContextHolder.getContext());
 
             return "redirect:/main";
 
