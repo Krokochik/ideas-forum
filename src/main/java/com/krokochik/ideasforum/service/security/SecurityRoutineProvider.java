@@ -8,12 +8,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
  * Provides quick access to basic security actions, such as authorization or checking user.
  **/
 @Primary
+@Slf4j
 @Component
 public class SecurityRoutineProvider {
 
@@ -77,12 +78,16 @@ public class SecurityRoutineProvider {
      **/
     public void authorizeUser(@NonNull User user, boolean remember, @NonNull SecurityContext securityContext,
                               HttpServletRequest request, HttpServletResponse response) {
-        Set<SimpleGrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.name()))
+        log.info("AuthorizeUser()");
+        log.info(user.toString());
+        Set<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(Role::toAuthority)
                 .collect(Collectors.toSet());
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 convertUserToUserDetails(user), user, authorities);
+        log.info(authentication.toString());
         securityContext.setAuthentication(authentication);
+        log.info(securityContext.getAuthentication().toString());
 
         if (remember) {
             if (request == null) throw new NullPointerException("request"); // lombok's @NonNull format
