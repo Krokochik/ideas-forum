@@ -162,7 +162,7 @@ public class AuthorizationController {
                 }
             }
             user.setRoles(userRoles);
-            userService.save(user);
+            log.info(userService.save(user).toString());
 
             boolean remember = session.getAttribute("oauth2Id") != null;
             srp.authorizeUser(user, remember, srp.getContext(), httpRequest, httpResponse);

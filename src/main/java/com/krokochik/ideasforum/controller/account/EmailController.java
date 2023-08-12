@@ -60,6 +60,7 @@ public class EmailController {
 
         User user = userService
                 .findByUsernameOrUnknown(ctx.getAuthentication().getName());
+        log.info(user.toString());
         if ((srp.hasRole(Role.ANONYM) || srp.hasRole(Role.USER)) && !user.getEmail().equals("unknown")) {
             if (!user.isConfirmMailSent()) {
                 String userToken = new TokenService().generateToken();
