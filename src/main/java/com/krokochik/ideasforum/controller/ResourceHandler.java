@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
+
+
 @RestController
 public class ResourceHandler {
 
@@ -25,7 +28,7 @@ public class ResourceHandler {
     @GetMapping(value = "/mfa-qr", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<Resource> qrCode() {
         User user = userService
-                .findByUsernameOrUnknown(srp.getContext().getAuthentication().getName());
+                .findByUsernameOrUnknown(getContext().getAuthentication().getName());
         if (user.getQrcode() != null) {
             Resource resource = new ByteArrayResource(user.getQrcode());
 
@@ -38,10 +41,10 @@ public class ResourceHandler {
     @GetMapping(value = "/avatar", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] avatar(HttpServletResponse response) {
         byte[] decodedAvatar;
-        if (srp.isAuthenticated()) {
+        if (srp.isAuthenticated(getContext())) {
             System.out.println("auth");
             User user = userService
-                    .findByUsernameOrUnknown(srp.getContext().getAuthentication().getName());
+                    .findByUsernameOrUnknown(getContext().getAuthentication().getName());
             System.out.println(user.getUsername());
             decodedAvatar = user.getAvatar();
         } else {

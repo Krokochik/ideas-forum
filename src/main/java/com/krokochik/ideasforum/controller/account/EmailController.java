@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Collections;
 import java.util.Optional;
 
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
+
+
 @Slf4j
 @Controller
 public class EmailController {
@@ -50,24 +53,25 @@ public class EmailController {
         } catch (NullPointerException exc) {
             log.error("An error occurred", exc);
         }
-        if (srp.hasRole(Role.USER) && (mode == null || temp == null))
+        if (srp.hasRole(Role.USER, getContext()) && (mode == null || temp == null))
             return "redirect:/main";
 
         if (temp != null)
             newEmail = temp.toString();
 
-        val ctx = srp.getContext();
+        val ctx = getContext();
 
         User user = userService
                 .findByUsernameOrUnknown(ctx.getAuthentication().getName());
+        log.info(ctx.getAuthentication().getName());
         log.info(user.toString());
-        if ((srp.hasRole(Role.ANONYM) || srp.hasRole(Role.USER)) && !user.getEmail().equals("unknown")) {
+        if ((srp.hasRole(Role.ANONYM, getContext()) || srp.hasRole(Role.USER, getContext())) && !user.getEmail().equals("unknown")) {
             if (!user.isConfirmMailSent()) {
                 String userToken = new TokenService().generateToken();
                 userService.setMailConfirmationTokenById(userToken, user.getId());
 
                 boolean isEmailChanging = !newEmail.isBlank();
-                boolean isAnonym = srp.hasRole(Role.ANONYM);
+                boolean isAnonym = srp.hasRole(Role.ANONYM, getContext());
                 String finalNewEmail = newEmail;
 
                 new Thread(() -> {
@@ -90,7 +94,7 @@ public class EmailController {
             return "email-confirmation-instructions";
         }
 
-        if (srp.isAuthenticated())
+        if (srp.isAuthenticated(getContext()))
             return "redirect:/main";
         return "redirect:/login";
     }
@@ -103,7 +107,7 @@ public class EmailController {
         Optional<User> userOptional = userService.findByUsername(name);
         User user = userOptional.orElse(null);
         if (userOptional.isPresent() && user.getMailConfirmationToken().equals(token)) {
-            if (newEmail != null && srp.hasRole(Role.USER)) {
+            if (newEmail != null && srp.hasRole(Role.USER, getContext())) {
                 userService.setEmailById(newEmail, user.getId());
                 session.removeAttribute("newEmail");
                 return "redirect:/settings";
@@ -124,7 +128,7 @@ public class EmailController {
                               @RequestParam(name = "email") String email,
                               @RequestParam(name = "password", required = false) String password) {
 
-        Optional<User> userOptional = userService.findByUsername(srp.getContext().getAuthentication().getName());
+        Optional<User> userOptional = userService.findByUsername(getContext().getAuthentication().getName());
         User user = userOptional.orElse(null);
 
         if (userOptional.isEmpty() || email.isBlank() || !UserValidator.validateEmail(email) ||
@@ -145,7 +149,7 @@ public class EmailController {
         if (session.getAttribute("newEmail") != null)
             return "redirect:/email-validity-confirmation?newEmail";
 
-        if (srp.hasRole(Role.ANONYM))
+        if (srp.hasRole(Role.ANONYM, getContext()))
             model.addAttribute("isAnonym", true);
         else
             model.addAttribute("isAnonym", false);

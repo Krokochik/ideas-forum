@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 @Slf4j
 @RestController
@@ -51,7 +52,7 @@ public class ProfileController {
 
         Optional<User> user = userService.findByUsername(username);
         if (user.isPresent() &&
-                username.equalsIgnoreCase(srp.getContext().getAuthentication().getName())) {
+                username.equalsIgnoreCase(getContext().getAuthentication().getName())) {
             if (!avatar.isBlank()) {
 
                 final double BYTES_IN_MEGABYTE = 1e+6;

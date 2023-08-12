@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.io.IOException;
 import java.util.Optional;
 
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
+
+
 @Slf4j
 @Controller
 public class SettingsController {
@@ -42,10 +45,10 @@ public class SettingsController {
     public String settings(Model model, HttpSession session,
                                @CookieValue(name = "theme", required = false, defaultValue = "dark") String theme) {
         Optional<User> userOptional = userService
-                .findByUsername(srp.getContext().getAuthentication().getName());
+                .findByUsername(getContext().getAuthentication().getName());
         User user = userOptional.orElse(null);
 
-        if (userOptional.isPresent() && srp.isAuthenticated()) {
+        if (userOptional.isPresent() && srp.isAuthenticated(getContext())) {
             if ((user.getQrcode() == null ||
                     !qrCodeManager.hasUserQrCode(user.getUsername()) ||
                     mfaService.getToken(user.getUsername()).isEmpty()) &&

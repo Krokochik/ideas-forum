@@ -20,6 +20,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
+
+
 @Slf4j
 @RestController
 @RequestMapping("mfa")
@@ -164,7 +167,7 @@ public class MFAController {
     public HashMap<String, Object> activateMfa(@RequestParam("PIN") String PIN,
                                                HttpServletResponse response) {
         Optional<User> userOptional = userService.findByUsername(
-                srp.getContext().getAuthentication().getName());
+                getContext().getAuthentication().getName());
         User user;
         if (userOptional.isPresent()) {
             user = userOptional.get();

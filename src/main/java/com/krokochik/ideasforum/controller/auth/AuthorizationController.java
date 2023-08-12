@@ -30,6 +30,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
+
 @Slf4j
 @Controller
 public class AuthorizationController {
@@ -56,7 +58,7 @@ public class AuthorizationController {
                                 @RequestParam(name = "password", defaultValue = "") String password,
                                 @RequestParam(name = "origin") String origin) {
         User user = userService.findByUsernameOrUnknown(
-                srp.getContext().getAuthentication().getName());
+                getContext().getAuthentication().getName());
         boolean isIdConfirmed = passwordEncoder.matches(password, user.getPassword());
         if (!isIdConfirmed)
             return "redirect:/proof-identity?error=bad+password&origin=" + origin;
@@ -68,7 +70,7 @@ public class AuthorizationController {
 
     @GetMapping("/login")
     public String login(Model model) {
-        if (srp.isAuthenticated() || srp.hasRole(Role.ANONYM))
+        if (srp.isAuthenticated(getContext()) || srp.hasRole(Role.ANONYM, getContext()))
             return "redirect:/email-validity-confirmation";
         model.addAttribute("discord", false);
         model.addAttribute("github", false);
@@ -165,7 +167,7 @@ public class AuthorizationController {
             log.info(userService.save(user).toString());
 
             boolean remember = session.getAttribute("oauth2Id") != null;
-            srp.authorizeUser(user, remember, srp.getContext(), httpRequest, httpResponse);
+            srp.authorizeUser(user, remember, getContext(), httpRequest, httpResponse);
 
             session.removeAttribute("oauth2Id");
             session.removeAttribute("oauth2Username");

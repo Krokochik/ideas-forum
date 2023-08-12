@@ -15,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.stereotype.Component;
@@ -39,8 +38,8 @@ public class SecurityRoutineProvider {
     /**
      * Returns if the context user is fully authenticated (has full access to the site).
      **/
-    public boolean isAuthenticated() {
-        for (GrantedAuthority authority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
+    public boolean isAuthenticated(SecurityContext ctx) {
+        for (GrantedAuthority authority : ctx.getAuthentication().getAuthorities()) {
             try {
                 if (Role.valueOf(authority.getAuthority()) != Role.ANONYM)
                     return true;
@@ -52,19 +51,12 @@ public class SecurityRoutineProvider {
     }
 
     /**
-     * Obtains the current {@link SecurityContext}.
-     **/
-    public SecurityContext getContext() {
-        return SecurityContextHolder.getContext();
-    }
-
-    /**
      * Returns if the context user has the role.
      *
      * @throws NullPointerException if role is {@code null}.
      **/
-    public boolean hasRole(@NonNull Role role) {
-        for (GrantedAuthority authority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
+    public boolean hasRole(@NonNull Role role, SecurityContext ctx) {
+        for (GrantedAuthority authority : ctx.getAuthentication().getAuthorities()) {
             try {
                 if (Role.valueOf(authority.getAuthority()).equals(role))
                     return true;

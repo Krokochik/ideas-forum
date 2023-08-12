@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 
 import java.nio.charset.StandardCharsets;
 
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
+
 @Configuration
 public class ThymeleafBeanConfig {
 
@@ -23,45 +25,45 @@ public class ThymeleafBeanConfig {
         return new UserAuth() {
             @Override
             public String getCurrentEmail() {
-                return userService.findByUsernameOrUnknown(srp
-                                .getContext().getAuthentication().getName())
+                return userService.findByUsernameOrUnknown(getContext()
+                                .getAuthentication().getName())
                         .getEmail();
             }
 
             @Override
             public String getCurrentName() {
-                return srp.getContext().getAuthentication().getName();
+                return getContext().getAuthentication().getName();
             }
 
             @Override
             public Long getCurrentId() {
-                return userService.findByUsernameOrUnknown(srp
-                                .getContext().getAuthentication().getName())
+                return userService.findByUsernameOrUnknown(getContext()
+                                .getAuthentication().getName())
                         .getId();
             }
 
             public String getNickname() {
-                if (srp.isAuthenticated()) {
-                    return userService.findByUsernameOrUnknown(srp
-                                    .getContext().getAuthentication().getName())
+                if (srp.isAuthenticated(getContext())) {
+                    return userService.findByUsernameOrUnknown(getContext()
+                                    .getAuthentication().getName())
                             .getNickname();
                 } else return "guest";
             }
 
             public String getAvatar() {
-                return new String(userService.findByUsernameOrUnknown(srp
-                                .getContext().getAuthentication().getName())
+                return new String(userService.findByUsernameOrUnknown(getContext()
+                                .getAuthentication().getName())
                         .getAvatar(), StandardCharsets.UTF_8);
             }
 
             public boolean isMfaActivated() {
-                return userService.findByUsernameOrUnknown(srp
-                                .getContext().getAuthentication().getName())
+                return userService.findByUsernameOrUnknown(getContext()
+                                .getAuthentication().getName())
                         .isMfaActivated();
             }
 
             public boolean isAuth() {
-                return srp.isAuthenticated();
+                return srp.isAuthenticated(getContext());
             }
         };
     }

@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
+
+
 @Slf4j
 @Controller
 public class PasswordController {
@@ -35,7 +38,7 @@ public class PasswordController {
 
     @GetMapping("/password-change-instructions")
     public String changePassword(Model model) {
-        SecurityContext context = srp.getContext();
+        SecurityContext context = getContext();
         new Thread(() -> {
             String passToken = new TokenService().generateToken();
             Mail mail = new Mail();
