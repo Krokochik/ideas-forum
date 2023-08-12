@@ -172,6 +172,8 @@ public class AuthorizationController {
                     user, remember, getContext(), httpRequest, httpResponse)
             );
 
+            System.out.println(getContext().getAuthentication().getName());
+
             session.removeAttribute("oauth2Id");
             session.removeAttribute("oauth2Username");
             session.removeAttribute("oauth2Email");
