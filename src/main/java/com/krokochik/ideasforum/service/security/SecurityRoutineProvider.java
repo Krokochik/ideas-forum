@@ -7,6 +7,7 @@ import com.krokochik.ideasforum.service.jdbc.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,9 +77,9 @@ public class SecurityRoutineProvider {
      * @param response the server response (spring-generated). If remember is true, must not be null.
      * @throws NullPointerException if a parameter is null.
      **/
-    public SecurityContext authorizeUser(@NonNull User user, boolean remember,
+    public void authorizeUser(@NonNull User user, boolean remember,
                                          @NonNull SecurityContext securityContext,
-                                         HttpServletRequest request, HttpServletResponse response) {
+                                         @NonNull HttpServletRequest request, HttpServletResponse response) {
         Set<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(Role::toAuthority)
                 .collect(Collectors.toSet());
@@ -86,8 +87,11 @@ public class SecurityRoutineProvider {
                 convertUserToUserDetails(user), user, authorities);
         securityContext.setAuthentication(authentication);
 
+        HttpSession session = request.getSession(true);
+        session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+
+
         if (remember) {
-            if (request == null) throw new NullPointerException("request"); // lombok's @NonNull format
             if (response == null) throw new NullPointerException("response");
 
             String rememberMeCookieName = "remember-me";
@@ -98,7 +102,6 @@ public class SecurityRoutineProvider {
             rememberMeServices.setTokenValiditySeconds(tokenValiditySeconds);
             rememberMeServices.loginSuccess(request, response, authentication);
         }
-        return securityContext;
     }
 
     /**
@@ -106,8 +109,9 @@ public class SecurityRoutineProvider {
      *
      * @throws NullPointerException if a parameter is null.
      **/
-    public SecurityContext authorizeUser(@NonNull User user, @NonNull SecurityContext securityContext) {
-        return authorizeUser(user, false, securityContext, null, null);
+    public void authorizeUser(@NonNull User user, @NonNull SecurityContext securityContext,
+                                         HttpServletRequest request) {
+        authorizeUser(user, false, securityContext, request, null);
     }
 
 

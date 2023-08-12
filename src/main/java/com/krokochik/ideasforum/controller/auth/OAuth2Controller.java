@@ -20,7 +20,6 @@ import java.net.URL;
 import java.util.Optional;
 
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
-import static org.springframework.security.core.context.SecurityContextHolder.setContext;
 
 @Slf4j
 @Controller
@@ -62,7 +61,7 @@ public class OAuth2Controller {
             if (userOptional.isPresent()) {
                 user = userOptional.get();
                 log.info(user.toString());
-                setContext(srp.authorizeUser(user, true, getContext(), request, response));
+                srp.authorizeUser(user, true, getContext(), request, response);
                 return "redirect:/email-validity-confirmation";
             } else {
                 URL avatarUrl = new URL("https://ideas-forum.herokuapp.com/avatar");

@@ -9,11 +9,11 @@ import com.krokochik.ideasforum.service.crypto.TokenService;
 import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
-import static org.springframework.security.core.context.SecurityContextHolder.setContext;
 
 
 @Slf4j
@@ -104,7 +103,7 @@ public class EmailController {
     public String confirmEmail(@RequestParam(name = "name") String name,
                                @RequestParam(name = "token") String token,
                                @RequestParam(name = "newEmail", required = false) String newEmail,
-                               HttpSession session, Model model) {
+                               HttpSession session, Model model, HttpServletRequest request) {
         Optional<User> userOptional = userService.findByUsername(name);
         User user = userOptional.orElse(null);
         if (userOptional.isPresent() && user.getMailConfirmationToken().equals(token)) {
@@ -116,7 +115,7 @@ public class EmailController {
 
             userService.setRolesById(user.getId(), Collections.singleton(Role.USER));
             user.setRoles(Collections.singleton(Role.USER));
-            setContext(srp.authorizeUser(user, getContext()));
+            srp.authorizeUser(user, getContext(), request);
 
             return "redirect:/main";
 
