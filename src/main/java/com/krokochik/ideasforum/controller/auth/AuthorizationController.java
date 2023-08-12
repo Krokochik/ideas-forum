@@ -148,26 +148,23 @@ public class AuthorizationController {
                 URL avatarUrl = (URL) session.getAttribute("oauth2AvatarUrl");
                 System.out.println(session.getAttribute("oauth2AvatarUrl"));
                 if (avatarUrl != null) {
-                    Set<Role> finalUserRoles = userRoles;
                     CompletableFuture.runAsync(() -> {
                         try {
                             BufferedImage image = ImageIO.read(avatarUrl);
                             ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
                             ImageIO.write(image, "png", byteArrayOutStream);
                             byte[] avatar = byteArrayOutStream.toByteArray();
-                            user.setAvatar(avatar);
-                            user.setRoles(finalUserRoles);
+                            userService.setAvatarById(avatar, user.getId());
                         } catch (Exception e) {
                             log.error("An error occurred during downloading avatar", e);
                         }
-                    }).thenRunAsync(() -> {
-                        userService.save(user);
                     });
                 }
             }
             user.setRoles(userRoles);
-            boolean remember = session.getAttribute("oauth2Id") != null;
+            userService.save(user);
 
+            boolean remember = session.getAttribute("oauth2Id") != null;
             srp.authorizeUser(user, remember, srp.getContext(), httpRequest, httpResponse);
 
             session.removeAttribute("oauth2Id");
