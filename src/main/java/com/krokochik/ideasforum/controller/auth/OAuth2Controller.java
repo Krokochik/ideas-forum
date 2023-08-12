@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
@@ -19,6 +18,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
+
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
+
 
 @Slf4j
 @Controller
@@ -60,7 +62,7 @@ public class OAuth2Controller {
             if (userOptional.isPresent()) {
                 user = userOptional.get();
                 log.info(user.toString());
-                srp.authorizeUser(user, true, SecurityContextHolder.getContext(), request, response);
+                srp.authorizeUser(user, true, getContext(), request, response);
                 return "redirect:/email-validity-confirmation";
             } else {
                 URL avatarUrl = new URL("https://ideas-forum.herokuapp.com/avatar");

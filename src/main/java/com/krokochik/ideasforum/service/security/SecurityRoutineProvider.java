@@ -88,6 +88,7 @@ public class SecurityRoutineProvider {
         log.info(authentication.toString());
         securityContext.setAuthentication(authentication);
         log.info(securityContext.getAuthentication().toString());
+        log.info(securityContext.getAuthentication().getName());
 
         if (remember) {
             if (request == null) throw new NullPointerException("request"); // lombok's @NonNull format
