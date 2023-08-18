@@ -90,7 +90,6 @@ public class SecurityRoutineProvider {
         HttpSession session = request.getSession(true);
         session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 
-
         if (remember) {
             if (response == null) throw new NullPointerException("response");
 
