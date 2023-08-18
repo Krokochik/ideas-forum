@@ -121,8 +121,9 @@ public class MFAController {
 
         userOptional.ifPresentOrElse(user -> {
             String mfaStatus = requestBody.get("mfaStatus");
+            String mfaToken = user.getMfaToken();
             try {
-                mfaStatus = Cryptographer.decrypt(mfaStatus, user.getMfaToken(), "");
+                mfaStatus = Cryptographer.decrypt(mfaStatus, mfaToken, "");
                 System.out.println(mfaStatus);
             } catch (Exception e) {
                 response.setStatus(400);
@@ -144,13 +145,13 @@ public class MFAController {
                 user.setMfaResetTokens(resetTokens);
                 user.setMfaConnecting(true);
                 user.setQrcode(null);
-                String PIN;
-                user.setMfaActivatePIN(PIN = tokenService.generateMfaPIN());
+                String pin;
+                user.setMfaActivatePIN(pin = tokenService.generateMfaPIN());
                 userService.update(user);
 
                 response.setStatus(200);
                 responseBody.set(new HashMap<>() {{
-                    put("PIN", PIN);
+                    put("PIN", Cryptographer.encrypt(pin, mfaToken, ""));
                 }});
             }
         }, () -> response.setStatus(400));
