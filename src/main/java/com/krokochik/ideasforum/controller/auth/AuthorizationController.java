@@ -59,6 +59,7 @@ public class AuthorizationController {
                                 @RequestParam(name = "origin") String origin) {
         User user = userService.findByUsernameOrUnknown(
                 getContext().getAuthentication().getName());
+        System.out.println(getContext().getAuthentication().getName());
         boolean isIdConfirmed = passwordEncoder.matches(password, user.getPassword());
         if (!isIdConfirmed)
             return "redirect:/proof-identity?error=bad+password&origin=" + origin;
