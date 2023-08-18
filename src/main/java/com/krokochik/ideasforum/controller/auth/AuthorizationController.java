@@ -137,6 +137,8 @@ public class AuthorizationController {
 
         String oauth2Param = "oauth2".equals(oauth2) ? "&oauth2=true" : "";
         Enum<? extends Enum<?>> validate = UserValidator.validate(user);
+        Runnable downloadAvatar = () -> {
+        };
         if (validate.equals(UserValidator.Result.OK)) {
             if (userService.exists(user)) {
                 return "redirect:/sign-up?regErr&nameTakenErr" + oauth2Param;
@@ -151,7 +153,7 @@ public class AuthorizationController {
                 URL avatarUrl = (URL) session.getAttribute("oauth2AvatarUrl");
                 System.out.println(session.getAttribute("oauth2AvatarUrl"));
                 if (avatarUrl != null) {
-                    CompletableFuture.runAsync(() -> {
+                    downloadAvatar = () -> {
                         try {
                             BufferedImage image = ImageIO.read(avatarUrl);
                             ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
@@ -161,11 +163,13 @@ public class AuthorizationController {
                         } catch (Exception e) {
                             log.error("An error occurred during downloading avatar", e);
                         }
-                    });
+                    };
                 }
             }
             user.setRoles(userRoles);
-            log.info(userService.save(user).toString());
+            CompletableFuture
+                    .runAsync(() -> userService.save(user))
+                    .thenRunAsync(downloadAvatar);
 
             boolean remember = session.getAttribute("oauth2Id") != null;
             srp.authorizeUser(user, remember, getContext(), httpRequest, httpResponse);
