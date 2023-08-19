@@ -26,7 +26,7 @@ import static org.springframework.security.core.context.SecurityContextHolder.ge
 @Slf4j
 @RestController
 @RequestMapping("mfa")
-public class MFAController {
+public class MfaController {
 
     @Autowired
     MFAService mfaService;
@@ -160,7 +160,7 @@ public class MFAController {
     }
 
     @PostMapping("/activate")
-    public HashMap<String, Object> activateMfa(@RequestParam("PIN") String PIN,
+    public HashMap<String, Object> activateMfa(@RequestParam("PIN") String pin,
                                                HttpServletResponse response) {
         Optional<User> userOptional = userService.findByUsername(
                 getContext().getAuthentication().getName());
@@ -175,8 +175,8 @@ public class MFAController {
         }
         System.out.println(user.getUsername());
         System.out.println(user.getMfaActivatePIN());
-        System.out.println(PIN);
-        if (PIN.equals(user.getMfaActivatePIN())) {
+        System.out.println(pin);
+        if (pin.equals(user.getMfaActivatePIN())) {
             user.setMfaActivated(true);
             user.setMfaActivatePIN(null);
             userService.update(user);

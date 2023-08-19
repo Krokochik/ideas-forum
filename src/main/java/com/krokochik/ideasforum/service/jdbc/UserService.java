@@ -1,7 +1,7 @@
 package com.krokochik.ideasforum.service.jdbc;
 
-import com.krokochik.ideasforum.annotation.NonBlank;
 import com.krokochik.ideasforum.annotation.NonNegative;
+import com.krokochik.ideasforum.annotation.NonBlank;
 import com.krokochik.ideasforum.model.db.User;
 import com.krokochik.ideasforum.model.functional.Role;
 import com.krokochik.ideasforum.repository.UserRepository;
@@ -138,16 +138,19 @@ public class UserService {
     /**
      * Saves a new user to database.
      *
-     * @param user the user.
+     * @param user the user to be saved.
+     * @param encryptPassword should the user's password be encrypted before saving.
      * @return {@link Optional} of saved user if the successfully saved,
      * empty {@link Optional} if the user is already exists.
      * @throws NullPointerException if user is {@code null} or
      *                              username is {@code null} and
      *                              ID is {@code null} or negative.
      */
-    public Optional<User> save(@NonNull User user) {
+    public Optional<User> save(@NonNull User user, boolean encryptPassword) {
         if (!exists(user)) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            if (encryptPassword) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
             return Optional.of(userRepository.save(user));
         } else {
             return Optional.empty();
@@ -155,22 +158,51 @@ public class UserService {
     }
 
     /**
-     * Updates the user at database.
+     * Overloads {@link #save(User, boolean)} with encryptPassword set to true.
      *
-     * @param user the user.
+     * @param user the user to be saved.
+     * @return {@link Optional} of saved user if the successfully saved,
+     * empty {@link Optional} if the user is already exists.
+     *
+     * @see #save(User, boolean)
+     */
+    public Optional<User> save(@NonNull User user) {
+        return save(user, true);
+    }
+
+    /**
+     * Updates the user in the database.
+     *
+     * @param user the user to be updated.
+     * @param encryptPassword should the user's password be encrypted before updating.
      * @return {@link Optional} of updated user if the successfully saved,
-     * empty {@link Optional} if the user isn't exists.
+     * empty {@link Optional} if the user doesn't exist.
      * @throws NullPointerException if user is {@code null} or
      *                              username is {@code null} and
      *                              ID is {@code null} or negative.
      */
-    public Optional<User> update(@NonNull User user) {
+    public Optional<User> update(@NonNull User user, boolean encryptPassword) {
         if (exists(user)) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            if (encryptPassword) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
             return Optional.of(userRepository.save(user));
         } else {
             return Optional.empty();
         }
+    }
+
+    /**
+     * Overloads {@link #update(User, boolean)} with encryptPassword set to false.
+     *
+     * @param user the user to be updated.
+     * @return {@link Optional} of updated user if the successfully saved,
+     *          empty {@link Optional} if the user doesn't exist.
+     *
+     * @see #update(User, boolean)
+     */
+    public Optional<User> update(@NonNull User user) {
+        return update(user, false);
     }
 
     public Optional<User> findById(@NonNegative Long id) {
