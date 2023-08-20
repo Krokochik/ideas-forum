@@ -164,7 +164,10 @@ public class MfaController {
     public HashMap<String, Object> isActivated(@RequestParam("username") String username,
                                                @RequestParam("token") String token,
                                                @RequestBody String body,
+                                               @RequestBody HashMap<String, String> body1,
                                                HttpServletResponse response) {
+        System.out.println("activated");
+        System.out.println(body1.toString());
         System.out.println(body);
         System.out.println(username);
         System.out.println(token);
@@ -191,7 +194,6 @@ public class MfaController {
                 responseStatus = 403;
             }
         }
-
 
         response.setStatus(responseStatus);
         return responseBody;
