@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.IllegalBlockSizeException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
@@ -41,10 +42,10 @@ public class MfaController {
     SecurityRoutineProvider srp;
 
     /*
-    * to connect mfa client must confirm the addition sending
-    * encrypted with the private token's part a message
-    * to a path that is the public token's part
-    */
+     * to connect mfa client must confirm the addition sending
+     * encrypted with the private token's part a message
+     * to a path that is the public token's part
+     */
 
     @GetMapping(value = "/ping", produces = "application/json")
     public HashMap<String, Object> ping(HttpServletResponse response) {
@@ -157,6 +158,39 @@ public class MfaController {
         }, () -> response.setStatus(400));
 
         return responseBody.get();
+    }
+
+    @PostMapping("/activated")
+    public HashMap<String, Object> isActivated(@RequestParam("username") String username,
+                                               @RequestParam("token") String token,
+                                               HttpServletResponse response) {
+        int responseStatus = 500;
+        HashMap<String, Object> responseBody = new HashMap<>();
+
+        if (username == null || token == null
+                || username.isBlank() || token.isBlank()) {
+            responseStatus = 400;
+        } else if (!userService.exists(username)) {
+            responseStatus = 404;
+        } else {
+            // if the user exists findByUsername will always return !empty
+            User user = userService.findByUsername(username).get();
+            try {
+                token = Cryptographer.decrypt(token, user.getMfaToken(), "");
+                if ("token".equals(token)) {
+                    responseBody.put("activated", Boolean.toString(user.isMfaActivated()));
+                    responseStatus = 200;
+                } else {
+                    responseStatus = 403;
+                }
+            } catch (IllegalBlockSizeException e) {
+                responseStatus = 403;
+            }
+        }
+
+
+        response.setStatus(responseStatus);
+        return responseBody;
     }
 
     @PostMapping("/activate")
