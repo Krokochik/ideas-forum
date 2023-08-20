@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.crypto.IllegalBlockSizeException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -161,18 +162,12 @@ public class MfaController {
     }
 
     @PostMapping("/activated")
-    public HashMap<String, Object> isActivated(@RequestParam("username") String username,
-                                               @RequestParam("token") String token,
-                                               @RequestBody String body,
-                                               @RequestBody HashMap<String, String> body1,
+    public HashMap<String, Object> isActivated(@RequestBody Map<String, String> request,
                                                HttpServletResponse response) {
-        System.out.println("activated");
-        System.out.println(body1.toString());
-        System.out.println(body);
-        System.out.println(username);
-        System.out.println(token);
-        int responseStatus;
+        String username = request.get("username");
+        String token = request.get("token");
         HashMap<String, Object> responseBody = new HashMap<>();
+        int responseStatus;
 
         if (username == null || token == null
                 || username.isBlank() || token.isBlank()) {
