@@ -163,7 +163,9 @@ public class MfaController {
     @PostMapping("/activated")
     public HashMap<String, Object> isActivated(@RequestParam("username") String username,
                                                @RequestParam("token") String token,
+                                               @RequestBody String body,
                                                HttpServletResponse response) {
+        System.out.println(body);
         System.out.println(username);
         System.out.println(token);
         int responseStatus;
