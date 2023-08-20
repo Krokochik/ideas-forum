@@ -164,7 +164,9 @@ public class MfaController {
     public HashMap<String, Object> isActivated(@RequestParam("username") String username,
                                                @RequestParam("token") String token,
                                                HttpServletResponse response) {
-        int responseStatus = 500;
+        System.out.println(username);
+        System.out.println(token);
+        int responseStatus;
         HashMap<String, Object> responseBody = new HashMap<>();
 
         if (username == null || token == null
