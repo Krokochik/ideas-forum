@@ -70,7 +70,7 @@ public class WebSecurityConfig {
                         "/email-validity-confirmation",
                         "/scripts/**", "/images/**", "/css/**",
                         "/avatar", "/privacy",
-                        "/mfa/**", "/terminal",
+                        "/mfa/**", "/terminal", "/ver/**",
                         "/googleb8fcdd64aa45ba54.html", "/yandex_f4f03a518326d43b.html", "/bootstrap.min.css.map")
                     .permitAll()
                 .requestMatchers("/oauth2/**", "/sign-up", "/login/**", "/password-reset-request")

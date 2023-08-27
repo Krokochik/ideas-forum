@@ -53,7 +53,7 @@ public class MfaController {
      */
 
     @GetMapping("/ver/{code}")
-    public HashMap<String, Object> temp(@PathVariable("code") String code) {
+    public HashMap<String, Object> temp(@PathVariable(name = "code") String code) {
         return new HashMap<>() {{
             put("valid", verifier.isValidCode(userService.findByUsernameOrUnknown(
                     getContext().getAuthentication().getName()).getMfaSecret(), code));
