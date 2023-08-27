@@ -67,13 +67,6 @@ public class TokenService {
     }
 
     /**
-     * Generates 6 characters long random string, consisting of numbers.
-     **/
-    public String generateMfaCode() {
-        return generateToken(6L, "1234567890".repeat(100));
-    }
-
-    /**
      * Generates 4 characters long random string, consisting of numbers.
      **/
     public String generateMfaPIN() {

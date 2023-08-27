@@ -1,9 +1,11 @@
 package com.krokochik.ideasforum.service.crypto;
 
 import at.favre.lib.crypto.SingleStepKdf;
+import dev.samstevens.totp.code.HashingAlgorithm;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -18,9 +20,9 @@ import java.security.MessageDigest;
  * */
 public class Cryptographer {
 
+    @Autowired
+    private static HashingAlgorithm HASHING_ALGORITHM;
     private static final String AES_ALGORITHM = "AES/CBC/PKCS5PADDING";
-    private static final String HASH_ALGORITHM = "SHA-512";
-
 
     /**
      * Encrypts a string with AES algorithm.
@@ -92,7 +94,7 @@ public class Cryptographer {
     @SneakyThrows
     public static String getHash(String str, String salt) {
         str += salt;
-        MessageDigest crypt = MessageDigest.getInstance(HASH_ALGORITHM);
+        MessageDigest crypt = MessageDigest.getInstance(HASHING_ALGORITHM.name());
         crypt.update(str.getBytes(StandardCharsets.UTF_8));
 
         byte[] bytes = crypt.digest();

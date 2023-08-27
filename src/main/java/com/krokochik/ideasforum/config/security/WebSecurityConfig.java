@@ -3,6 +3,9 @@ package com.krokochik.ideasforum.config.security;
 import com.krokochik.ideasforum.model.functional.Role;
 import com.krokochik.ideasforum.repository.CustomPersistentTokenRepository;
 import com.krokochik.ideasforum.service.jdbc.CustomUserDetailsService;
+import dev.samstevens.totp.code.HashingAlgorithm;
+import dev.samstevens.totp.time.NtpTimeProvider;
+import dev.samstevens.totp.time.TimeProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,15 +37,23 @@ public class WebSecurityConfig {
     @Autowired
     CustomPersistentTokenRepository tokenRepository;
 
+    // Same as Spring Boot 3 .not().hasAnyAuthority()
+    private AuthorizationDecision hasNotAnyRole(Authentication authentication, Role... role) {
+        Set<GrantedAuthority> authorities = Arrays.stream(role)
+                .map(Role::toAuthority)
+                .collect(Collectors.toSet());
+        boolean granted = true;
+        for (GrantedAuthority authority : authorities) {
+            if (authentication.getAuthorities().contains(authority)) {
+                granted = false;
+                break;
+            }
+        }
+        return new AuthorizationDecision(granted);
+    }
+
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        // FUCKING SPRING SEC6 DOESN'T WORK WITH CSRF
-        // I HATE FUCKING SPRING
-        // B/C WAST 5 HOURS ON THIS SHIT
-        // SPRING SECURITY WAS MADE BY STUPID FAGGOTS
-        // ...
-        // FUCK U Rob Winch OR SOME1 WHO DID THIS
-
         http.requiresChannel(registry ->
             registry
                 .anyRequest()
@@ -115,24 +127,18 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-
-    // Same as Spring Boot 3 .not().hasAnyAuthority()
-    private AuthorizationDecision hasNotAnyRole(Authentication authentication, Role... role) {
-        Set<GrantedAuthority> authorities = Arrays.stream(role)
-                .map(Role::toAuthority)
-                .collect(Collectors.toSet());
-        boolean granted = true;
-        for (GrantedAuthority authority : authorities) {
-            if (authentication.getAuthorities().contains(authority)) {
-                granted = false;
-                break;
-            }
-        }
-        return new AuthorizationDecision(granted);
-    }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public HashingAlgorithm hashingAlgorithm() {
+        return HashingAlgorithm.SHA512;
+    }
+
+    @Bean
+    public TimeProvider timeProvider() throws UnknownHostException {
+        return new NtpTimeProvider("pool.ntp.org");
     }
 }

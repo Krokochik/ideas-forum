@@ -7,7 +7,8 @@ import com.krokochik.ideasforum.service.crypto.Cryptographer;
 import com.krokochik.ideasforum.service.crypto.TokenService;
 import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.mfa.MFAService;
-import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;
+import dev.samstevens.totp.code.CodeVerifier;
+import dev.samstevens.totp.secret.SecretGenerator;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,10 @@ public class MfaController {
     UserService userService;
 
     @Autowired
-    SecurityRoutineProvider srp;
+    CodeVerifier verifier;
+
+    @Autowired
+    SecretGenerator secretGenerator;
 
     /*
      * to connect mfa client must confirm the addition sending
@@ -48,7 +52,15 @@ public class MfaController {
      * to a path that is the public token's part
      */
 
-    @GetMapping(value = "/ping", produces = "application/json")
+    @GetMapping("/ver/{code}")
+    public HashMap<String, Object> temp(@PathVariable("code") String code) {
+        return new HashMap<>() {{
+            put("valid", verifier.isValidCode(userService.findByUsernameOrUnknown(
+                    getContext().getAuthentication().getName()).getMfaSecret(), code));
+        }};
+    }
+
+    @GetMapping(value = "/ping")
     public HashMap<String, Object> ping(HttpServletResponse response) {
         response.setStatus(200);
         return new HashMap<>() {{
@@ -56,7 +68,7 @@ public class MfaController {
         }};
     }
 
-    @PostMapping(value = "/codes", produces = "application/json")
+    @PostMapping(value = "/codes")
     public HashMap<String, Object> produceMfaCodesToHtml(HttpServletResponse response, Authentication authentication) {
         System.out.println("codes");
         if (authentication == null) {
@@ -149,11 +161,14 @@ public class MfaController {
                 user.setQrcode(null);
                 String pin;
                 user.setMfaActivatePIN(pin = tokenService.generateMfaPIN());
+                String secret;
+                user.setMfaSecret(secret = secretGenerator.generate());
                 userService.update(user);
 
                 response.setStatus(200);
                 responseBody.set(new HashMap<>() {{
                     put("PIN", Cryptographer.encrypt(pin, mfaToken, ""));
+                    put("secret", Cryptographer.encrypt(secret, mfaToken, ""));
                 }});
             }
         }, () -> response.setStatus(400));

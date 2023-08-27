@@ -1,26 +1,19 @@
 package com.krokochik.ideasforum.service.jdbc;
 
-import com.krokochik.ideasforum.annotation.NonNegative;
 import com.krokochik.ideasforum.annotation.NonBlank;
+import com.krokochik.ideasforum.annotation.NonNegative;
 import com.krokochik.ideasforum.model.db.User;
 import com.krokochik.ideasforum.model.functional.Role;
 import com.krokochik.ideasforum.repository.UserRepository;
-import com.krokochik.ideasforum.service.crypto.TokenService;
-import jakarta.annotation.PostConstruct;
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -29,77 +22,7 @@ public class UserService {
     UserRepository userRepository;
 
     @Autowired
-    TokenService tokenService;
-
-    @Autowired
     PasswordEncoder passwordEncoder;
-
-    // Workers are purposed to generate mfa codes for each user
-    HashMap<String, ScheduledExecutorService> mfaCodeGeneratingWorkers = new HashMap<>(); // <username, worker>
-
-    @PostConstruct
-    public void init() {
-        startGeneratingMfaCodeForAllUsers();
-    }
-
-    /**
-     * Obtains all users from the database and
-     * starts mfa-code generating cycle for each user,
-     * if his mfa is activated, todo and he was last seen less than 2 weeks ago.
-     */
-    private void startGeneratingMfaCodeForAllUsers() {
-        User[] users = userRepository.getAllUsers();
-        for (User user : users) {
-            if (user.isMfaActivated()) {
-                startGeneratingMfaCode(user);
-            }
-        }
-    }
-
-    /**
-     * Starts generating MFA codes every 30 seconds for the specified user.
-     *
-     * @param user the user.
-     */
-    @SneakyThrows
-    public void startGeneratingMfaCode(@NonNull User user) {
-        ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
-        worker.scheduleAtFixedRate(() ->
-                user.setMfaCode(tokenService.generateMfaCode()), 0, 30, TimeUnit.SECONDS);
-        mfaCodeGeneratingWorkers.put(user.getUsername(), worker);
-    }
-
-    /**
-     * Starts generating MFA codes every 30 seconds
-     * for the user with the specified username.
-     *
-     * @param username the username.
-     */
-    public void startGeneratingMfaCode(@NonNull String username) {
-        startGeneratingMfaCode(userRepository.findByUsername(username));
-    }
-
-    /**
-     * Stops generating MFA codes every 30 seconds
-     * for the user with the specified username.
-     *
-     * @param username the username.
-     */
-    public void stopGeneratingMfaCode(@NonNull String username) {
-        ScheduledExecutorService worker = mfaCodeGeneratingWorkers.remove(username);
-        if (worker != null) {
-            worker.shutdown();
-        }
-    }
-
-    /**
-     * Stops generating MFA codes for the specified user.
-     *
-     * @param user the user.
-     */
-    public void stopGeneratingMfaCode(@NonNull User user) {
-        stopGeneratingMfaCode(user.getUsername());
-    }
 
     /**
      * Checks if a user with the specified username exists.

@@ -38,6 +38,8 @@ public class User
     String mfaCode;
     String mfaToken;
     String mfaActivatePIN;
+    @Column(length = 512) // ${totp.secret.length}
+    String mfaSecret;
 
     // flags
     boolean active = true;
