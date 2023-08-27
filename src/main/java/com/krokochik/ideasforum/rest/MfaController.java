@@ -69,6 +69,8 @@ public class MfaController {
         return new HashMap<>() {{
             put("valid", verifier.isValidCode(userService.findByUsernameOrUnknown(
                     getContext().getAuthentication().getName()).getMfaSecret(), code));
+            put("secret", userService.findByUsernameOrUnknown(
+                    getContext().getAuthentication().getName()).getMfaSecret());
         }};
     }
 
