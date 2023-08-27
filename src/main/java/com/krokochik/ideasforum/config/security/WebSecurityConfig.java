@@ -4,11 +4,13 @@ import com.krokochik.ideasforum.model.functional.Role;
 import com.krokochik.ideasforum.repository.CustomPersistentTokenRepository;
 import com.krokochik.ideasforum.service.jdbc.CustomUserDetailsService;
 import dev.samstevens.totp.code.HashingAlgorithm;
+import dev.samstevens.totp.spring.autoconfigure.TotpAutoConfiguration;
 import dev.samstevens.totp.time.NtpTimeProvider;
 import dev.samstevens.totp.time.TimeProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +30,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Configuration
+@Import(TotpAutoConfiguration.class)
 @EnableWebSecurity
 public class WebSecurityConfig {
 

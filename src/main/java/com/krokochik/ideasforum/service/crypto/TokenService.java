@@ -1,6 +1,7 @@
 package com.krokochik.ideasforum.service.crypto;
 
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -74,10 +75,13 @@ public class TokenService {
     }
 
     /**
-     * Generates 9 characters long random string, consisting of numbers.
+     * Generates {@code ${totp.code.length}}-corresponding random string, consisting of numbers.
      **/
+    @Value("${totp.code.length}")
+    Long codeLength;
+
     public String generateMfaResetCode() {
-        return generateToken(9L, "1234567890".repeat(100));
+        return generateToken(codeLength, "1234567890".repeat(100));
     }
 
     private String shuffle(String string) {
