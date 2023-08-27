@@ -52,6 +52,18 @@ public class MfaController {
      * to a path that is the public token's part
      */
 
+    @GetMapping("/off")
+    public HashMap<String, Object> off() {
+        User user = userService.findByUsernameOrUnknown(
+                getContext().getAuthentication().getName()
+        );
+        user.setMfaConnecting(false);
+        user.setMfaActivated(false);
+        user.setMfaSecret(null);
+        userService.update(user);
+        return new HashMap<>();
+    }
+
     @GetMapping("/ver/{code}")
     public HashMap<String, Object> temp(@PathVariable(name = "code") String code) {
         return new HashMap<>() {{
