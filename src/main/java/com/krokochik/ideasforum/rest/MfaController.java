@@ -9,6 +9,7 @@ import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.mfa.MFAService;
 import dev.samstevens.totp.code.CodeVerifier;
 import dev.samstevens.totp.secret.SecretGenerator;
+import dev.samstevens.totp.time.TimeProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +47,9 @@ public class MfaController {
     @Autowired
     SecretGenerator secretGenerator;
 
+    @Autowired
+    TimeProvider provider;
+
     /*
      * to connect mfa client must confirm the addition sending
      * encrypted with the private token's part a message
@@ -71,6 +75,7 @@ public class MfaController {
                     getContext().getAuthentication().getName()).getMfaSecret(), code));
             put("secret", userService.findByUsernameOrUnknown(
                     getContext().getAuthentication().getName()).getMfaSecret());
+            put("time", provider.getTime());
         }};
     }
 
