@@ -45,7 +45,7 @@ public class PasswordController {
             mail.setTheme("Сброс пароля");
             mail.setReceiver(userService.findByUsernameOrUnknown(context
                     .getAuthentication().getName()).getEmail());
-            mail.setLink("https://ideas-forum.herokuapp.com/password-change?name="
+            mail.setLink("https://ideasforum-3e3f402d99b3.herokuapp.com/password-change?name="
                     + context.getAuthentication().getName()
                     + "&token=" + passToken);
             userService.setPasswordAbortTokenById(passToken, userService
@@ -118,7 +118,7 @@ public class PasswordController {
                     Mail mail = new Mail();
                     mail.setTheme("Сброс пароля");
                     mail.setReceiver(user.get().getEmail());
-                    mail.setLink("https://ideas-forum.herokuapp.com/password-change?name="
+                    mail.setLink("https://ideasforum-3e3f402d99b3.herokuapp.com/password-change?name="
                             + name + "&token=" + token);
                     userService.setPasswordAbortTokenById(token, user.get().getId());
                     try {

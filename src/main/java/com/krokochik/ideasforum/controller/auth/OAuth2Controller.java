@@ -64,7 +64,7 @@ public class OAuth2Controller {
                 srp.authorizeUser(user, true, getContext(), request, response);
                 return "redirect:/email-validity-confirmation";
             } else {
-                URL avatarUrl = new URL("https://ideas-forum.herokuapp.com/avatar");
+                URL avatarUrl = new URL("https://ideasforum-3e3f402d99b3.herokuapp.com/avatar");
                 try {
                     if (oauth2User.getAttribute("avatar") != null)
                         avatarUrl = new URL("https://cdn.discordapp.com/avatars/" + id + "/" + oauth2User.getAttribute("avatar") + ".png");

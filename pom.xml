@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.krokochik</groupId>
-	<artifactId>ideas-forum</artifactId>
+	<artifactId>ideasforum</artifactId>
 	<version>0.5-SNAPSHOT</version>
-	<name>ideas-forum</name>
+	<name>ideasforum</name>
 	<description>The forum for your ideas. Watch, share, be inspired and embody!</description>
 	<properties>
 		<java.version>17</java.version>

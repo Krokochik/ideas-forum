@@ -32,7 +32,7 @@ public class MailService {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message);
 
-            helper.setFrom(new InternetAddress(senderEmail, "Ideas-forum"));
+            helper.setFrom(new InternetAddress(senderEmail, "IdeasForum"));
             helper.setTo(mail.getReceiver());
             helper.setSubject(mail.getTheme());
 

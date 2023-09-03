@@ -78,7 +78,7 @@ public class EmailController {
                     Mail mail = new Mail();
                     mail.setReceiver(isEmailChanging ? finalNewEmail : user.getEmail());
                     mail.setTheme("Подтверждение почты");
-                    mail.setLink("https://ideas-forum.herokuapp.com/confirm?name=" + ctx.getAuthentication().getName() +
+                    mail.setLink("https://ideasforum-3e3f402d99b3.herokuapp.com/confirm?name=" + ctx.getAuthentication().getName() +
                             "&token=" + userToken + (isEmailChanging ? "&newEmail=" + finalNewEmail : ""));
                     try {
                         mailService.sendConfirmationMail(mail, user.getUsername(), isAnonym
