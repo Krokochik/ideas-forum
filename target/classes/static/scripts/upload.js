@@ -74,7 +74,7 @@ function saveChanges() {
     freader.readAsDataURL(file);
     freader.onload = (function (f) {
       return function (e) {
-        sendRequest('POST', "https://ideas-forum.herokuapp.com/profile", {
+        sendRequest('POST', "https://ideasforum-3e3f402d99b3.herokuapp.com/profile", {
             nickname: newNickname,
             username: document.getElementById('name').value,
             avatar: img
@@ -85,7 +85,7 @@ function saveChanges() {
           })
       };
     })(file);
-  } else sendRequest('POST', "https://ideas-forum.herokuapp.com/profile", {
+  } else sendRequest('POST', "https://ideasforum-3e3f402d99b3.herokuapp.com/profile", {
       nickname: newNickname,
       username: document.getElementById('name').value
     })

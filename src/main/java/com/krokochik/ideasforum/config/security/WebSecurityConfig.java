@@ -40,7 +40,7 @@ public class WebSecurityConfig {
     @Autowired
     CustomPersistentTokenRepository tokenRepository;
 
-    // Same as Spring Boot 3 .not().hasAnyAuthority()
+    // same as Spring Boot 3 .not().hasAnyAuthority()
     private AuthorizationDecision hasNotAnyRole(Authentication authentication, Role... role) {
         Set<GrantedAuthority> authorities = Arrays.stream(role)
                 .map(Role::toAuthority)
