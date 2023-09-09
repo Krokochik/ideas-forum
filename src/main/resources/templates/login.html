@@ -100,7 +100,17 @@
             width: fit-content;
             z-index: 1
         }
-
+        @keyframes flashing {
+            from {
+                box-shadow: 0px 0px 10px 1px #102770;
+            }
+            to {
+                box-shadow: 0px 0px 18px 3px #142f85;
+            }
+        }
+        #reg-log-lbl::before {
+            animation: 1.5s infinite alternate-reverse flashing;
+        }
     </style>
     <script src="/scripts/form-submit.js"></script>
 </head>
@@ -128,9 +138,12 @@
             <div class="row full-height justify-content-center">
                 <div class="col-12 text-center align-self-center py-5">
                     <div class="section pb-5 pt-5 pt-sm-2 text-center">
-                        <h6 class="mb-0 pb-3"><span>Авторизация</span><span>Регистрация</span></h6>
+                        <h6 class="mb-0 pb-3"><span onclick="document.getElementById('reg-log').checked = 'false'"
+                                                    style="cursor: pointer;margin: 0 20px;padding: 0;">Авторизация</span>
+                            <span onclick="document.getElementById('reg-log').checked = 'true'"
+                                  style="cursor: pointer;margin: 0 20px;padding: 0;">Регистрация</span></h6>
                         <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" th:checked="${mode}"/>
-                        <label for="reg-log"></label>
+                        <label id="reg-log-lbl" for="reg-log"></label>
                         <div class="card-3d-wrap mx-auto h-auto" th:style="'min-height: ' + ${param.keySet().contains('oauth2')?
                                                                                               param.keySet().contains('nameErr')? '450':
                                                                                               param.keySet().contains('loginError')? '450':
