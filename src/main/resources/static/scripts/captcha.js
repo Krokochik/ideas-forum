@@ -13,13 +13,13 @@ $(document).ready(function () {
     if (getUrlVars()["oauth2"] === undefined) {
         $('#submit').prop('disabled', true);
         $('#captchaLbl').hover(function () {
-            if (captchaPassed == false) {
+            if (captchaPassed === false) {
                 $('#prnt').addClass('translucent-after');
                 $('#prnt').removeClass('visible-after');
                 $('#prnt').removeClass('hidden-after');
             }
         }, function () {
-            if (captchaPassed == false) {
+            if (captchaPassed === false) {
                 $('#prnt').addClass('hidden-after');
                 $('#prnt').removeClass('translucent-after');
                 $('#prnt').removeClass('visible-after');
