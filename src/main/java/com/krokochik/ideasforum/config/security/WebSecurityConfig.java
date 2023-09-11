@@ -69,7 +69,7 @@ public class WebSecurityConfig {
                         "/settings",
                         "/email-validity-confirmation",
                         "/scripts/**", "/images/**", "/css/**",
-                        "/avatar", "/privacy",
+                        "/avatar", "/privacy", "/password-change",
                         "/mfa/**", "/terminal", "/ver/**", "/password-change-instructions",
                         "/googleb8fcdd64aa45ba54.html", "/yandex_f4f03a518326d43b.html", "/bootstrap.min.css.map")
                     .permitAll()
