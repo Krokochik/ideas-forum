@@ -2,12 +2,12 @@ class TwoFactorCode {
     constructor(root) {
         this.root = root;
         this.numberOfInputs =
-            root.dataset.fields != undefined ?
+            root.dataset.fields !== undefined ?
                 parseInt(root.dataset.fields, 10) :
                 4;
         this.color =
-            root.dataset.color != undefined ? root.dataset.color : "#000";
-        this.style = root.dataset.style != undefined ? root.dataset.style : "";
+            root.dataset.color !== undefined ? root.dataset.color : "#000";
+        this.style = root.dataset.style !== undefined ? root.dataset.style : "";
         this.autoSubmit = root.dataset.submit !== "btn";
         this.code = Array(this.numberOfInputs).fill("");
         this.inputs = undefined;
