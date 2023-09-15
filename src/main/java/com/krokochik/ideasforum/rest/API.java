@@ -170,9 +170,9 @@ public class API {
                             responseBody.put("avatar", "guest");
                         } else {
                             if (user.get().getAvatar() == null) {
-                                responseBody.put("avatar", "null");
+                                responseBody.put("avatar", null);
                             } else {
-                                responseBody.put("avatar", new String(user.get().getAvatar()));
+                                responseBody.put("avatar", user.get().getAvatar());
                             }
                         }
                         break;
