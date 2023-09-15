@@ -1,7 +1,7 @@
 package com.krokochik.ideasforum.service.security;
 
 import com.krokochik.ideasforum.model.db.User;
-import com.krokochik.ideasforum.model.functional.Role;
+import com.krokochik.ideasforum.model.service.Role;
 import com.krokochik.ideasforum.repository.CustomPersistentTokenRepository;
 import com.krokochik.ideasforum.service.jdbc.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletRequest;

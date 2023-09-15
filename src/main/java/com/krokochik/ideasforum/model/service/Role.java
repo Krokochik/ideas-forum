@@ -1,4 +1,4 @@
-package com.krokochik.ideasforum.model.functional;
+package com.krokochik.ideasforum.model.service;
 
 import lombok.NonNull;
 import lombok.ToString;

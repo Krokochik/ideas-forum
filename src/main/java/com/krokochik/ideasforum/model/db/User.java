@@ -1,6 +1,6 @@
 package com.krokochik.ideasforum.model.db;
 
-import com.krokochik.ideasforum.model.functional.Role;
+import com.krokochik.ideasforum.model.service.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.jetbrains.annotations.Contract;

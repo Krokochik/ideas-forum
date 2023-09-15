@@ -3,7 +3,7 @@ package com.krokochik.ideasforum.service.jdbc;
 import com.krokochik.ideasforum.annotation.NonBlank;
 import com.krokochik.ideasforum.annotation.NonNegative;
 import com.krokochik.ideasforum.model.db.User;
-import com.krokochik.ideasforum.model.functional.Role;
+import com.krokochik.ideasforum.model.service.Role;
 import com.krokochik.ideasforum.repository.UserRepository;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;

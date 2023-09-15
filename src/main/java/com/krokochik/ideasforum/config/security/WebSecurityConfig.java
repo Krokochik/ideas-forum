@@ -1,6 +1,6 @@
 package com.krokochik.ideasforum.config.security;
 
-import com.krokochik.ideasforum.model.functional.Role;
+import com.krokochik.ideasforum.model.service.Role;
 import com.krokochik.ideasforum.repository.CustomPersistentTokenRepository;
 import com.krokochik.ideasforum.service.jdbc.CustomUserDetailsService;
 import dev.samstevens.totp.code.HashingAlgorithm;
@@ -57,16 +57,16 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.requiresChannel(registry ->
-            registry
-                .anyRequest()
-                    .requiresSecure()
-        );
+//        http.requiresChannel(registry ->
+//            registry
+//                .anyRequest()
+//                    .requiresSecure()
+//        );
         http
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                 .requestMatchers(
-                        "/", "/main", "/main/**",
-                        "/settings",
+                        "/", "/main/**",
+                        "/settings", "/api/**",
                         "/email-validity-confirmation",
                         "/scripts/**", "/images/**", "/css/**",
                         "/avatar", "/privacy", "/password-change",
@@ -81,6 +81,8 @@ public class WebSecurityConfig {
                             hasNotAnyRole(auth.get(), Role.USER))
                 .requestMatchers(HttpMethod.POST, "/profile")
                     .hasAnyAuthority(Role.USER.name())
+                .requestMatchers(HttpMethod.POST, "/api/**")
+                    .permitAll()
                 .anyRequest()
                     .authenticated()
             )
@@ -121,7 +123,7 @@ public class WebSecurityConfig {
             )
             .csrf(conf ->
                 conf
-                    .ignoringRequestMatchers("/mfa/**", "/profile/**")
+                    .ignoringRequestMatchers("/mfa/**", "/profile/**", "/api/**")
             )
             .cors(request ->
                     new CorsConfiguration().applyPermitDefaultValues()

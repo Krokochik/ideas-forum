@@ -3,7 +3,7 @@ package com.krokochik.ideasforum.controller.auth;
 import com.krokochik.ideasforum.hcaptcha.HCaptchaClient;
 import com.krokochik.ideasforum.hcaptcha.HCaptchaResponse;
 import com.krokochik.ideasforum.model.db.User;
-import com.krokochik.ideasforum.model.functional.Role;
+import com.krokochik.ideasforum.model.service.Role;
 import com.krokochik.ideasforum.service.UserValidator;
 import com.krokochik.ideasforum.service.jdbc.UserService;
 import com.krokochik.ideasforum.service.security.SecurityRoutineProvider;

@@ -1,6 +1,6 @@
 package com.krokochik.ideasforum.rest;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.krokochik.ideasforum.model.db.User;
 import com.krokochik.ideasforum.model.service.Token;
 import com.krokochik.ideasforum.service.crypto.Cryptographer;
@@ -18,10 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.IllegalBlockSizeException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
@@ -88,7 +85,8 @@ public class MfaController {
     }
 
     @PostMapping(value = "/codes")
-    public HashMap<String, Object> produceMfaCodesToHtml(HttpServletResponse response, Authentication authentication) {
+    public HashMap<String, Object> produceMfaCodesToHtml(HttpServletResponse response,
+                                                         Authentication authentication) {
         System.out.println("codes");
         if (authentication == null) {
             response.setStatus(403);

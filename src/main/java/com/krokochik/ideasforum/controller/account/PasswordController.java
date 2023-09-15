@@ -1,7 +1,7 @@
 package com.krokochik.ideasforum.controller.account;
 
 import com.krokochik.ideasforum.model.db.User;
-import com.krokochik.ideasforum.model.functional.Role;
+import com.krokochik.ideasforum.model.service.Role;
 import com.krokochik.ideasforum.model.service.Mail;
 import com.krokochik.ideasforum.service.MailService;
 import com.krokochik.ideasforum.service.UserValidator;
