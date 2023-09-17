@@ -5,8 +5,6 @@ import com.krokochik.ideasforum.repository.CustomPersistentTokenRepository;
 import com.krokochik.ideasforum.service.jdbc.CustomUserDetailsService;
 import dev.samstevens.totp.code.HashingAlgorithm;
 import dev.samstevens.totp.spring.autoconfigure.TotpAutoConfiguration;
-import dev.samstevens.totp.time.NtpTimeProvider;
-import dev.samstevens.totp.time.TimeProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +22,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
-import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -140,10 +137,5 @@ public class WebSecurityConfig {
     @Bean
     public HashingAlgorithm hashingAlgorithm() {
         return HashingAlgorithm.SHA512;
-    }
-
-    @Bean
-    public TimeProvider timeProvider() throws UnknownHostException {
-        return new NtpTimeProvider("pool.ntp.org");
     }
 }

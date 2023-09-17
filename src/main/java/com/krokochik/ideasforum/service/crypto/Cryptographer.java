@@ -3,7 +3,6 @@ package com.krokochik.ideasforum.service.crypto;
 import at.favre.lib.crypto.SingleStepKdf;
 import dev.samstevens.totp.code.HashingAlgorithm;
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,9 +10,9 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Functional class containing static methods that are working with cryptography.
@@ -89,23 +88,26 @@ public class Cryptographer {
     }
 
     /**
-     * Computes SHA-512 hash of the string.
+     * Computes the MD5 hash of the given object and returns a string representation of the hash.
+     *
+     * @param o the object to compute the hash for
+     * @return a string representation of the MD5 hash
+     * @throws RuntimeException if the MD5 algorithm is not available
      */
-    @SneakyThrows
-    public static String getHash(String str, String salt) {
-        str += salt;
-        MessageDigest crypt = MessageDigest.getInstance(HASHING_ALGORITHM.name());
-        crypt.update(str.getBytes(StandardCharsets.UTF_8));
-
-        byte[] bytes = crypt.digest();
-        BigInteger bi = new BigInteger(1, bytes);
-        return String.format("%0" + (bytes.length << 1) + "x", bi);
-    }
-
-    /**
-     * Computes SHA-512 hash of the string.
-     */
-    public static String getHash(String str) {
-        return getHash(str, "");
+    public static String getHash(Object o) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("md5");
+            byte[] bytes;
+            if (o instanceof byte[]) {
+                bytes = (byte[]) o;
+            } else {
+                bytes = o.toString().getBytes();
+            }
+            bytes = md.digest(bytes);
+            String base64Hash = Base64.encodeBase64String(bytes);
+            return base64Hash.substring(0, 10);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
