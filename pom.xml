@@ -14,7 +14,7 @@
 	<name>ideasforum</name>
 	<description>The forum for your ideas. Watch, share, be inspired and embody!</description>
 	<properties>
-		<java.version>20.0.2.1</java.version>
+		<java.version>20</java.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -301,7 +301,16 @@
 				<artifactId>heroku-maven-plugin</artifactId>
 				<version>3.0.6</version>
 			</plugin>
-		</plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
+                </configuration>
+            </plugin>
+        </plugins>
 	</build>
 
 </project>
