@@ -75,6 +75,7 @@ public class AuthorizationController {
             return "redirect:/email-validity-confirmation";
         model.addAttribute("discord", false);
         model.addAttribute("github", false);
+        model.addAttribute("google", false);
         return "login";
     }
 
@@ -100,6 +101,7 @@ public class AuthorizationController {
 
         model.addAttribute("discord", oauth2Provider.equals("discord"));
         model.addAttribute("github", oauth2Provider.equals("github"));
+        model.addAttribute("google", oauth2Provider.equals("google"));
 
         // mode ? sign up : login
         model.addAttribute("mode", true);

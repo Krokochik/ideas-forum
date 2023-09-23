@@ -46,10 +46,14 @@ public class OAuth2Controller {
         }
 
         oauth2User.getAttributes().forEach((s, o) -> log.info(s + ": " + o));
-        if (oauth2User.getAttribute("id") != null) {
+        if (oauth2User.getAttribute("id") != null || oauth2User.getAttribute("sub") != null) {
             String id;
             try {
-                id = oauth2User.getAttribute("id");
+                if (oauth2User.getAttribute("id") != null) {
+                    id = oauth2User.getAttribute("id");
+                } else if (oauth2User.getAttribute("sub") != null) {
+                    id = oauth2User.getAttribute("sub");
+                } else return "redirect:/login";
             } catch (NullPointerException e) {
                 return "redirect:/login";
             }  catch (ClassCastException e) {
@@ -66,20 +70,33 @@ public class OAuth2Controller {
             } else {
                 URL avatarUrl = new URL("https://ideasforum-3e3f402d99b3.herokuapp.com/avatar");
                 try {
-                    if (oauth2User.getAttribute("avatar") != null)
+                    if (oauth2User.getAttribute("avatar") != null) {
                         avatarUrl = new URL("https://cdn.discordapp.com/avatars/" + id + "/" + oauth2User.getAttribute("avatar") + ".png");
-                    else if (oauth2User.getAttribute("avatar_url") != null)
+                    } else if (oauth2User.getAttribute("avatar_url") != null) {
                         avatarUrl = new URL("" + oauth2User.getAttribute("avatar_url"));
+                    } else if (oauth2User.getAttribute("picture") != null) {
+                        avatarUrl = new URL("" + oauth2User.getAttribute("picture"));
+                    }
                 } catch (MalformedURLException ignored) { }
 
-                String username = oauth2User.getAttribute("global_name") != null ? oauth2User.getAttribute("global_name") :
-                        oauth2User.getAttribute("username") != null ? oauth2User.getAttribute("username") :
-                                oauth2User.getAttribute("login") != null ? oauth2User.getAttribute("login") : "Username";
+                String username;
+                if (oauth2User.getAttribute("global_name") != null) {
+                    username = oauth2User.getAttribute("global_name");
+                } else if (oauth2User.getAttribute("username") != null) {
+                    username = oauth2User.getAttribute("username");
+                } else if (oauth2User.getAttribute("login") != null) {
+                    username = oauth2User.getAttribute("login");
+                } else if ((username = oauth2User.getAttribute("given_name")) != null) {
+                    username = username.concat((
+                            (String) oauth2User.getAttribute("at_hash"))
+                            .substring(0, 4));
+                } else username = "Username";
 
                 String email = oauth2User.getAttribute("email");
 
                 String provider = oauth2User.getAttribute("global_name") != null ? "discord" :
-                        oauth2User.getAttribute("username") != null ? "discord" : "github";
+                        oauth2User.getAttribute("username") != null ? "discord" :
+                                oauth2User.getAttribute("family_name") != null ? "google" : "github";
 
                 log.info("sign-up");
                 // attributes to signing up
