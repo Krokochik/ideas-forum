@@ -92,17 +92,26 @@ public class OAuth2Controller {
                             .substring(0, 4));
                 } else username = "Username";
 
-                String email = oauth2User.getAttribute("email");
-
                 String provider = oauth2User.getAttribute("global_name") != null ? "discord" :
                         oauth2User.getAttribute("username") != null ? "discord" :
                                 oauth2User.getAttribute("family_name") != null ? "google" : "github";
+
+                String email = oauth2User.getAttribute("email");
+                boolean emailVerified = email != null;
+                if (emailVerified) {
+                    if (provider.equals("github"))
+                        emailVerified = false;
+                    else if (provider.equals("google") &&
+                            !("true").equals(oauth2User.getAttribute("email_verified")))
+                        emailVerified = false;
+                }
 
                 log.info("sign-up");
                 // attributes to signing up
                 session.setAttribute("oauth2Id", id);
                 session.setAttribute("oauth2Username", username);
                 session.setAttribute("oauth2Email", email);
+                session.setAttribute("oauth2EmailVerified", emailVerified);
                 session.setAttribute("oauth2AvatarUrl", avatarUrl);
                 session.setAttribute("oauth2Provider", provider);
 

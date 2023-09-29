@@ -149,7 +149,9 @@ public class AuthorizationController {
             if (oauth2 != null && !oauth2.isBlank() && session.getAttribute("oauth2Id") != null) {
                 String oauth2Id = (String) session.getAttribute("oauth2Id");
                 user.setOauth2Id(oauth2Id);
-                if (session.getAttribute("oauth2Email") != null && session.getAttribute("oauth2Email").equals(email)) {
+                if (session.getAttribute("oauth2Email") != null &&
+                        session.getAttribute("oauth2Email").equals(email) &&
+                        session.getAttribute("oauth2EmailVerified").equals(true)) {
                     userRoles = Collections.singleton(Role.USER);
                 }
                 URL avatarUrl = (URL) session.getAttribute("oauth2AvatarUrl");
