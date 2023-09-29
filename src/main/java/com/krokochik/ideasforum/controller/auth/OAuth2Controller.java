@@ -102,7 +102,7 @@ public class OAuth2Controller {
                     if (provider.equals("github"))
                         emailVerified = false;
                     else if (provider.equals("google") &&
-                            !("true").equals(oauth2User.getAttribute("email_verified")))
+                            !(Boolean.TRUE).equals(oauth2User.getAttribute("email_verified")))
                         emailVerified = false;
                 }
 
