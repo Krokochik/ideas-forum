@@ -1,6 +1,0 @@
-<component name="ArtifactManager">
-  <artifact name="ideasforum.war">
-    <output-path>$PROJECT_DIR$/out/artifacts/ideasforum_war</output-path>
-    <root id="root" />
-  </artifact>
-</component>
